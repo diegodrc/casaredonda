@@ -1,7 +1,3 @@
-/* =============================================
-   CASA REDONDA — Landing Page Scripts
-   ============================================= */
-
 (function () {
   'use strict';
 
@@ -205,7 +201,7 @@
 
   // Keyboard navigation for lightbox
   document.addEventListener('keydown', (e) => {
-    if (!lightbox.classList.contains('open')) return;
+    if (!lightbox || !lightbox.classList.contains('open')) return;
 
     if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowLeft') showImage(currentImageIndex - 1);
