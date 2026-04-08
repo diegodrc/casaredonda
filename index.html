@@ -2,776 +2,825 @@
 <html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hospedaria Astral · Milho Verde</title>
-  <meta name="description"
-    content="Quatro casas únicas em Milho Verde, MG — cada uma com seu próprio charme, todas com o cuidado e acolhimento da Eliane, Superhost no Airbnb.">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospedaria Astral · Milho Verde</title>
+    <meta name="description"
+        content="Quatro casas únicas em Milho Verde, MG — cada uma com seu próprio charme, todas com o cuidado e acolhimento da Eliane, Superhost no Airbnb.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Serif+4:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap"
-    rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Serif+4:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap"
+        rel="stylesheet">
 
-  <!-- Remixicon -->
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Remixicon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">
 
-  <style>
-    /* ── VARIABLE ALIASES (bridge to styles.css naming) ── */
-    :root {
-      --color-terracotta: var(--terracotta);
-      --color-sand: var(--sand);
-      --color-sand-light: var(--sand-light);
-      --color-moss: var(--moss);
-      --color-wood: var(--wood);
-      --color-wood-dark: var(--wood-dark);
-      --color-charcoal: var(--charcoal);
-      --space-1: 0.25rem;
-      --space-2: 0.5rem;
-      --space-3: 0.75rem;
-      --space-4: 1rem;
-      --space-5: 1.25rem;
-      --space-6: 1.5rem;
-      --space-8: 2rem;
-      --space-10: 2.5rem;
-      --space-12: 3rem;
-      --space-16: 4rem;
-    }
+    <style>
+        /* ── VARIABLE ALIASES (bridge to styles.css naming) ── */
+        :root {
+            --color-terracotta: var(--terracotta);
+            --color-sand: var(--sand);
+            --color-sand-light: var(--sand-light);
+            --color-moss: var(--moss);
+            --color-wood: var(--wood);
+            --color-wood-dark: var(--wood-dark);
+            --color-charcoal: var(--charcoal);
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+        }
 
-    /* ── MAIN PAGE SPECIFIC ── */
+        /* ── MAIN PAGE SPECIFIC ── */
 
-    /* Hero override: taller on main page */
-    .hero { min-height: 100svh; }
+        /* Hero override: taller on main page */
+        .hero {
+            min-height: 100svh;
+        }
 
-    /* ── PROPERTIES SECTION ── */
-    .properties {
-      background: var(--color-sand-light);
-    }
+        /* ── PROPERTIES SECTION ── */
+        .properties {
+            background: var(--color-sand-light);
+        }
 
-    .properties__intro {
-      max-width: 640px;
-      margin: 0 auto var(--space-12);
-      text-align: center;
-      color: var(--color-wood-dark);
-      font-size: 1.1rem;
-      line-height: 1.7;
-    }
+        .properties__intro {
+            max-width: 640px;
+            margin: 0 auto var(--space-12);
+            text-align: center;
+            color: var(--color-wood-dark);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
 
-    .properties__grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-8);
-    }
+        .properties__grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-8);
+        }
 
-    @media (max-width: 768px) {
-      .properties__grid { grid-template-columns: 1fr; }
-    }
+        @media (max-width: 768px) {
+            .properties__grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
-    .property-card {
-      background: #fff;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 2px 16px rgba(44,36,25,0.08);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      display: flex;
-      flex-direction: column;
-    }
+        .property-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 16px rgba(44, 36, 25, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .property-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 32px rgba(44,36,25,0.14);
-    }
+        .property-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(44, 36, 25, 0.14);
+        }
 
-    .property-card__img-wrap {
-      position: relative;
-      overflow: hidden;
-      aspect-ratio: 4/3;
-    }
+        .property-card__img-wrap {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+        }
 
-    .property-card__img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-      display: block;
-    }
+        .property-card__img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
 
-    .property-card:hover .property-card__img {
-      transform: scale(1.04);
-    }
+        .property-card:hover .property-card__img {
+            transform: scale(1.04);
+        }
 
-    .property-card__badge {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      background: var(--color-terracotta);
-      color: #fff;
-      font-family: var(--font-body);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 20px;
-    }
+        .property-card__badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: var(--color-terracotta);
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
 
-    .property-card__rating {
-      position: absolute;
-      bottom: 14px;
-      right: 14px;
-      background: rgba(255,255,255,0.95);
-      border-radius: 20px;
-      padding: 4px 10px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-family: var(--font-body);
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--color-charcoal);
-    }
+        .property-card__rating {
+            position: absolute;
+            bottom: 14px;
+            right: 14px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 4px 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--color-charcoal);
+        }
 
-    .property-card__rating i {
-      color: #e8a838;
-      font-size: 0.82rem;
-    }
+        .property-card__rating i {
+            color: #e8a838;
+            font-size: 0.82rem;
+        }
 
-    .property-card__body {
-      padding: var(--space-6);
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      gap: var(--space-3);
-    }
+        .property-card__body {
+            padding: var(--space-6);
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: var(--space-3);
+        }
 
-    .property-card__location {
-      font-family: var(--font-body);
-      font-size: 0.78rem;
-      color: var(--color-moss);
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+        .property-card__location {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            color: var(--color-moss);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
 
-    .property-card__name {
-      font-family: var(--font-display);
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: var(--color-wood-dark);
-      line-height: 1.2;
-      margin: 0;
-    }
+        .property-card__name {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--color-wood-dark);
+            line-height: 1.2;
+            margin: 0;
+        }
 
-    .property-card__desc {
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-      color: var(--color-charcoal);
-      line-height: 1.65;
-      margin: 0;
-      flex: 1;
-    }
+        .property-card__desc {
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            color: var(--color-charcoal);
+            line-height: 1.65;
+            margin: 0;
+            flex: 1;
+        }
 
-    .property-card__tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: var(--space-1);
-    }
+        .property-card__tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: var(--space-1);
+        }
 
-    .property-card__tag {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: var(--color-sand);
-      color: var(--color-wood-dark);
-      font-family: var(--font-body);
-      font-size: 0.78rem;
-      font-weight: 500;
-      padding: 4px 10px;
-      border-radius: 20px;
-    }
+        .property-card__tag {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--color-sand);
+            color: var(--color-wood-dark);
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
 
-    .property-card__tag i { font-size: 0.82rem; color: var(--color-terracotta); }
+        .property-card__tag i {
+            font-size: 0.82rem;
+            color: var(--color-terracotta);
+        }
 
-    .property-card__cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: var(--space-4);
-      padding: 12px 20px;
-      background: var(--color-terracotta);
-      color: #fff;
-      font-family: var(--font-body);
-      font-size: 0.88rem;
-      font-weight: 600;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.2s;
-      align-self: flex-start;
-    }
+        .property-card__cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: var(--space-4);
+            padding: 12px 20px;
+            background: var(--color-terracotta);
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+            align-self: flex-start;
+        }
 
-    .property-card__cta:hover {
-      background: var(--color-wood);
-      transform: translateY(-1px);
-    }
+        .property-card__cta:hover {
+            background: var(--color-wood);
+            transform: translateY(-1px);
+        }
 
-    /* ── MILHO VERDE SECTION ── */
-    .milhoverde {
-      background: var(--color-wood-dark);
-      color: var(--color-sand-light);
-    }
+        /* ── MILHO VERDE SECTION ── */
+        .milhoverde {
+            background: var(--color-wood-dark);
+            color: var(--color-sand-light);
+        }
 
-    .milhoverde .section__title {
-      color: var(--color-sand-light);
-    }
+        .milhoverde .section__title {
+            color: var(--color-sand-light);
+        }
 
-    .milhoverde__body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-16);
-      align-items: center;
-    }
+        .milhoverde__body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-16);
+            align-items: center;
+        }
 
-    @media (max-width: 768px) {
-      .milhoverde__body { grid-template-columns: 1fr; gap: var(--space-8); }
-    }
+        @media (max-width: 768px) {
+            .milhoverde__body {
+                grid-template-columns: 1fr;
+                gap: var(--space-8);
+            }
+        }
 
-    .milhoverde__text {
-      font-size: 1.05rem;
-      line-height: 1.8;
-      opacity: 0.9;
-    }
+        .milhoverde__text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
 
-    .milhoverde__facts {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-5);
-    }
+        .milhoverde__facts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-5);
+        }
 
-    .milhoverde__fact {
-      background: rgba(255,255,255,0.06);
-      border-radius: 12px;
-      padding: var(--space-5);
-    }
+        .milhoverde__fact {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: var(--space-5);
+        }
 
-    .milhoverde__fact i {
-      font-size: 1.4rem;
-      color: var(--color-terracotta);
-      margin-bottom: var(--space-2);
-      display: block;
-    }
+        .milhoverde__fact i {
+            font-size: 1.4rem;
+            color: var(--color-terracotta);
+            margin-bottom: var(--space-2);
+            display: block;
+        }
 
-    .milhoverde__fact strong {
-      display: block;
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--color-sand-light);
-      margin-bottom: 4px;
-    }
+        .milhoverde__fact strong {
+            display: block;
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-sand-light);
+            margin-bottom: 4px;
+        }
 
-    .milhoverde__fact span {
-      font-size: 0.82rem;
-      opacity: 0.7;
-      line-height: 1.5;
-    }
+        .milhoverde__fact span {
+            font-size: 0.82rem;
+            opacity: 0.7;
+            line-height: 1.5;
+        }
 
-    /* ── CONTACT SECTION ── */
-    .contato {
-      background: var(--color-sand);
-      text-align: center;
-    }
+        /* ── CONTACT SECTION ── */
+        .contato {
+            background: var(--color-sand);
+            text-align: center;
+        }
 
-    .contato__desc {
-      max-width: 520px;
-      margin: 0 auto var(--space-10);
-      font-size: 1rem;
-      line-height: 1.7;
-      color: var(--color-wood-dark);
-    }
+        .contato__desc {
+            max-width: 520px;
+            margin: 0 auto var(--space-10);
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--color-wood-dark);
+        }
 
-    .contato__links {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: var(--space-4);
-    }
+        .contato__links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+        }
 
-    .contato__link {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 24px;
-      border-radius: 10px;
-      font-family: var(--font-body);
-      font-weight: 600;
-      font-size: 0.95rem;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
+        .contato__link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
 
-    .contato__link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+        .contato__link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
 
-    .contato__link--whatsapp {
-      background: #25d366;
-      color: #fff;
-    }
+        .contato__link--whatsapp {
+            background: #25d366;
+            color: #fff;
+        }
 
-    .contato__link--instagram {
-      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-      color: #fff;
-    }
+        .contato__link--instagram {
+            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: #fff;
+        }
 
-    .contato__link--airbnb {
-      background: #ff5a5f;
-      color: #fff;
-    }
+        .contato__link--airbnb {
+            background: #ff5a5f;
+            color: #fff;
+        }
 
-    .contato__link i { font-size: 1.1rem; }
+        .contato__link i {
+            font-size: 1.1rem;
+        }
 
-    /* reveal for new elements */
-    .property-card.reveal,
-    .milhoverde__fact.reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.55s ease, transform 0.55s ease;
-    }
+        /* reveal for new elements */
+        .property-card.reveal,
+        .milhoverde__fact.reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.55s ease, transform 0.55s ease;
+        }
 
-    .property-card.reveal.visible,
-    .milhoverde__fact.reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  </style>
+        .property-card.reveal.visible,
+        .milhoverde__fact.reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 
 <body>
 
-  <!-- ===================== HEADER ===================== -->
-  <header class="header" id="header">
-    <div class="header__container">
-      <a href="#" class="header__logo">Hospedaria Astral</a>
+    <!-- ===================== HEADER ===================== -->
+    <header class="header" id="header">
+        <div class="header__container">
+            <a href="#" class="header__logo">Hospedaria Astral</a>
 
-      <nav class="header__nav" id="nav">
-        <a href="#acomodacoes" class="header__link" data-pt="Acomodações" data-en="Accommodations"
-          data-es="Alojamientos">Acomodações</a>
-        <a href="#anfitria" class="header__link" data-pt="Anfitriã" data-en="Host" data-es="Anfitriona">Anfitriã</a>
-        <a href="#milho-verde" class="header__link" data-pt="Milho Verde" data-en="Milho Verde"
-          data-es="Milho Verde">Milho Verde</a>
-        <a href="#contato" class="header__link" data-pt="Contato" data-en="Contact" data-es="Contacto">Contato</a>
-      </nav>
+            <nav class="header__nav" id="nav">
+                <a href="#acomodacoes" class="header__link" data-pt="Acomodações" data-en="Accommodations"
+                    data-es="Alojamientos">Acomodações</a>
+                <a href="#anfitria" class="header__link" data-pt="Anfitriã" data-en="Host"
+                    data-es="Anfitriona">Anfitriã</a>
+                <a href="#milho-verde" class="header__link" data-pt="Milho Verde" data-en="Milho Verde"
+                    data-es="Milho Verde">Milho Verde</a>
+                <a href="#contato" class="header__link" data-pt="Contato" data-en="Contact"
+                    data-es="Contacto">Contato</a>
+            </nav>
 
-      <div class="header__actions">
-        <div class="lang-switcher" id="langSwitcher">
-          <button class="lang-switcher__btn" id="langBtn" aria-label="Idioma">
-            <i class="ri-translate-2"></i>
-            <span id="langLabel">PT</span>
-            <i class="ri-arrow-down-s-line"></i>
-          </button>
-          <div class="lang-switcher__dropdown" id="langDropdown">
-            <button class="lang-switcher__option active" data-lang="pt">Português</button>
-            <button class="lang-switcher__option" data-lang="en">English</button>
-            <button class="lang-switcher__option" data-lang="es">Español</button>
-          </div>
+            <div class="header__actions">
+                <div class="lang-switcher" id="langSwitcher">
+                    <button class="lang-switcher__btn" id="langBtn" aria-label="Idioma">
+                        <i class="ri-translate-2"></i>
+                        <span id="langLabel">PT</span>
+                        <i class="ri-arrow-down-s-line"></i>
+                    </button>
+                    <div class="lang-switcher__dropdown" id="langDropdown">
+                        <button class="lang-switcher__option active" data-lang="pt">Português</button>
+                        <button class="lang-switcher__option" data-lang="en">English</button>
+                        <button class="lang-switcher__option" data-lang="es">Español</button>
+                    </div>
+                </div>
+
+                <button class="header__mobile-toggle" id="mobileToggle" aria-label="Menu">
+                    <i class="ri-menu-3-line"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero" id="hero">
+        <div class="hero__bg">
+            <img src="casa-redonda/img/0deaa673-1197-413c-a128-a367ece1fe52.avif" alt="Hospedaria Astral - Milho Verde"
+                class="hero__bg-img">
+            <div class="hero__overlay"></div>
         </div>
 
-        <button class="header__mobile-toggle" id="mobileToggle" aria-label="Menu">
-          <i class="ri-menu-3-line"></i>
+        <div class="hero__content">
+            <h1 class="hero__title" data-pt="Hospedaria Astral" data-en="Hospedaria Astral" data-es="Hospedaria Astral">
+                Hospedaria Astral
+            </h1>
+            <p class="hero__subtitle"
+                data-pt="Quatro casas únicas em Milho Verde, Minas Gerais — cada uma com seu próprio charme, todas com o cuidado e acolhimento que fazem a diferença."
+                data-en="Four unique houses in Milho Verde, Minas Gerais — each with its own charm, all with the care and warmth that make the difference."
+                data-es="Cuatro casas únicas en Milho Verde, Minas Gerais — cada una con su propio encanto, todas con el cuidado y la calidez que marcan la diferencia.">
+                Quatro casas únicas em Milho Verde, Minas Gerais — cada uma com seu próprio charme, todas com o cuidado
+                e
+                acolhimento que fazem a diferença.
+            </p>
+            <a href="#acomodacoes" class="btn btn--primary hero__cta" data-pt="Ver acomodações"
+                data-en="See accommodations" data-es="Ver alojamientos">
+                <i class="ri-home-2-line"></i>
+                Ver acomodações
+            </a>
+        </div>
+
+        <button class="hero__scroll" aria-label="Scroll down">
+            <i class="ri-arrow-down-line"></i>
         </button>
-      </div>
-    </div>
-  </header>
+    </section>
 
-  <!-- ===================== HERO ===================== -->
-  <section class="hero" id="hero">
-    <div class="hero__bg">
-      <img src="casa-redonda/img/0deaa673-1197-413c-a128-a367ece1fe52.avif" alt="Hospedaria Astral - Milho Verde"
-        class="hero__bg-img">
-      <div class="hero__overlay"></div>
-    </div>
+    <!-- ===================== ACOMODAÇÕES ===================== -->
+    <section class="section properties" id="acomodacoes">
+        <div class="container">
+            <h2 class="section__title" data-pt="Nossas Acomodações" data-en="Our Accommodations"
+                data-es="Nuestros Alojamientos">Nossas Acomodações</h2>
 
-    <div class="hero__content">
-      <h1 class="hero__title" data-pt="Hospedaria Astral" data-en="Hospedaria Astral"
-        data-es="Hospedaria Astral">
-        Hospedaria Astral
-      </h1>
-      <p class="hero__subtitle"
-        data-pt="Quatro casas únicas em Milho Verde, Minas Gerais — cada uma com seu próprio charme, todas com o cuidado e acolhimento que fazem a diferença."
-        data-en="Four unique houses in Milho Verde, Minas Gerais — each with its own charm, all with the care and warmth that make the difference."
-        data-es="Cuatro casas únicas en Milho Verde, Minas Gerais — cada una con su propio encanto, todas con el cuidado y la calidez que marcan la diferencia.">
-        Quatro casas únicas em Milho Verde, Minas Gerais — cada uma com seu próprio charme, todas com o cuidado e
-        acolhimento que fazem a diferença.
-      </p>
-      <a href="#acomodacoes" class="btn btn--primary hero__cta" data-pt="Ver acomodações"
-        data-en="See accommodations" data-es="Ver alojamientos">
-        <i class="ri-home-2-line"></i>
-        Ver acomodações
-      </a>
-    </div>
-
-    <button class="hero__scroll" aria-label="Scroll down">
-      <i class="ri-arrow-down-line"></i>
-    </button>
-  </section>
-
-  <!-- ===================== ACOMODAÇÕES ===================== -->
-  <section class="section properties" id="acomodacoes">
-    <div class="container">
-      <h2 class="section__title" data-pt="Nossas Acomodações" data-en="Our Accommodations"
-        data-es="Nuestros Alojamientos">Nossas Acomodações</h2>
-
-      <p class="properties__intro"
-        data-pt="Cada casa tem sua própria personalidade — mas todas compartilham o mesmo cuidado, limpeza e atenção que a Eliane dedica a cada hóspede. Escolha a sua."
-        data-en="Each house has its own personality — but all share the same care, cleanliness and attention that Eliane dedicates to every guest. Choose yours."
-        data-es="Cada casa tiene su propia personalidad — pero todas comparten el mismo cuidado, limpieza y atención que Eliane dedica a cada huésped. Elige la tuya.">
-        Cada casa tem sua própria personalidade — mas todas compartilham o mesmo cuidado, limpeza e atenção que a
-        Eliane dedica a cada hóspede. Escolha a sua.
-      </p>
-
-      <div class="properties__grid">
-
-        <!-- Casa Redonda -->
-        <div class="property-card reveal">
-          <div class="property-card__img-wrap">
-            <img src="casa-redonda/img/0deaa673-1197-413c-a128-a367ece1fe52.avif" alt="Casa Redonda"
-              class="property-card__img" loading="lazy">
-            <span class="property-card__badge"
-              data-pt="Destaque" data-en="Featured" data-es="Destacada">Destaque</span>
-            <div class="property-card__rating">
-              <i class="ri-star-fill"></i>
-              <span>4,76</span>
-              <span style="opacity:.6;font-weight:400" data-pt="· 37 aval." data-en="· 37 rev." data-es="· 37 res.">· 37 aval.</span>
-            </div>
-          </div>
-          <div class="property-card__body">
-            <span class="property-card__location"><i class="ri-map-pin-2-line"></i> Milho Verde, MG</span>
-            <h3 class="property-card__name">Casa Redonda</h3>
-            <p class="property-card__desc"
-              data-pt="Arquitetura circular única em madeira, vista para a serra e dois banheiros. O espaço mais especial de Milho Verde — um projeto que não existe igual em toda a região."
-              data-en="Unique circular wooden architecture, mountain views and two bathrooms. The most special space in Milho Verde — a design unlike anything else in the entire region."
-              data-es="Arquitectura circular única en madera, vistas a la sierra y dos baños. El espacio más especial de Milho Verde — un proyecto sin igual en toda la región.">
-              Arquitetura circular única em madeira, vista para a serra e dois banheiros. O espaço mais especial de
-              Milho Verde — um projeto que não existe igual em toda a região.
+            <p class="properties__intro"
+                data-pt="Cada casa tem sua própria personalidade — mas todas compartilham o mesmo cuidado, limpeza e atenção que a Eliane dedica a cada hóspede. Escolha a sua."
+                data-en="Each house has its own personality — but all share the same care, cleanliness and attention that Eliane dedicates to every guest. Choose yours."
+                data-es="Cada casa tiene su propia personalidad — pero todas comparten el mismo cuidado, limpieza y atención que Eliane dedica a cada huésped. Elige la tuya.">
+                Cada casa tem sua própria personalidade — mas todas compartilham o mesmo cuidado, limpeza e atenção que
+                a
+                Eliane dedica a cada hóspede. Escolha a sua.
             </p>
-            <div class="property-card__tags">
-              <span class="property-card__tag"><i class="ri-group-line"></i>
-                <span data-pt="Até 5 hóspedes" data-en="Up to 5 guests" data-es="Hasta 5 huéspedes">Até 5 hóspedes</span>
-              </span>
-              <span class="property-card__tag"><i class="ri-home-smile-2-line"></i>
-                <span data-pt="Arquitetura única" data-en="Unique architecture" data-es="Arquitectura única">Arquitetura única</span>
-              </span>
-              <span class="property-card__tag"><i class="ri-drop-line"></i>
-                <span data-pt="2 banheiros" data-en="2 bathrooms" data-es="2 baños">2 banheiros</span>
-              </span>
-            </div>
-            <a href="casa-redonda/index.html" class="property-card__cta"
-              data-pt="Ver a Casa Redonda" data-en="See Casa Redonda" data-es="Ver Casa Redonda">
-              <i class="ri-arrow-right-line"></i>
-              Ver a Casa Redonda
-            </a>
-          </div>
-        </div>
 
-        <!-- Casa Alto Astral -->
-        <div class="property-card reveal">
-          <div class="property-card__img-wrap">
-            <img src="casa-alto-astral/img/f097dbf1-9e3e-40ba-b503-f125e05033c1.avif" alt="Casa Alto Astral"
-              class="property-card__img" loading="lazy">
-            <span class="property-card__badge"
-              data-pt="Preferido dos hóspedes" data-en="Guest favourite" data-es="Favorito de huéspedes">Preferido dos hóspedes</span>
-            <div class="property-card__rating">
-              <i class="ri-star-fill"></i>
-              <span>4,86</span>
-              <span style="opacity:.6;font-weight:400" data-pt="· 21 aval." data-en="· 21 rev." data-es="· 21 res.">· 21 aval.</span>
+            <div class="properties__grid">
+
+                <!-- Casa Redonda -->
+                <div class="property-card reveal">
+                    <div class="property-card__img-wrap">
+                        <img src="casa-redonda/img/0deaa673-1197-413c-a128-a367ece1fe52.avif" alt="Casa Redonda"
+                            class="property-card__img" loading="lazy">
+                        <span class="property-card__badge" data-pt="Destaque" data-en="Featured"
+                            data-es="Destacada">Destaque</span>
+                        <div class="property-card__rating">
+                            <i class="ri-star-fill"></i>
+                            <span>4,76</span>
+                            <span style="opacity:.6;font-weight:400" data-pt="· 37 aval." data-en="· 37 rev."
+                                data-es="· 37 res.">· 37 aval.</span>
+                        </div>
+                    </div>
+                    <div class="property-card__body">
+                        <span class="property-card__location"><i class="ri-map-pin-2-line"></i> Milho Verde, MG</span>
+                        <h3 class="property-card__name">Casa Redonda</h3>
+                        <p class="property-card__desc"
+                            data-pt="Arquitetura circular única em madeira, vista para a serra e dois banheiros. O espaço mais especial de Milho Verde — um projeto que não existe igual em toda a região."
+                            data-en="Unique circular wooden architecture, mountain views and two bathrooms. The most special space in Milho Verde — a design unlike anything else in the entire region."
+                            data-es="Arquitectura circular única en madera, vistas a la sierra y dos baños. El espacio más especial de Milho Verde — un proyecto sin igual en toda la región.">
+                            Arquitetura circular única em madeira, vista para a serra e dois banheiros. O espaço mais
+                            especial de
+                            Milho Verde — um projeto que não existe igual em toda a região.
+                        </p>
+                        <div class="property-card__tags">
+                            <span class="property-card__tag"><i class="ri-group-line"></i>
+                                <span data-pt="Até 5 hóspedes" data-en="Up to 5 guests" data-es="Hasta 5 huéspedes">Até
+                                    5 hóspedes</span>
+                            </span>
+                            <span class="property-card__tag"><i class="ri-home-smile-2-line"></i>
+                                <span data-pt="Arquitetura única" data-en="Unique architecture"
+                                    data-es="Arquitectura única">Arquitetura única</span>
+                            </span>
+                            <span class="property-card__tag"><i class="ri-drop-line"></i>
+                                <span data-pt="2 banheiros" data-en="2 bathrooms" data-es="2 baños">2 banheiros</span>
+                            </span>
+                        </div>
+                        <a href="casa-redonda/index.html" class="property-card__cta" data-pt="Ver a Casa Redonda"
+                            data-en="See Casa Redonda" data-es="Ver Casa Redonda">
+                            <i class="ri-arrow-right-line"></i>
+                            Ver a Casa Redonda
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Casa Alto Astral -->
+                <div class="property-card reveal">
+                    <div class="property-card__img-wrap">
+                        <img src="casa-alto-astral/img/f097dbf1-9e3e-40ba-b503-f125e05033c1.avif" alt="Casa Alto Astral"
+                            class="property-card__img" loading="lazy">
+                        <span class="property-card__badge" data-pt="Preferido dos hóspedes" data-en="Guest favourite"
+                            data-es="Favorito de huéspedes">Preferido dos hóspedes</span>
+                        <div class="property-card__rating">
+                            <i class="ri-star-fill"></i>
+                            <span>4,86</span>
+                            <span style="opacity:.6;font-weight:400" data-pt="· 21 aval." data-en="· 21 rev."
+                                data-es="· 21 res.">· 21 aval.</span>
+                        </div>
+                    </div>
+                    <div class="property-card__body">
+                        <span class="property-card__location"><i class="ri-map-pin-2-line"></i> Milho Verde, MG</span>
+                        <h3 class="property-card__name">Casa Alto Astral</h3>
+                        <p class="property-card__desc"
+                            data-pt="Varanda com vista deslumbrante para o pôr do sol, duas redes e 5 minutos a pé do centrinho. Boas energias e muito sossego em Milho Verde."
+                            data-en="Veranda with breathtaking sunset views, two hammocks and 5 minutes on foot from the village center. Good vibes and plenty of tranquility in Milho Verde."
+                            data-es="Terraza con impresionantes vistas al atardecer, dos hamacas y a 5 minutos a pie del centro. Buenas energías y mucha tranquilidad en Milho Verde.">
+                            Varanda com vista deslumbrante para o pôr do sol, duas redes e 5 minutos a pé do centrinho.
+                            Boas energias
+                            e muito sossego em Milho Verde.
+                        </p>
+                        <div class="property-card__tags">
+                            <span class="property-card__tag"><i class="ri-group-line"></i>
+                                <span data-pt="Até 4 hóspedes" data-en="Up to 4 guests" data-es="Hasta 4 huéspedes">Até
+                                    4 hóspedes</span>
+                            </span>
+                            <span class="property-card__tag"><i class="ri-sun-line"></i>
+                                <span data-pt="Vista pôr do sol" data-en="Sunset views"
+                                    data-es="Vista al atardecer">Vista pôr do sol</span>
+                            </span>
+                            <span class="property-card__tag"><i class="ri-leaf-line"></i>
+                                <span data-pt="2 varandas" data-en="2 verandas" data-es="2 terrazas">2 varandas</span>
+                            </span>
+                        </div>
+                        <a href="casa-alto-astral/index.html" class="property-card__cta"
+                            data-pt="Ver a Casa Alto Astral" data-en="See Casa Alto Astral"
+                            data-es="Ver Casa Alto Astral">
+                            <i class="ri-arrow-right-line"></i>
+                            Ver a Casa Alto Astral
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Casa da Montanha -->
+                <div class="property-card reveal">
+                    <div class="property-card__img-wrap">
+                        <img src="casa-montanha/img/945dc449-541b-4980-82ba-b9ceefdd10ba.avif" alt="Casa da Montanha"
+                            class="property-card__img" loading="lazy">
+                        <span class="property-card__badge" data-pt="Preferido dos hóspedes" data-en="Guest favourite"
+                            data-es="Favorito de huéspedes">Preferido dos hóspedes</span>
+                        <div class="property-card__rating">
+                            <i class="ri-star-fill"></i>
+                            <span>4,95</span>
+                            <span style="opacity:.6;font-weight:400" data-pt="· 19 aval." data-en="· 19 rev."
+                                data-es="· 19 res.">· 19 aval.</span>
+                        </div>
+                    </div>
+                    <div class="property-card__body">
+                        <span class="property-card__location"><i class="ri-map-pin-2-line"></i> Milho Verde, MG</span>
+                        <h3 class="property-card__name">Casa da Montanha</h3>
+                        <p class="property-card__desc"
+                            data-pt="Vista deslumbrante para as montanhas, ambiente charmoso e impecável. Ideal para casais ou pequenos grupos que buscam autenticidade e tranquilidade."
+                            data-en="Breathtaking mountain views, charming and impeccable atmosphere. Ideal for couples or small groups seeking authenticity and tranquility."
+                            data-es="Impresionantes vistas a las montañas, ambiente encantador e impecable. Ideal para parejas o pequeños grupos que buscan autenticidad y tranquilidad.">
+                            Vista deslumbrante para as montanhas, ambiente charmoso e impecável. Ideal para casais ou
+                            pequenos grupos
+                            que buscam autenticidade e tranquilidade.
+                        </p>
+                        <div class="property-card__tags">
+                            <span class="property-card__tag"><i class="ri-group-line"></i>
+                                <span data-pt="Até 4 hóspedes" data-en="Up to 4 guests" data-es="Hasta 4 huéspedes">Até
+                                    4 hóspedes</span>
+                            </span>
+                            <span class="property-card__tag"><i class="ri-landscape-line"></i>
+                                <span data-pt="Vista montanhas" data-en="Mountain views" data-es="Vista montañas">Vista
+                                    montanhas</span>
+                            </span>
+                            <span class="property-card__tag"><i class="ri-bear-smile-line"></i>
+                                <span data-pt="Aceita pets" data-en="Pet-friendly" data-es="Acepta pets">Aceita
+                                    pets</span>
+                            </span>
+                        </div>
+                        <a href="casa-montanha/index.html" class="property-card__cta" data-pt="Ver a Casa da Montanha"
+                            data-en="See Casa da Montanha" data-es="Ver Casa da Montanha">
+                            <i class="ri-arrow-right-line"></i>
+                            Ver a Casa da Montanha
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Casinha -->
+                <div class="property-card reveal">
+                    <div class="property-card__img-wrap">
+                        <img src="casinha/img/fd076c4a-02e2-4b86-805f-f84cf3c55e17.avif" alt="Casinha"
+                            class="property-card__img" loading="lazy">
+                        <span class="property-card__badge" data-pt="Nova" data-en="New" data-es="Nueva">Nova</span>
+                        <div class="property-card__rating">
+                            <i class="ri-star-fill"></i>
+                            <span>4,6</span>
+                            <span style="opacity:.6;font-weight:400" data-pt="· 5 aval." data-en="· 5 rev."
+                                data-es="· 5 res.">· 5 aval.</span>
+                        </div>
+                    </div>
+                    <div class="property-card__body">
+                        <span class="property-card__location"><i class="ri-map-pin-2-line"></i> Milho Verde, MG</span>
+                        <h3 class="property-card__name">Casinha</h3>
+                        <p class="property-card__desc"
+                            data-pt="Micro casa simples, aconchegante e bem ventilada, pertinho das cachoeiras. O cantinho certo para quem quer descansar sem complicação."
+                            data-en="Simple, cozy and well-ventilated micro house, close to the waterfalls. The right spot for those who want to rest without any fuss."
+                            data-es="Micro casa simple, acogedora y bien ventilada, cerca de las cascadas. El rincón perfecto para quienes quieren descansar sin complicaciones.">
+                            Micro casa simples, aconchegante e bem ventilada, pertinho das cachoeiras. O cantinho certo
+                            para quem quer
+                            descansar sem complicação.
+                        </p>
+                        <div class="property-card__tags">
+                            <span class="property-card__tag"><i class="ri-group-line"></i>
+                                <span data-pt="Até 4 hóspedes" data-en="Up to 4 guests" data-es="Hasta 4 huéspedes">Até
+                                    4 hóspedes</span>
+                            </span>
+                            <span class="property-card__tag"><i class="ri-water-flash-line"></i>
+                                <span data-pt="Próx. cachoeiras" data-en="Near waterfalls"
+                                    data-es="Cerca cascadas">Próx. cachoeiras</span>
+                            </span>
+                            <span class="property-card__tag"><i class="ri-heart-line"></i>
+                                <span data-pt="Aconchegante" data-en="Cozy" data-es="Acogedora">Aconchegante</span>
+                            </span>
+                        </div>
+                        <a href="casinha/index.html" class="property-card__cta" data-pt="Ver a Casinha"
+                            data-en="See the Casinha" data-es="Ver la Casinha">
+                            <i class="ri-arrow-right-line"></i>
+                            Ver a Casinha
+                        </a>
+                    </div>
+                </div>
+
             </div>
-          </div>
-          <div class="property-card__body">
-            <span class="property-card__location"><i class="ri-map-pin-2-line"></i> Milho Verde, MG</span>
-            <h3 class="property-card__name">Casa Alto Astral</h3>
-            <p class="property-card__desc"
-              data-pt="Varanda com vista deslumbrante para o pôr do sol, duas redes e 5 minutos a pé do centrinho. Boas energias e muito sossego em Milho Verde."
-              data-en="Veranda with breathtaking sunset views, two hammocks and 5 minutes on foot from the village center. Good vibes and plenty of tranquility in Milho Verde."
-              data-es="Terraza con impresionantes vistas al atardecer, dos hamacas y a 5 minutos a pie del centro. Buenas energías y mucha tranquilidad en Milho Verde.">
-              Varanda com vista deslumbrante para o pôr do sol, duas redes e 5 minutos a pé do centrinho. Boas energias
-              e muito sossego em Milho Verde.
+        </div>
+    </section>
+
+    <!-- ===================== ANFITRIÃ ===================== -->
+    <section class="section anfitria" id="anfitria">
+        <div class="container">
+            <h2 class="section__title" data-pt="A Anfitriã" data-en="The Host" data-es="La Anfitriona">A Anfitriã</h2>
+
+            <div class="anfitria__content reveal">
+                <div class="anfitria__photo">
+                    <img src="img/eliane.avif" alt="Eliane — Superhost" loading="lazy">
+                </div>
+
+                <div class="anfitria__info">
+                    <h3>Eliane</h3>
+                    <p class="anfitria__text"
+                        data-pt="Eliane é Superhost no Airbnb — uma das classificações mais difíceis de conquistar na plataforma. Com mais de 81 avaliações e média de 4,84 estrelas em todas as propriedades, ela responde em até 1 hora e nunca deixou uma mensagem sem resposta. Aposentada e apaixonada por receber bem, a Eliane criou a Hospedaria Astral não como um negócio, mas como um convite: para que cada hóspede encontre em Milho Verde o descanso, a beleza e o acolhimento que merece. E isso se sente em cada detalhe de cada uma das casas."
+                        data-en="Eliane is an Airbnb Superhost — one of the hardest ratings to earn on the platform. With over 81 reviews and a 4.84-star average across all properties, she responds within an hour and has never left a message unanswered. Retired and passionate about hospitality, Eliane created Hospedaria Astral not as a business, but as an invitation: for every guest to find in Milho Verde the rest, beauty and warmth they deserve. And you can feel that in every detail of every house."
+                        data-es="Eliane es Superhost en Airbnb — una de las clasificaciones más difíciles de obtener en la plataforma. Con más de 81 reseñas y un promedio de 4,84 estrellas en todas las propiedades, responde en menos de una hora y nunca dejó un mensaje sin respuesta. Jubilada y apasionada por recibir bien, Eliane creó Hospedaria Astral no como un negocio, sino como una invitación: para que cada huésped encuentre en Milho Verde el descanso, la belleza y la calidez que merece. Y eso se siente en cada detalle de cada una de las casas.">
+                        Eliane é Superhost no Airbnb — uma das classificações mais difíceis de conquistar na plataforma.
+                        Com mais de
+                        81 avaliações e média de 4,84 estrelas em todas as propriedades, ela responde em até 1 hora e
+                        nunca deixou
+                        uma mensagem sem resposta. Aposentada e apaixonada por receber bem, a Eliane criou a Hospedaria
+                        Astral não
+                        como um negócio, mas como um convite: para que cada hóspede encontre em Milho Verde o descanso,
+                        a beleza e
+                        o acolhimento que merece. E isso se sente em cada detalhe de cada uma das casas.
+                    </p>
+
+                    <div class="anfitria__badges">
+                        <div class="anfitria__badge">
+                            <i class="ri-verified-badge-line"></i>
+                            <span data-pt="Superhost verificado" data-en="Verified Superhost"
+                                data-es="Superhost verificado">Superhost verificado</span>
+                        </div>
+                        <div class="anfitria__badge">
+                            <i class="ri-home-2-line"></i>
+                            <span data-pt="4 propriedades" data-en="4 properties" data-es="4 propiedades">4
+                                propriedades</span>
+                        </div>
+                        <div class="anfitria__badge">
+                            <i class="ri-chat-3-line"></i>
+                            <span data-pt="Responde em até 1 hora" data-en="Responds within 1 hour"
+                                data-es="Responde en menos de 1 hora">Responde em até 1 hora</span>
+                        </div>
+                        <div class="anfitria__badge">
+                            <i class="ri-mail-check-line"></i>
+                            <span data-pt="Taxa de resposta: 100%" data-en="Response rate: 100%"
+                                data-es="Tasa de respuesta: 100%">Taxa de resposta: 100%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== MILHO VERDE ===================== -->
+    <section class="section milhoverde" id="milho-verde">
+        <div class="container">
+            <h2 class="section__title" data-pt="Milho Verde, MG" data-en="Milho Verde, MG" data-es="Milho Verde, MG">
+                Milho Verde, MG</h2>
+
+            <div class="milhoverde__body">
+                <p class="milhoverde__text"
+                    data-pt="Um vilarejo histórico encravado na serra do Espinhaço, a aproximadamente 4h30 de Belo Horizonte. Pedras centenárias, cachoeiras escondidas, trilhas que somem nas montanhas e uma quietude que a maioria das pessoas esqueceu que existia. Milho Verde é o tipo de lugar que se vai para desaparecer um pouco do mundo — e voltar mais inteiro."
+                    data-en="A historic village nestled in the Espinhaço mountain range, approximately 4h30 from Belo Horizonte. Centuries-old stone paths, hidden waterfalls, trails that vanish into the mountains, and a stillness most people have forgotten exists. Milho Verde is the kind of place you go to disappear from the world for a while — and come back more whole."
+                    data-es="Un pueblo histórico enclavado en la sierra del Espinhaço, a aproximadamente 4h30 de Belo Horizonte. Senderos centenarios, cascadas escondidas, caminos que se pierden en las montañas y una quietud que la mayoría olvidó que existía. Milho Verde es el tipo de lugar al que se va para desaparecer del mundo un rato — y volver más entero.">
+                    Um vilarejo histórico encravado na serra do Espinhaço, a aproximadamente 4h30 de Belo Horizonte.
+                    Pedras
+                    centenárias, cachoeiras escondidas, trilhas que somem nas montanhas e uma quietude que a maioria das
+                    pessoas
+                    esqueceu que existia. Milho Verde é o tipo de lugar que se vai para desaparecer um pouco do mundo —
+                    e voltar
+                    mais inteiro.
+                </p>
+
+                <div class="milhoverde__facts">
+                    <div class="milhoverde__fact reveal">
+                        <i class="ri-water-flash-line"></i>
+                        <strong data-pt="Cachoeiras" data-en="Waterfalls" data-es="Cascadas">Cachoeiras</strong>
+                        <span data-pt="Lajeado, Moinho, Canelau, Tempo Perdido e mais"
+                            data-en="Lajeado, Moinho, Canelau, Tempo Perdido and more"
+                            data-es="Lajeado, Moinho, Canelau, Tiempo Perdido y más">Lajeado, Moinho, Canelau, Tempo
+                            Perdido e mais</span>
+                    </div>
+                    <div class="milhoverde__fact reveal">
+                        <i class="ri-ancient-gate-line"></i>
+                        <strong data-pt="História" data-en="History" data-es="Historia">História</strong>
+                        <span data-pt="Vilarejo histórico do século XVIII na Estrada Real"
+                            data-en="18th century historic village on the Royal Road"
+                            data-es="Pueblo histórico del siglo XVIII en el Camino Real">Vilarejo histórico do século
+                            XVIII na Estrada Real</span>
+                    </div>
+                    <div class="milhoverde__fact reveal">
+                        <i class="ri-walk-line"></i>
+                        <strong data-pt="Trilhas" data-en="Trails" data-es="Senderos">Trilhas</strong>
+                        <span data-pt="Diversas opções de curta e longa distância na serra"
+                            data-en="Various short and long-distance options in the mountains"
+                            data-es="Diversas opciones de corta y larga distancia en la sierra">Diversas opções de curta
+                            e longa distância na serra</span>
+                    </div>
+                    <div class="milhoverde__fact reveal">
+                        <i class="ri-restaurant-line"></i>
+                        <strong data-pt="Gastronomia" data-en="Food" data-es="Gastronomía">Gastronomia</strong>
+                        <span data-pt="Restaurantes e bares aconchegantes no centrinho da vila"
+                            data-en="Cozy restaurants and bars in the village center"
+                            data-es="Restaurantes y bares acogedores en el centro de la villa">Restaurantes e bares
+                            aconchegantes no centrinho da vila</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== CONTATO ===================== -->
+    <section class="section contato" id="contato">
+        <div class="container">
+            <h2 class="section__title" data-pt="Fale com a Eliane" data-en="Talk to Eliane" data-es="Habla con Eliane">
+                Fale com a Eliane</h2>
+
+            <p class="contato__desc"
+                data-pt="Dúvidas sobre as casas, disponibilidade ou qualquer coisa que precise — a Eliane responde rápido e com muito carinho."
+                data-en="Questions about the houses, availability or anything you need — Eliane responds quickly and warmly."
+                data-es="Dudas sobre las casas, disponibilidad o cualquier cosa que necesites — Eliane responde rápido y con mucho cariño.">
+                Dúvidas sobre as casas, disponibilidade ou qualquer coisa que precise — a Eliane responde rápido e com
+                muito
+                carinho.
             </p>
-            <div class="property-card__tags">
-              <span class="property-card__tag"><i class="ri-group-line"></i>
-                <span data-pt="Até 4 hóspedes" data-en="Up to 4 guests" data-es="Hasta 4 huéspedes">Até 4 hóspedes</span>
-              </span>
-              <span class="property-card__tag"><i class="ri-sun-line"></i>
-                <span data-pt="Vista pôr do sol" data-en="Sunset views" data-es="Vista al atardecer">Vista pôr do sol</span>
-              </span>
-              <span class="property-card__tag"><i class="ri-leaf-line"></i>
-                <span data-pt="2 varandas" data-en="2 verandas" data-es="2 terrazas">2 varandas</span>
-              </span>
+
+            <div class="contato__links">
+                <a href="https://wa.me/5531933889140" target="_blank" rel="noopener"
+                    class="contato__link contato__link--whatsapp">
+                    <i class="ri-whatsapp-line"></i>
+                    <span>+55 31 9338-9140</span>
+                </a>
+                <a href="https://www.instagram.com/hospedariastral/" target="_blank" rel="noopener"
+                    class="contato__link contato__link--instagram">
+                    <i class="ri-instagram-line"></i>
+                    <span>@hospedariastral</span>
+                </a>
+                <a href="https://www.airbnb.com.br/users/show/1470733641876647737" target="_blank" rel="noopener"
+                    class="contato__link contato__link--airbnb">
+                    <i class="ri-external-link-line"></i>
+                    <span data-pt="Ver no Airbnb" data-en="See on Airbnb" data-es="Ver en Airbnb">Ver no Airbnb</span>
+                </a>
             </div>
-            <a href="casa-alto-astral/index.html" class="property-card__cta"
-              data-pt="Ver a Casa Alto Astral" data-en="See Casa Alto Astral" data-es="Ver Casa Alto Astral">
-              <i class="ri-arrow-right-line"></i>
-              Ver a Casa Alto Astral
-            </a>
-          </div>
         </div>
+    </section>
 
-        <!-- Casa da Montanha -->
-        <div class="property-card reveal">
-          <div class="property-card__img-wrap">
-            <img src="casa-montanha/img/945dc449-541b-4980-82ba-b9ceefdd10ba.avif" alt="Casa da Montanha"
-              class="property-card__img" loading="lazy">
-            <span class="property-card__badge"
-              data-pt="Preferido dos hóspedes" data-en="Guest favourite" data-es="Favorito de huéspedes">Preferido dos hóspedes</span>
-            <div class="property-card__rating">
-              <i class="ri-star-fill"></i>
-              <span>4,95</span>
-              <span style="opacity:.6;font-weight:400" data-pt="· 19 aval." data-en="· 19 rev." data-es="· 19 res.">· 19 aval.</span>
-            </div>
-          </div>
-          <div class="property-card__body">
-            <span class="property-card__location"><i class="ri-map-pin-2-line"></i> Milho Verde, MG</span>
-            <h3 class="property-card__name">Casa da Montanha</h3>
-            <p class="property-card__desc"
-              data-pt="Vista deslumbrante para as montanhas, ambiente charmoso e impecável. Ideal para casais ou pequenos grupos que buscam autenticidade e tranquilidade."
-              data-en="Breathtaking mountain views, charming and impeccable atmosphere. Ideal for couples or small groups seeking authenticity and tranquility."
-              data-es="Impresionantes vistas a las montañas, ambiente encantador e impecable. Ideal para parejas o pequeños grupos que buscan autenticidad y tranquilidad.">
-              Vista deslumbrante para as montanhas, ambiente charmoso e impecável. Ideal para casais ou pequenos grupos
-              que buscam autenticidade e tranquilidade.
-            </p>
-            <div class="property-card__tags">
-              <span class="property-card__tag"><i class="ri-group-line"></i>
-                <span data-pt="Até 4 hóspedes" data-en="Up to 4 guests" data-es="Hasta 4 huéspedes">Até 4 hóspedes</span>
-              </span>
-              <span class="property-card__tag"><i class="ri-landscape-line"></i>
-                <span data-pt="Vista montanhas" data-en="Mountain views" data-es="Vista montañas">Vista montanhas</span>
-              </span>
-              <span class="property-card__tag"><i class="ri-bear-smile-line"></i>
-                <span data-pt="Aceita pets" data-en="Pet-friendly" data-es="Acepta pets">Aceita pets</span>
-              </span>
-            </div>
-            <a href="casa-montanha/index.html" class="property-card__cta"
-              data-pt="Ver a Casa da Montanha" data-en="See Casa da Montanha" data-es="Ver Casa da Montanha">
-              <i class="ri-arrow-right-line"></i>
-              Ver a Casa da Montanha
-            </a>
-          </div>
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="footer">
+        <div class="container">
+            <span class="footer__logo">Hospedaria Astral</span>
+            <span class="footer__separator">·</span>
+            <span>Milho Verde, Minas Gerais</span>
         </div>
+    </footer>
 
-        <!-- Casinha -->
-        <div class="property-card reveal">
-          <div class="property-card__img-wrap">
-            <img src="casinha/img/fd076c4a-02e2-4b86-805f-f84cf3c55e17.avif" alt="Casinha"
-              class="property-card__img" loading="lazy">
-            <span class="property-card__badge"
-              data-pt="Nova" data-en="New" data-es="Nueva">Nova</span>
-            <div class="property-card__rating">
-              <i class="ri-star-fill"></i>
-              <span>4,6</span>
-              <span style="opacity:.6;font-weight:400" data-pt="· 5 aval." data-en="· 5 rev." data-es="· 5 res.">· 5 aval.</span>
-            </div>
-          </div>
-          <div class="property-card__body">
-            <span class="property-card__location"><i class="ri-map-pin-2-line"></i> Milho Verde, MG</span>
-            <h3 class="property-card__name">Casinha</h3>
-            <p class="property-card__desc"
-              data-pt="Micro casa simples, aconchegante e bem ventilada, pertinho das cachoeiras. O cantinho certo para quem quer descansar sem complicação."
-              data-en="Simple, cozy and well-ventilated micro house, close to the waterfalls. The right spot for those who want to rest without any fuss."
-              data-es="Micro casa simple, acogedora y bien ventilada, cerca de las cascadas. El rincón perfecto para quienes quieren descansar sin complicaciones.">
-              Micro casa simples, aconchegante e bem ventilada, pertinho das cachoeiras. O cantinho certo para quem quer
-              descansar sem complicação.
-            </p>
-            <div class="property-card__tags">
-              <span class="property-card__tag"><i class="ri-group-line"></i>
-                <span data-pt="Até 4 hóspedes" data-en="Up to 4 guests" data-es="Hasta 4 huéspedes">Até 4 hóspedes</span>
-              </span>
-              <span class="property-card__tag"><i class="ri-water-flash-line"></i>
-                <span data-pt="Próx. cachoeiras" data-en="Near waterfalls" data-es="Cerca cascadas">Próx. cachoeiras</span>
-              </span>
-              <span class="property-card__tag"><i class="ri-heart-line"></i>
-                <span data-pt="Aconchegante" data-en="Cozy" data-es="Acogedora">Aconchegante</span>
-              </span>
-            </div>
-            <a href="casinha/index.html" class="property-card__cta"
-              data-pt="Ver a Casinha" data-en="See the Casinha" data-es="Ver la Casinha">
-              <i class="ri-arrow-right-line"></i>
-              Ver a Casinha
-            </a>
-          </div>
-        </div>
+    <script src="script.js"></script>
+    <script>
+        // Reveal for property cards and milhoverde facts
+        (function () {
+            const cards = document.querySelectorAll('.property-card.reveal, .milhoverde__fact.reveal');
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== ANFITRIÃ ===================== -->
-  <section class="section anfitria" id="anfitria">
-    <div class="container">
-      <h2 class="section__title" data-pt="A Anfitriã" data-en="The Host" data-es="La Anfitriona">A Anfitriã</h2>
-
-      <div class="anfitria__content reveal">
-        <div class="anfitria__photo">
-          <img src="img/eliane.avif" alt="Eliane — Superhost" loading="lazy">
-        </div>
-
-        <div class="anfitria__info">
-          <h3>Eliane</h3>
-          <p class="anfitria__text"
-            data-pt="Eliane é Superhost no Airbnb — uma das classificações mais difíceis de conquistar na plataforma. Com mais de 81 avaliações e média de 4,84 estrelas em todas as propriedades, ela responde em até 1 hora e nunca deixou uma mensagem sem resposta. Aposentada e apaixonada por receber bem, a Eliane criou a Hospedaria Astral não como um negócio, mas como um convite: para que cada hóspede encontre em Milho Verde o descanso, a beleza e o acolhimento que merece. E isso se sente em cada detalhe de cada uma das casas."
-            data-en="Eliane is an Airbnb Superhost — one of the hardest ratings to earn on the platform. With over 81 reviews and a 4.84-star average across all properties, she responds within an hour and has never left a message unanswered. Retired and passionate about hospitality, Eliane created Hospedaria Astral not as a business, but as an invitation: for every guest to find in Milho Verde the rest, beauty and warmth they deserve. And you can feel that in every detail of every house."
-            data-es="Eliane es Superhost en Airbnb — una de las clasificaciones más difíciles de obtener en la plataforma. Con más de 81 reseñas y un promedio de 4,84 estrellas en todas las propiedades, responde en menos de una hora y nunca dejó un mensaje sin respuesta. Jubilada y apasionada por recibir bien, Eliane creó Hospedaria Astral no como un negocio, sino como una invitación: para que cada huésped encuentre en Milho Verde el descanso, la belleza y la calidez que merece. Y eso se siente en cada detalle de cada una de las casas.">
-            Eliane é Superhost no Airbnb — uma das classificações mais difíceis de conquistar na plataforma. Com mais de
-            81 avaliações e média de 4,84 estrelas em todas as propriedades, ela responde em até 1 hora e nunca deixou
-            uma mensagem sem resposta. Aposentada e apaixonada por receber bem, a Eliane criou a Hospedaria Astral não
-            como um negócio, mas como um convite: para que cada hóspede encontre em Milho Verde o descanso, a beleza e
-            o acolhimento que merece. E isso se sente em cada detalhe de cada uma das casas.
-          </p>
-
-          <div class="anfitria__badges">
-            <div class="anfitria__badge">
-              <i class="ri-verified-badge-line"></i>
-              <span data-pt="Superhost verificado" data-en="Verified Superhost"
-                data-es="Superhost verificado">Superhost verificado</span>
-            </div>
-            <div class="anfitria__badge">
-              <i class="ri-home-2-line"></i>
-              <span data-pt="4 propriedades" data-en="4 properties" data-es="4 propiedades">4 propriedades</span>
-            </div>
-            <div class="anfitria__badge">
-              <i class="ri-chat-3-line"></i>
-              <span data-pt="Responde em até 1 hora" data-en="Responds within 1 hour"
-                data-es="Responde en menos de 1 hora">Responde em até 1 hora</span>
-            </div>
-            <div class="anfitria__badge">
-              <i class="ri-mail-check-line"></i>
-              <span data-pt="Taxa de resposta: 100%" data-en="Response rate: 100%"
-                data-es="Tasa de respuesta: 100%">Taxa de resposta: 100%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== MILHO VERDE ===================== -->
-  <section class="section milhoverde" id="milho-verde">
-    <div class="container">
-      <h2 class="section__title" data-pt="Milho Verde, MG" data-en="Milho Verde, MG"
-        data-es="Milho Verde, MG">Milho Verde, MG</h2>
-
-      <div class="milhoverde__body">
-        <p class="milhoverde__text"
-          data-pt="Um vilarejo histórico encravado na serra do Espinhaço, a aproximadamente 4h30 de Belo Horizonte. Pedras centenárias, cachoeiras escondidas, trilhas que somem nas montanhas e uma quietude que a maioria das pessoas esqueceu que existia. Milho Verde é o tipo de lugar que se vai para desaparecer um pouco do mundo — e voltar mais inteiro."
-          data-en="A historic village nestled in the Espinhaço mountain range, approximately 4h30 from Belo Horizonte. Centuries-old stone paths, hidden waterfalls, trails that vanish into the mountains, and a stillness most people have forgotten exists. Milho Verde is the kind of place you go to disappear from the world for a while — and come back more whole."
-          data-es="Un pueblo histórico enclavado en la sierra del Espinhaço, a aproximadamente 4h30 de Belo Horizonte. Senderos centenarios, cascadas escondidas, caminos que se pierden en las montañas y una quietud que la mayoría olvidó que existía. Milho Verde es el tipo de lugar al que se va para desaparecer del mundo un rato — y volver más entero.">
-          Um vilarejo histórico encravado na serra do Espinhaço, a aproximadamente 4h30 de Belo Horizonte. Pedras
-          centenárias, cachoeiras escondidas, trilhas que somem nas montanhas e uma quietude que a maioria das pessoas
-          esqueceu que existia. Milho Verde é o tipo de lugar que se vai para desaparecer um pouco do mundo — e voltar
-          mais inteiro.
-        </p>
-
-        <div class="milhoverde__facts">
-          <div class="milhoverde__fact reveal">
-            <i class="ri-water-flash-line"></i>
-            <strong data-pt="Cachoeiras" data-en="Waterfalls" data-es="Cascadas">Cachoeiras</strong>
-            <span data-pt="Lajeado, Moinho, Canelau, Tempo Perdido e mais"
-              data-en="Lajeado, Moinho, Canelau, Tempo Perdido and more"
-              data-es="Lajeado, Moinho, Canelau, Tiempo Perdido y más">Lajeado, Moinho, Canelau, Tempo Perdido e mais</span>
-          </div>
-          <div class="milhoverde__fact reveal">
-            <i class="ri-ancient-gate-line"></i>
-            <strong data-pt="História" data-en="History" data-es="Historia">História</strong>
-            <span data-pt="Vilarejo histórico do século XVIII na Estrada Real"
-              data-en="18th century historic village on the Royal Road"
-              data-es="Pueblo histórico del siglo XVIII en el Camino Real">Vilarejo histórico do século XVIII na Estrada Real</span>
-          </div>
-          <div class="milhoverde__fact reveal">
-            <i class="ri-walk-line"></i>
-            <strong data-pt="Trilhas" data-en="Trails" data-es="Senderos">Trilhas</strong>
-            <span data-pt="Diversas opções de curta e longa distância na serra"
-              data-en="Various short and long-distance options in the mountains"
-              data-es="Diversas opciones de corta y larga distancia en la sierra">Diversas opções de curta e longa distância na serra</span>
-          </div>
-          <div class="milhoverde__fact reveal">
-            <i class="ri-restaurant-line"></i>
-            <strong data-pt="Gastronomia" data-en="Food" data-es="Gastronomía">Gastronomia</strong>
-            <span data-pt="Restaurantes e bares aconchegantes no centrinho da vila"
-              data-en="Cozy restaurants and bars in the village center"
-              data-es="Restaurantes y bares acogedores en el centro de la villa">Restaurantes e bares aconchegantes no centrinho da vila</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== CONTATO ===================== -->
-  <section class="section contato" id="contato">
-    <div class="container">
-      <h2 class="section__title" data-pt="Fale com a Eliane" data-en="Talk to Eliane"
-        data-es="Habla con Eliane">Fale com a Eliane</h2>
-
-      <p class="contato__desc"
-        data-pt="Dúvidas sobre as casas, disponibilidade ou qualquer coisa que precise — a Eliane responde rápido e com muito carinho."
-        data-en="Questions about the houses, availability or anything you need — Eliane responds quickly and warmly."
-        data-es="Dudas sobre las casas, disponibilidad o cualquier cosa que necesites — Eliane responde rápido y con mucho cariño.">
-        Dúvidas sobre as casas, disponibilidade ou qualquer coisa que precise — a Eliane responde rápido e com muito
-        carinho.
-      </p>
-
-      <div class="contato__links">
-        <a href="https://wa.me/5531933889140" target="_blank" rel="noopener" class="contato__link contato__link--whatsapp">
-          <i class="ri-whatsapp-line"></i>
-          <span>+55 31 9338-9140</span>
-        </a>
-        <a href="https://www.instagram.com/hospedariastral/" target="_blank" rel="noopener"
-          class="contato__link contato__link--instagram">
-          <i class="ri-instagram-line"></i>
-          <span>@hospedariastral</span>
-        </a>
-        <a href="https://www.airbnb.com.br/users/show/578970765" target="_blank" rel="noopener"
-          class="contato__link contato__link--airbnb">
-          <i class="ri-external-link-line"></i>
-          <span data-pt="Ver no Airbnb" data-en="See on Airbnb" data-es="Ver en Airbnb">Ver no Airbnb</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== FOOTER ===================== -->
-  <footer class="footer">
-    <div class="container">
-      <span class="footer__logo">Hospedaria Astral</span>
-      <span class="footer__separator">·</span>
-      <span>Milho Verde, Minas Gerais</span>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
-  <script>
-    // Reveal for property cards and milhoverde facts
-    (function () {
-      const cards = document.querySelectorAll('.property-card.reveal, .milhoverde__fact.reveal');
-      const obs = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            obs.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-      cards.forEach((el, i) => {
-        el.style.transitionDelay = (i * 0.08) + 's';
-        obs.observe(el);
-      });
-    })();
-  </script>
+            cards.forEach((el, i) => {
+                el.style.transitionDelay = (i * 0.08) + 's';
+                obs.observe(el);
+            });
+        })();
+    </script>
 </body>
 
 </html>
