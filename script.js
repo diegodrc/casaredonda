@@ -6,7 +6,43 @@
   const langDropdown = document.getElementById('langDropdown');
   const langLabel = document.getElementById('langLabel');
   const langOptions = document.querySelectorAll('.lang-switcher__option');
-  let currentLang = 'pt';
+  const htmlLang = document.documentElement.lang;
+  const defaultLang = htmlLang === 'en' ? 'en' : htmlLang === 'es' ? 'es' : 'pt';
+  let currentLang = defaultLang;
+
+  function applyLang(lang) {
+    currentLang = lang;
+    langLabel.textContent = lang.toUpperCase();
+
+    // Update active state
+    langOptions.forEach((o) => o.classList.remove('active'));
+    const activeOption = document.querySelector('.lang-switcher__option[data-lang="' + lang + '"]');
+    if (activeOption) activeOption.classList.add('active');
+
+    // Update all translatable elements
+    document.querySelectorAll('[data-' + lang + ']').forEach((el) => {
+      const text = el.getAttribute('data-' + lang);
+      if (text) {
+        if (el.tagName === 'A' || el.tagName === 'BUTTON') {
+          // Preserve icon inside buttons/links
+          const icon = el.querySelector('i');
+          if (icon) {
+            el.textContent = '';
+            el.appendChild(icon);
+            el.append(' ' + text);
+          } else {
+            el.textContent = text;
+          }
+        } else {
+          el.textContent = text;
+        }
+      }
+    });
+
+    // Update HTML lang attribute
+    const langMap = { pt: 'pt-BR', en: 'en', es: 'es' };
+    document.documentElement.lang = langMap[lang] || lang;
+  }
 
   langBtn.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -21,41 +57,13 @@
     option.addEventListener('click', () => {
       const lang = option.dataset.lang;
       if (lang === currentLang) return;
-
-      currentLang = lang;
-      langLabel.textContent = lang.toUpperCase();
-
-      // Update active state
-      langOptions.forEach((o) => o.classList.remove('active'));
-      option.classList.add('active');
-
-      // Update all translatable elements
-      document.querySelectorAll('[data-' + lang + ']').forEach((el) => {
-        const text = el.getAttribute('data-' + lang);
-        if (text) {
-          if (el.tagName === 'A' || el.tagName === 'BUTTON') {
-            // Preserve icon inside buttons/links
-            const icon = el.querySelector('i');
-            if (icon) {
-              el.textContent = '';
-              el.appendChild(icon);
-              el.append(' ' + text);
-            } else {
-              el.textContent = text;
-            }
-          } else {
-            el.textContent = text;
-          }
-        }
-      });
-
-      // Update HTML lang attribute
-      const langMap = { pt: 'pt-BR', en: 'en', es: 'es' };
-      document.documentElement.lang = langMap[lang] || lang;
-
+      applyLang(lang);
       langDropdown.classList.remove('open');
     });
   });
+
+  // Apply default language on load if not Portuguese
+  if (defaultLang !== 'pt') applyLang(defaultLang);
 
   // ---------- HEADER SCROLL ----------
   const header = document.getElementById('header');
