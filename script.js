@@ -42,6 +42,10 @@
     // Update HTML lang attribute
     const langMap = { pt: 'pt-BR', en: 'en', es: 'es' };
     document.documentElement.lang = langMap[lang] || lang;
+
+    // Update page title if a per-language title is defined
+    const titleAttr = document.documentElement.getAttribute('data-title-' + lang);
+    if (titleAttr) document.title = titleAttr;
   }
 
   langBtn.addEventListener('click', (e) => {
