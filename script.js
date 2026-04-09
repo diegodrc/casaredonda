@@ -57,12 +57,39 @@
     langDropdown.classList.remove('open');
   });
 
+  function getLangUrl(targetLang) {
+    const path = window.location.pathname;
+    const slugs = ['casa-redonda', 'casa-alto-astral', 'casa-montanha', 'casinha'];
+
+    // Find current page slug
+    const slug = slugs.find(s => path.includes('/' + s + '/') || path.endsWith('/' + s)) || '';
+
+    // Strip language prefix (/en or /es) to get site root
+    let root = path.replace(/\/(en|es)(\/.*)?$/, '');
+
+    // If no lang prefix was stripped, strip slug + filename (PT pages)
+    if (root === path) {
+      if (slug) {
+        root = path.replace(new RegExp('/' + slug + '.*$'), '');
+      } else {
+        root = path.replace(/\/[^/]*$/, '');
+      }
+    }
+
+    const page = slug ? '/' + slug + '/index.html' : '/index.html';
+
+    if (targetLang === 'pt') return root + page;
+    if (targetLang === 'en') return root + '/en' + page;
+    if (targetLang === 'es') return root + '/es' + page;
+  }
+
   langOptions.forEach((option) => {
     option.addEventListener('click', () => {
       const lang = option.dataset.lang;
       if (lang === currentLang) return;
-      applyLang(lang);
       langDropdown.classList.remove('open');
+      const url = getLangUrl(lang);
+      if (url) window.location.href = url;
     });
   });
 
