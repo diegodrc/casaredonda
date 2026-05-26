@@ -1,434 +1,416 @@
 
 <style>
-  :root {
-    --teal-50: #E1F5EE; --teal-100: #9FE1CB; --teal-200: #5DCAA5;
-    --teal-600: #0F6E56; --teal-800: #085041; --teal-900: #04342C;
-    --blue-50: #E6F1FB; --blue-100: #B5D4F4;
-    --blue-600: #185FA5; --blue-800: #0C447C;
-    --amber-50: #FAEEDA; --amber-100: #FAC775;
-    --amber-600: #854F0B; --amber-800: #633806;
-    --coral-50: #FAECE7; --coral-100: #F5C4B3;
-    --coral-600: #993C1D; --coral-800: #712B13;
-    --gray-50: #F1EFE8; --gray-100: #D3D1C7;
-    --gray-600: #5F5E5A; --gray-800: #444441;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-sans, system-ui, sans-serif); font-size: 15px; line-height: 1.7; color: var(--color-text-primary); }
-  .doc { max-width: 680px; padding: 2rem 0; }
-  h1 { font-size: 22px; font-weight: 500; margin-bottom: 0.5rem; }
-  h2 { font-size: 18px; font-weight: 500; margin: 2rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
-  h3 { font-size: 16px; font-weight: 500; margin: 1.5rem 0 0.5rem; }
-  p { margin-bottom: 0.75rem; color: var(--color-text-primary); }
-  .subtitle { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
-  .badge { display: inline-block; font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 999px; margin-right: 6px; }
-  .badge-teal { background: var(--teal-50); color: var(--teal-800); }
-  .badge-blue { background: var(--blue-50); color: var(--blue-800); }
-  .badge-amber { background: var(--amber-50); color: var(--amber-800); }
-  .badge-coral { background: var(--coral-50); color: var(--coral-800); }
+*{box-sizing:border-box;margin:0;padding:0}
+.doc{max-width:660px;padding:1.5rem 1rem;font-family:var(--font-sans,system-ui,sans-serif);font-size:15px;line-height:1.7;color:var(--color-text-primary)}
+@media(min-width:600px){.doc{padding:2rem 1.5rem}}
 
-  .leigo-box { background: var(--blue-50); border-left: 3px solid var(--blue-600); border-radius: 0; padding: 0.75rem 1rem; margin: 0.75rem 0 1rem; }
-  .leigo-box-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue-600); margin-bottom: 4px; }
-  .leigo-box p { font-size: 14px; color: var(--color-text-primary); margin-bottom: 0; }
+h1{font-size:20px;font-weight:500;line-height:1.3;margin-bottom:.4rem}
+@media(min-width:600px){h1{font-size:22px}}
+h2{font-size:17px;font-weight:500;margin:2rem 0 .75rem;padding-bottom:.5rem;border-bottom:.5px solid var(--color-border-tertiary)}
+@media(min-width:600px){h2{font-size:18px}}
+h3{font-size:15px;font-weight:500;margin:1.25rem 0 .4rem}
+p{margin-bottom:.7rem}
+ul{padding-left:1.2rem;margin:.4rem 0}
+ul li{margin-bottom:5px;font-size:14px}
 
-  .warn-box { background: var(--amber-50); border-left: 3px solid var(--amber-600); padding: 0.75rem 1rem; margin: 0.75rem 0 1rem; border-radius: 0; }
-  .warn-box-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber-600); margin-bottom: 4px; }
-  .warn-box p { font-size: 14px; color: var(--color-text-primary); margin-bottom: 0; }
+.subtitle{font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem}
+.tag{font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.tag-teal{background:#E1F5EE;color:#085041}
+.tag-blue{background:#E6F1FB;color:#0C447C}
+.tag-amber{background:#FAEEDA;color:#633806}
 
-  .danger-box { background: var(--coral-50); border-left: 3px solid var(--coral-600); padding: 0.75rem 1rem; margin: 0.75rem 0 1rem; border-radius: 0; }
-  .danger-box-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--coral-600); margin-bottom: 4px; }
-  .danger-box p { font-size: 14px; color: var(--color-text-primary); margin-bottom: 0; }
+.toc{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:.875rem 1rem;margin-bottom:1.75rem}
+.toc-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-secondary);margin-bottom:.4rem}
+.toc a{display:block;font-size:13px;color:#185FA5;text-decoration:none;padding:2px 0;line-height:1.5}
 
-  .green-box { background: var(--teal-50); border-left: 3px solid var(--teal-600); padding: 0.75rem 1rem; margin: 0.75rem 0 1rem; border-radius: 0; }
-  .green-box-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--teal-600); margin-bottom: 4px; }
-  .green-box p { font-size: 14px; color: var(--color-text-primary); margin-bottom: 0; }
+.callout{border-left:3px solid;padding:.65rem .9rem;margin:.65rem 0 .9rem;border-radius:0}
+.callout-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.callout p{font-size:13px;margin-bottom:0;line-height:1.6}
+.c-blue{border-color:#185FA5;background:#E6F1FB}.c-blue .callout-label{color:#185FA5}
+.c-amber{border-color:#854F0B;background:#FAEEDA}.c-amber .callout-label{color:#854F0B}
+.c-red{border-color:#993C1D;background:#FAECE7}.c-red .callout-label{color:#993C1D}
+.c-teal{border-color:#0F6E56;background:#E1F5EE}.c-teal .callout-label{color:#0F6E56}
 
-  details { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 1rem; overflow: hidden; }
-  summary { font-size: 15px; font-weight: 500; padding: 1rem 1.25rem; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; background: var(--color-background-secondary); }
-  summary::-webkit-details-marker { display: none; }
-  summary::after { content: '+'; font-size: 20px; font-weight: 300; color: var(--color-text-secondary); }
-  details[open] summary::after { content: '−'; }
-  details[open] summary { border-bottom: 0.5px solid var(--color-border-tertiary); }
-  .details-body { padding: 1.25rem; background: var(--color-background-primary); }
+details{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:.75rem;overflow:hidden}
+summary{font-size:14px;font-weight:500;padding:.875rem 1rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;background:var(--color-background-secondary);gap:8px}
+summary::-webkit-details-marker{display:none}
+summary .icon{font-size:18px;font-weight:300;color:var(--color-text-secondary);flex-shrink:0;line-height:1}
+details[open] summary{border-bottom:.5px solid var(--color-border-tertiary)}
+details[open] summary .icon::before{content:'−'}
+.icon::before{content:'+'}
+.det-body{padding:1rem;background:var(--color-background-primary)}
 
-  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 0.75rem 0; }
-  th { text-align: left; padding: 6px 10px; font-weight: 500; font-size: 12px; color: var(--color-text-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); }
-  td { padding: 7px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); vertical-align: top; }
-  tr:last-child td { border-bottom: none; }
+.fase-card{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.875rem;background:var(--color-background-primary)}
+.fase-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:.75rem}
+.fase-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0;margin-top:2px}
+.fn1{background:#E6F1FB;color:#0C447C}
+.fn2{background:#E1F5EE;color:#085041}
+.fn3{background:#FAEEDA;color:#633806}
+.fn4{background:#FAECE7;color:#712B13}
+.fase-title{font-size:15px;font-weight:500;line-height:1.3}
+.fase-sub{font-size:12px;color:var(--color-text-secondary);margin-top:1px}
 
-  .semaforo { display: flex; gap: 12px; margin: 1rem 0; flex-wrap: wrap; }
-  .semaforo-item { flex: 1; min-width: 160px; border-radius: var(--border-radius-md); padding: 0.75rem 1rem; }
-  .sem-verde { background: var(--teal-50); }
-  .sem-amarelo { background: var(--amber-50); }
-  .sem-vermelho { background: var(--coral-50); }
-  .sem-titulo { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
-  .sem-verde .sem-titulo { color: var(--teal-800); }
-  .sem-amarelo .sem-titulo { color: var(--amber-800); }
-  .sem-vermelho .sem-titulo { color: var(--coral-800); }
-  .sem-texto { font-size: 12px; color: var(--color-text-secondary); }
+.semaforo{display:grid;grid-template-columns:1fr;gap:8px;margin:.75rem 0}
+@media(min-width:480px){.semaforo{grid-template-columns:repeat(3,1fr)}}
+.sem{border-radius:var(--border-radius-md);padding:.75rem}
+.sem-verde{background:#E1F5EE}
+.sem-amarelo{background:#FAEEDA}
+.sem-vermelho{background:#FAECE7}
+.sem-titulo{font-size:13px;font-weight:500;margin-bottom:3px}
+.sem-verde .sem-titulo{color:#085041}
+.sem-amarelo .sem-titulo{color:#633806}
+.sem-vermelho .sem-titulo{color:#712B13}
+.sem-txt{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
 
-  .fase-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 1rem; background: var(--color-background-primary); }
-  .fase-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; }
-  .fase-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; flex-shrink: 0; }
-  .fn1 { background: var(--blue-50); color: var(--blue-800); }
-  .fn2 { background: var(--teal-50); color: var(--teal-800); }
-  .fn3 { background: var(--amber-50); color: var(--amber-800); }
-  .fn4 { background: var(--coral-50); color: var(--coral-800); }
-  .fase-title { font-size: 15px; font-weight: 500; }
-  .fase-sub { font-size: 12px; color: var(--color-text-secondary); }
-  ul { padding-left: 1.25rem; margin: 0.5rem 0; }
-  ul li { margin-bottom: 4px; font-size: 14px; }
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.6rem 0}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:360px}
+th{text-align:left;padding:6px 8px;font-weight:500;font-size:11px;color:var(--color-text-secondary);border-bottom:.5px solid var(--color-border-tertiary);white-space:nowrap}
+td{padding:7px 8px;border-bottom:.5px solid var(--color-border-tertiary);vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
 
-  .ref-item { font-size: 13px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); }
-  .ref-item:last-child { border-bottom: none; }
-  .ref-num { font-weight: 500; color: var(--color-text-primary); margin-right: 6px; }
-  .ref-journal { font-style: italic; }
+.ref-item{font-size:12px;padding:7px 0;border-bottom:.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);line-height:1.5}
+.ref-item:last-child{border-bottom:none}
+.ref-num{font-weight:500;color:var(--color-text-primary);margin-right:5px}
+.ref-journal{font-style:italic}
 
-  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 2rem 0; }
-  .toc { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 2rem; }
-  .toc-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; }
-  .toc a { display: block; font-size: 14px; color: var(--blue-600); text-decoration: none; padding: 3px 0; }
-  .toc a:hover { text-decoration: underline; }
+hr{border:none;border-top:.5px solid var(--color-border-tertiary);margin:1.75rem 0}
+.notice{margin-top:1.75rem;padding:.875rem 1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);font-size:12px;color:var(--color-text-secondary);line-height:1.6}
 </style>
 
 <div class="doc">
-  <h1>Exercícios Terapêuticos para Dor no Quadril e no Joelho</h1>
-  <p class="subtitle">Protocolo baseado em evidências científicas para tendinopatia glútea e condropatia patelar grau I — versão para pacientes e profissionais</p>
-  <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:1.5rem;">
-    <span class="badge badge-teal">Fisioterapia musculoesquelética</span>
-    <span class="badge badge-blue">Academia de musculação</span>
-    <span class="badge badge-amber">Protocolo de 12 semanas</span>
-  </div>
 
-  <div class="toc">
-    <div class="toc-title">Índice</div>
-    <a href="#intro">Sobre este documento</a>
-    <a href="#tendao">Parte 1 — Tendinopatia Glútea</a>
-    <a href="#joelho">Parte 2 — Condropatia Patelar</a>
-    <a href="#combinado">Parte 3 — Protocolo unificado na academia</a>
-    <a href="#monitoramento">Parte 4 — Como monitorar a dor e o progresso</a>
-    <a href="#referencias">Referências científicas</a>
-  </div>
+<h1>Exercícios Terapêuticos para Dor no Quadril e no Joelho</h1>
+<p class="subtitle">Protocolo baseado em evidências para tendinopatia glútea e condropatia patelar grau I</p>
+<div class="tags">
+  <span class="tag tag-teal">Fisioterapia musculoesquelética</span>
+  <span class="tag tag-blue">Academia de musculação</span>
+  <span class="tag tag-amber">Protocolo 12 semanas</span>
+</div>
 
-  <h2 id="intro">Sobre este documento</h2>
-  <p>Este protocolo foi desenvolvido por um fisioterapeuta especializado para orientar o tratamento de duas condições muito comuns que afetam a mobilidade e a qualidade de vida: a <strong>tendinopatia glútea</strong> (dor na lateral do quadril) e a <strong>condropatia patelar grau I</strong> (desgaste inicial da cartilagem do joelho).</p>
-  <div class="leigo-box">
-    <div class="leigo-box-label">Para entender melhor</div>
-    <p>Um <strong>protocolo</strong> é um conjunto de instruções padronizadas, baseadas em pesquisas científicas, que guia o tratamento passo a passo. Ele não substitui a consulta com um profissional de saúde — pelo contrário, deve ser sempre supervisionado por um fisioterapeuta.</p>
-  </div>
-  <p>Todas as recomendações aqui presentes vêm de <strong>revisões sistemáticas</strong>, <strong>meta-análises</strong> e <strong>ensaios clínicos randomizados</strong> — os tipos de estudos mais confiáveis na ciência médica.</p>
-  <div class="leigo-box">
-    <div class="leigo-box-label">O que são esses tipos de estudo?</div>
-    <p><strong>Revisão sistemática:</strong> pesquisadores reúnem e analisam todos os estudos já publicados sobre um tema para tirar uma conclusão mais confiável do que qualquer estudo isolado.<br><br><strong>Meta-análise:</strong> vai além da revisão sistemática — usa matemática para combinar os resultados de vários estudos e medir o efeito de um tratamento com mais precisão.<br><br><strong>Ensaio clínico randomizado (ECR):</strong> um experimento em que pacientes são divididos aleatoriamente em grupos (ex: um recebe o tratamento, outro recebe um placebo ou tratamento alternativo), para comparar resultados de forma justa e sem viés.</p>
-  </div>
+<div class="toc">
+  <div class="toc-label">Índice</div>
+  <a href="#intro">Sobre este documento</a>
+  <a href="#tendao">Parte 1 — Tendinopatia glútea</a>
+  <a href="#joelho">Parte 2 — Condropatia patelar</a>
+  <a href="#protocolo">Parte 3 — Protocolo na academia</a>
+  <a href="#monitor">Parte 4 — Monitorar dor e progresso</a>
+  <a href="#refs">Referências científicas</a>
+</div>
 
-  <hr class="divider">
+<h2 id="intro">Sobre este documento</h2>
+<p>Este protocolo orienta o tratamento de duas condições comuns que afetam a mobilidade: a <strong>tendinopatia glútea</strong> (dor na lateral do quadril) e a <strong>condropatia patelar grau I</strong> (desgaste inicial da cartilagem do joelho).</p>
+<div class="callout c-blue">
+  <div class="callout-label">Para entender melhor</div>
+  <p>Um <strong>protocolo</strong> é um conjunto de instruções padronizadas, baseadas em pesquisas, que guia o tratamento passo a passo. Deve ser sempre supervisionado por um fisioterapeuta.</p>
+</div>
+<p>Todas as recomendações vêm de <strong>revisões sistemáticas</strong>, <strong>meta-análises</strong> e <strong>ensaios clínicos randomizados</strong> — os tipos de estudo mais confiáveis na ciência médica.</p>
+<div class="callout c-blue">
+  <div class="callout-label">O que são esses tipos de estudo?</div>
+  <p><strong>Revisão sistemática:</strong> reúne e analisa todos os estudos publicados sobre um tema.<br><strong>Meta-análise:</strong> combina matematicamente os resultados de vários estudos para medir o efeito de um tratamento com mais precisão.<br><strong>Ensaio clínico randomizado (ECR):</strong> pacientes são divididos aleatoriamente em grupos para comparar tratamentos de forma justa.</p>
+</div>
 
-  <h2 id="tendao">Parte 1 — Tendinopatia glútea (dor trocantérica lateral)</h2>
+<hr>
 
-  <div class="leigo-box">
-    <div class="leigo-box-label">O que é tendinopatia glútea?</div>
-    <p>É uma condição dolorosa causada pela degeneração (deterioração gradual) dos tendões dos músculos glúteo médio e glúteo mínimo — músculos localizados na lateral do quadril. A dor aparece tipicamente na lateral do quadril, na região chamada de <strong>trocânter maior</strong> (a saliência óssea que você sente na lateral do quadril). Pode piorar ao subir escadas, ficar de pé por muito tempo ou ao cruzar as pernas.</p>
-  </div>
+<h2 id="tendao">Parte 1 — Tendinopatia glútea</h2>
+<div class="callout c-blue">
+  <div class="callout-label">O que é tendinopatia glútea?</div>
+  <p>Degeneração dos tendões dos músculos glúteo médio e mínimo — localizados na lateral do quadril. A dor aparece no <strong>trocânter maior</strong> (a saliência óssea que você sente na lateral do quadril) e piora ao subir escadas, ficar de pé por muito tempo ou cruzar as pernas.</p>
+</div>
 
-  <h3>O que a ciência diz</h3>
-  <p>O estudo mais importante sobre esse problema é o <strong>LEAP trial</strong> (Mellor et al., <em>BMJ</em>, 2018), um ensaio clínico com 204 pacientes que comparou três abordagens:</p>
+<h3>O estudo LEAP — a evidência mais sólida</h3>
+<p>Mellor et al. (<em>BMJ</em>, 2018) comparou três abordagens em 204 pacientes:</p>
 
-  <details>
-    <summary>Resultados do LEAP trial — clique para ver</summary>
-    <div class="details-body">
-      <div class="leigo-box">
-        <div class="leigo-box-label">O que é o LEAP trial?</div>
-        <p>Um estudo australiano de alta qualidade conduzido por Mellor e colaboradores que acompanhou 204 pacientes com tendinopatia glútea por até 1 ano, comparando três formas de tratamento.</p>
-      </div>
-      <table>
-        <thead>
-          <tr><th>Tratamento</th><th>Taxa de sucesso em 8 semanas</th><th>Em 52 semanas</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Educação + exercício (EDX)</strong></td><td>77,3%</td><td>78,6%</td></tr>
-          <tr><td>Infiltração de corticoide</td><td>58,5%</td><td>58,3%</td></tr>
-          <tr><td>Esperar sem tratar ("wait and see")</td><td>29,4%</td><td>51,9%</td></tr>
-        </tbody>
-      </table>
-      <div class="leigo-box">
-        <div class="leigo-box-label">O que é infiltração de corticoide?</div>
-        <p>É uma injeção de um medicamento anti-inflamatório (chamado corticoide) diretamente no local da dor. É eficaz no curto prazo, mas os resultados do LEAP mostram que o exercício combinado com educação é melhor tanto em 2 meses quanto em 1 ano.</p>
-      </div>
-      <p style="font-size:13px; color:var(--color-text-secondary); margin-top:0.75rem;">Fonte: Mellor R et al. <em>BMJ.</em> 2018;361:k1662.</p>
+<details>
+  <summary>Resultados do LEAP trial <span class="icon"></span></summary>
+  <div class="det-body">
+    <div class="callout c-blue">
+      <div class="callout-label">O que é o LEAP trial?</div>
+      <p>Estudo australiano que acompanhou 204 pacientes por até 1 ano, comparando educação + exercício, infiltração de corticoide e espera sem tratamento.</p>
     </div>
-  </details>
-
-  <h3>O papel da compressão tendínea</h3>
-  <p>Pesquisas de Cook & Purdam (2012) e Grimaldi & Fearon (2015) mostram que o principal vilão nessa condição é a <strong>compressão do tendão</strong>, e não apenas o esforço muscular excessivo.</p>
-  <div class="leigo-box">
-    <div class="leigo-box-label">O que é compressão tendínea?</div>
-    <p>Tendões são como cordas que conectam músculos a ossos. Quando você cruza as pernas, "descansa" o peso em um quadril ou dorme do lado afetado, o tendão glúteo fica espremido entre o músculo e o osso — como dobrar uma mangueira. Fazer isso repetidamente inflama e deteriora o tendão ao longo do tempo. Por isso, grande parte do tratamento consiste em aprender a evitar essas posições.</p>
-  </div>
-  <p>Allison et al. (2016) demonstrou que pessoas com essa condição caminham com um padrão de movimento que aumenta a compressão no tendão em 9 a 33% a cada passada — e considerando 5.000 a 10.000 passos por dia, a carga acumulada é enorme.</p>
-
-  <h3>Isométrico vs. isotônico — qual é melhor?</h3>
-  <div class="leigo-box">
-    <div class="leigo-box-label">O que são exercícios isométricos e isotônicos?</div>
-    <p><strong>Isométrico:</strong> o músculo se contrai (fica tenso) sem que haja movimento. Exemplo: empurrar uma parede com força — você se cansa, mas não move nada.<br><br><strong>Isotônico:</strong> o músculo se contrai com movimento. Existem dois tipos: <em>concêntrico</em> (músculo encurta — ex: subir na ponta dos pés) e <em>excêntrico</em> (músculo alonga enquanto está ativado — ex: descer devagar de um degrau).</p>
-  </div>
-  <p>Clifford et al. (2019) comparou os dois tipos em 30 pacientes por 12 semanas: <strong>55% do grupo isométrico</strong> e <strong>58% do grupo isotônico</strong> atingiram melhora significativa de dor. A conclusão: o <em>tipo</em> de contração importa menos do que a <em>progressão gradual da carga</em>.</p>
-
-  <h3>Posturas e atividades a evitar</h3>
-  <div class="danger-box">
-    <div class="danger-box-label">Atenção — posições que pioram o tendão glúteo</div>
-    <p>• Sentar com as pernas cruzadas (joelho sobre joelho ou tornozelo sobre joelho)<br>
-    • Apoiar o peso em apenas um quadril com a pelve caída ("hip hanging")<br>
-    • Dormir do lado afetado sem travesseiro entre os joelhos<br>
-    • Alongamentos de "piriforme" cruzando o joelho para o ombro oposto<br>
-    • Exercícios que trazem a perna para dentro da linha do corpo (adução) sob carga<br>
-    • Máquina adutora e "curtsy lunge" (avanço cruzado)</p>
-  </div>
-
-  <hr class="divider">
-
-  <h2 id="joelho">Parte 2 — Condropatia patelar grau I e síndrome da dor patelofemoral</h2>
-
-  <div class="leigo-box">
-    <div class="leigo-box-label">O que é condropatia patelar e síndrome da dor patelofemoral?</div>
-    <p>A <strong>patela</strong> é o "osso do joelho" — aquele que você consegue mover com o dedo quando a perna está esticada. Ela desliza em um sulco no osso da coxa (fêmur) durante os movimentos. A <strong>cartilagem patelar</strong> é uma camada protetora na face interna da patela que amortece esse deslizamento.<br><br><strong>Condropatia grau I</strong> é o estágio mais inicial de desgaste dessa cartilagem — ela apresenta amolecimento superficial, mas ainda sem erosão profunda.<br><br><strong>Síndrome da dor patelofemoral (PFPS)</strong> é o nome clínico dado à dor nessa articulação, geralmente sentida atrás ou ao redor da patela, que piora ao agachar, subir escadas, ficar sentado por muito tempo ("sinal do cinema") ou correr.</p>
-  </div>
-
-  <h3>O que a ciência diz</h3>
-  <p>O <strong>Consenso de Gold Coast 2018</strong> (Collins, Barton, Crossley et al., <em>BJSM</em>) — a declaração oficial de especialistas internacionais no tema — recomenda fortemente o <strong>exercício combinado de quadril + joelho</strong> como tratamento de primeira linha.</p>
-  <div class="leigo-box">
-    <div class="leigo-box-label">Por que fortalecer o quadril para tratar dor no joelho?</div>
-    <p>O quadril controla o alinhamento de toda a perna. Quando os músculos do quadril (especialmente o glúteo médio e os rotadores externos) estão fracos, o joelho tende a cair para dentro ao agachar ou subir escadas — um movimento chamado de <strong>valgo dinâmico</strong>. Isso aumenta a pressão sobre a patela e causa dor. Fortalecer o quadril corrige esse desalinhamento e reduz o estresse na articulação do joelho.</p>
-  </div>
-  <p>A meta-análise de Nascimento et al. (<em>JOSPT</em>, 2018) analisou 14 ensaios clínicos e mostrou que o fortalecimento combinado quadril + joelho reduz a dor <strong>1,5 ponto a mais</strong> (em uma escala de 0 a 10) do que o fortalecimento isolado do joelho — diferença considerada clinicamente importante.</p>
-
-  <h3>Ângulos articulares seguros — biomecânica do joelho</h3>
-  <div class="leigo-box">
-    <div class="leigo-box-label">O que são cadeia cinética fechada e aberta?</div>
-    <p><strong>Cadeia cinética fechada (CCF):</strong> exercícios em que o pé está apoiado no chão ou em uma superfície fixa. Exemplo: agachamento, leg press, subida de degrau. São geralmente mais seguros para o joelho porque distribuem melhor a carga.<br><br><strong>Cadeia cinética aberta (CCA):</strong> exercícios em que o pé fica solto no ar. Exemplo: cadeira extensora ("leg extension"). Produzem um tipo diferente de pressão sobre a patela.</p>
-  </div>
-  <p>Steinkamp et al. (<em>AJSM</em>, 1993) demonstrou que o estresse na articulação patelofemoral é diferente em cada tipo de exercício dependendo do ângulo do joelho:</p>
-  <table>
-    <thead><tr><th>Ângulo do joelho</th><th>Cadeia fechada (agachamento/leg press)</th><th>Cadeia aberta (cadeira extensora)</th></tr></thead>
-    <tbody>
-      <tr><td>0° a 45°</td><td style="color:var(--teal-800)">Estresse baixo — seguro</td><td style="color:var(--coral-600)">Estresse alto — evitar no início</td></tr>
-      <tr><td>45° a 90°</td><td style="color:var(--amber-800)">Estresse aumenta gradualmente</td><td style="color:var(--teal-800)">Estresse menor — mais seguro</td></tr>
-    </tbody>
-  </table>
-  <div class="leigo-box">
-    <div class="leigo-box-label">Na prática — o que isso significa para você?</div>
-    <p>Nos exercícios de agachamento e leg press, comece com movimentos pequenos (dobrar o joelho só até 45°, que equivale a uma "meia descida"). Na cadeira extensora, faça o movimento mais fechado (partindo de 90° de dobramento até metade). Conforme a dor diminui e o fisioterapeuta autoriza, aumente progressivamente a amplitude.</p>
-  </div>
-
-  <h3>O mito do VMO seletivo</h3>
-  <div class="leigo-box">
-    <div class="leigo-box-label">O que é o VMO e por que isso importa?</div>
-    <p>O <strong>VMO (vasto medial oblíquo)</strong> é a parte interna do músculo quadríceps (o músculo da frente da coxa) — aquela que forma o "gotejado" acima do joelho no lado interno. Acreditava-se que fortalecê-lo seletivamente melhoraria o rastreamento da patela. Hoje se sabe que <strong>isso é um mito</strong> — a ciência não encontrou exercícios que ativem o VMO separadamente dos outros componentes do quadríceps. O que funciona é o fortalecimento do quadríceps como um todo, junto com o quadril.</p>
-  </div>
-
-  <hr class="divider">
-
-  <h2 id="combinado">Parte 3 — Protocolo unificado de 12 semanas na academia</h2>
-  <p>Os dois protocolos têm exercícios em comum — os chamados <strong>exercícios "dois em um"</strong> — que beneficiam tanto o tendão glúteo quanto a articulação do joelho ao mesmo tempo.</p>
-  <div class="green-box">
-    <div class="green-box-label">Exercícios "dois em um" (beneficiam quadril e joelho)</div>
-    <p>Single-leg squat parcial (agachamento unipodal até 45°), step-down lateral (descida de degrau), ponte unilateral, abdução em pé no cabo, lateral band walk (caminhada lateral com elástico), hip thrust unilateral</p>
-  </div>
-
-  <div class="fase-card">
-    <div class="fase-header">
-      <div class="fase-num fn1">1</div>
-      <div><div class="fase-title">Fase de familiarização</div><div class="fase-sub">Semanas 1–2 · 3 sessões/semana · RPE 11–12</div></div>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Tratamento</th><th>8 semanas</th><th>52 semanas</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Educação + exercício (EDX)</strong></td><td>77,3%</td><td>78,6%</td></tr>
+        <tr><td>Infiltração de corticoide</td><td>58,5%</td><td>58,3%</td></tr>
+        <tr><td>Esperar sem tratar</td><td>29,4%</td><td>51,9%</td></tr>
+      </tbody>
+    </table>
     </div>
-    <div class="leigo-box" style="margin-top:0;">
-      <div class="leigo-box-label">O que é RPE?</div>
-      <p>RPE significa <em>Rate of Perceived Exertion</em> — escala de esforço percebido, de 6 (repouso total) a 20 (esforço máximo absoluto). RPE 11–12 corresponde a um esforço "leve a moderado" — você sente que está se exercitando, mas consegue conversar sem dificuldade.</p>
+    <div class="callout c-blue" style="margin-top:.75rem">
+      <div class="callout-label">O que é infiltração de corticoide?</div>
+      <p>Injeção de anti-inflamatório no local da dor. Eficaz a curto prazo, mas os resultados do LEAP mostram que exercício + educação supera essa opção tanto em 2 meses quanto em 1 ano.</p>
     </div>
-    <ul>
-      <li><strong>Abdução isométrica</strong> em pé contra a parede: 5 × 10–15 segundos (cada lado)</li>
-      <li><strong>Ponte bilateral</strong> no banco: 1 × 10 repetições</li>
-      <li><strong>Agachamento parcial</strong> (0–30° de dobramento do joelho): 1 × 10 repetições</li>
-      <li><strong>Abdução no cabo</strong> (baixo): 2 × 10 repetições cada lado</li>
-      <li><strong>Cadeira extensora</strong> de 90° a 45°: 3 × 10 repetições</li>
-      <li><strong>TKE com elástico</strong> (extensão terminal do joelho): 3 × 15 repetições</li>
-      <li>Educação intensa sobre posturas a evitar</li>
-    </ul>
-    <div class="warn-box" style="margin-top:0.75rem; margin-bottom:0;">
-      <div class="warn-box-label">Critério de dor nesta fase</div>
-      <p>Dor máxima de <strong>4/10</strong> nos exercícios de força isolada. <strong>Zero piora</strong> em atividades do dia a dia. Sem aumento de dor na manhã seguinte ao treino.</p>
-    </div>
+    <p style="font-size:12px;color:var(--color-text-secondary);margin-top:.5rem;margin-bottom:0">Fonte: Mellor R et al. <em>BMJ.</em> 2018;361:k1662.</p>
   </div>
+</details>
 
-  <div class="fase-card">
-    <div class="fase-header">
-      <div class="fase-num fn2">2</div>
-      <div><div class="fase-title">Carga precoce</div><div class="fase-sub">Semanas 3–4 · 3 sessões/semana · RPE 13–14</div></div>
-    </div>
-    <ul>
-      <li><strong>Ponte unilateral</strong> com halter 5 kg sobre o quadril: 2 × 8–10</li>
-      <li><strong>Agachamento parcial assimétrico</strong> na Smith (70% do peso em um lado): 2 × 5 cada lado</li>
-      <li><strong>Subida de degrau lateral</strong> (15–20 cm) com halteres 4–8 kg: 2 × 8</li>
-      <li><strong>Abdução no cabo</strong> (carga média): 2 × 8</li>
-      <li><strong>Caminhada lateral com elástico</strong> (monster walk): 2 × 10 cada direção</li>
-      <li><strong>Leg press</strong> de 0° a 60°: 3 × 10</li>
-    </ul>
-    <div class="leigo-box" style="margin-top:0.75rem; margin-bottom:0;">
-      <div class="leigo-box-label">O que é "carga precoce"?</div>
-      <p>Significa introduzir cargas moderadas já no início do tratamento — ao contrário do que se pensava antes (repouso total). A ciência atual mostra que <strong>o tendão e a cartilagem precisam de carga progressiva para se recuperar</strong>; o repouso prolongado piora o prognóstico.</p>
-    </div>
+<h3>Compressão tendínea — o principal agravante</h3>
+<p>Cook & Purdam (2012) e Grimaldi & Fearon (2015) mostram que o vetor mais danoso para o tendão não é o esforço isolado, mas a <strong>compressão repetida</strong>.</p>
+<div class="callout c-blue">
+  <div class="callout-label">O que é compressão tendínea?</div>
+  <p>Tendões são como cordas que conectam músculos a ossos. Ao cruzar as pernas ou descansar o peso em um quadril, o tendão glúteo fica espremido entre músculo e osso — como dobrar uma mangueira. Repetido 5.000–10.000 vezes por dia (número de passos), deteriora o tendão gradualmente.</p>
+</div>
+
+<h3>Isométrico vs. isotônico</h3>
+<div class="callout c-blue">
+  <div class="callout-label">O que são exercícios isométricos e isotônicos?</div>
+  <p><strong>Isométrico:</strong> o músculo se contrai sem movimento — como empurrar uma parede.<br><strong>Isotônico:</strong> o músculo se contrai com movimento (concêntrico = encurtando; excêntrico = alongando sob tensão).</p>
+</div>
+<p>Clifford et al. (2019) comparou os dois em 30 pacientes: <strong>55% (isométrico)</strong> vs. <strong>58% (isotônico)</strong> atingiram melhora significativa de dor. O tipo de contração importa menos do que a progressão gradual da carga.</p>
+
+<h3>Posições e exercícios a evitar</h3>
+<div class="callout c-red">
+  <div class="callout-label">Atenção — agrava o tendão glúteo</div>
+  <p>• Sentar com pernas cruzadas (joelho sobre joelho ou tornozelo sobre joelho)<br>
+  • "Hip hanging" — descansar o peso em um quadril com pelve caída<br>
+  • Dormir do lado afetado sem travesseiro entre os joelhos<br>
+  • Alongamentos de piriforme cruzando o joelho ao ombro oposto<br>
+  • Máquina adutora, curtsy lunge e qualquer movimento que traga a perna para dentro da linha do corpo sob carga</p>
+</div>
+
+<hr>
+
+<h2 id="joelho">Parte 2 — Condropatia patelar e síndrome da dor patelofemoral</h2>
+<div class="callout c-blue">
+  <div class="callout-label">O que é condropatia patelar?</div>
+  <p>A <strong>patela</strong> é o "osso do joelho". A <strong>cartilagem patelar</strong> é a camada protetora na sua face interna que amortece o deslizamento sobre o fêmur. <strong>Grau I</strong> é o estágio mais inicial — amolecimento superficial sem erosão profunda. A dor aparece atrás ou ao redor da patela e piora ao agachar, subir escadas ou sentar por muito tempo.</p>
+</div>
+
+<h3>O que a ciência recomenda</h3>
+<p>O <strong>Consenso de Gold Coast 2018</strong> (Collins, Barton, Crossley et al., <em>BJSM</em>) recomenda fortemente <strong>exercício combinado de quadril + joelho</strong> como tratamento de primeira linha.</p>
+<div class="callout c-blue">
+  <div class="callout-label">Por que fortalecer o quadril para tratar dor no joelho?</div>
+  <p>O quadril controla o alinhamento de toda a perna. Quando o glúteo médio e os rotadores externos estão fracos, o joelho cai para dentro ao agachar — <strong>valgo dinâmico</strong>. Isso aumenta a pressão sobre a patela. Fortalecer o quadril corrige esse desalinhamento.</p>
+</div>
+<p>A meta-análise de Nascimento et al. (<em>JOSPT</em>, 2018) — 14 ensaios clínicos, 673 pacientes — mostrou que quadril + joelho reduz a dor <strong>1,5 ponto a mais</strong> do que joelho isolado, acima do limiar de relevância clínica.</p>
+
+<h3>Ângulos articulares seguros</h3>
+<div class="callout c-blue">
+  <div class="callout-label">Cadeia cinética fechada e aberta — o que é?</div>
+  <p><strong>Cadeia fechada (CCF):</strong> pé apoiado no chão ou superfície fixa. Ex: agachamento, leg press, subida de degrau.<br><strong>Cadeia aberta (CCA):</strong> pé livre no ar. Ex: cadeira extensora (leg extension).</p>
+</div>
+<p>Steinkamp et al. (<em>AJSM</em>, 1993) mostrou que o estresse na articulação do joelho é diferente conforme o ângulo:</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Ângulo do joelho</th><th>Cadeia fechada</th><th>Cadeia aberta</th></tr></thead>
+  <tbody>
+    <tr><td>0° a 45°</td><td style="color:#085041">Estresse baixo ✓</td><td style="color:#993C1D">Estresse alto — evitar</td></tr>
+    <tr><td>45° a 90°</td><td style="color:#854F0B">Estresse aumenta</td><td style="color:#085041">Estresse menor ✓</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="callout c-blue">
+  <div class="callout-label">Na prática</div>
+  <p>Nos agachamentos e leg press, comece descendo só até 45° de dobramento do joelho. Na cadeira extensora, faça de 90° até a metade. Aumente a amplitude gradualmente, com autorização do fisioterapeuta.</p>
+</div>
+
+<h3>O mito do VMO seletivo</h3>
+<div class="callout c-blue">
+  <div class="callout-label">O que é o VMO?</div>
+  <p>O <strong>vasto medial oblíquo (VMO)</strong> é a parte interna do quadríceps — o "gotejado" acima do joelho no lado interno. Acreditava-se que fortalecê-lo seletivamente melhoraria o joelho, mas a ciência mostrou que isso é um mito. O que funciona é o fortalecimento global do quadríceps + quadril.</p>
+</div>
+
+<hr>
+
+<h2 id="protocolo">Parte 3 — Protocolo na academia (12 semanas)</h2>
+<div class="callout c-teal">
+  <div class="callout-label">Exercícios "dois em um" — beneficiam quadril e joelho</div>
+  <p>Single-leg squat parcial, step-down lateral, ponte unilateral, abdução no cabo, lateral band walk, hip thrust unilateral</p>
+</div>
+
+<div class="fase-card">
+  <div class="fase-head">
+    <div class="fase-num fn1">1</div>
+    <div><div class="fase-title">Familiarização</div><div class="fase-sub">Semanas 1–2 · 3×/semana · RPE 11–12</div></div>
   </div>
-
-  <div class="fase-card">
-    <div class="fase-header">
-      <div class="fase-num fn3">3</div>
-      <div><div class="fase-title">Carga progressiva pesada e lenta (HSR)</div><div class="fase-sub">Semanas 5–8 · 3–4 sessões/semana · RPE 15–17</div></div>
-    </div>
-    <div class="leigo-box" style="margin-top:0;">
-      <div class="leigo-box-label">O que é HSR (Heavy Slow Resistance)?</div>
-      <p>É um método de fortalecimento que usa <strong>cargas mais elevadas com movimentos lentos e controlados</strong> (tipicamente 3 segundos para subir e 3 segundos para descer). Estudos mostram que esse tipo de treinamento é particularmente eficaz para a saúde de tendões e cartilagens — mais do que movimentos rápidos com pouco peso.</p>
-    </div>
-    <ul>
-      <li><strong>Agachamento unipodal parcial</strong> até 45°: 3 × 6–8 (lento 3s/3s)</li>
-      <li><strong>Hip thrust</strong> unilateral com barra (10–20 kg): 3 × 6–8</li>
-      <li><strong>Subida de degrau lateral alto</strong> (30 cm) com halteres 8–15 kg: 3 × 6–8</li>
-      <li><strong>Abdução no cabo</strong> (pesado, lento): 3 × 6–8</li>
-      <li><strong>Bulgarian split squat</strong> com halteres 5–15 kg: 3 × 6–8</li>
-      <li><strong>Leg press</strong> de 0° a 90° (se tolerado sem dor): 3 × 8–10</li>
-    </ul>
-    <div class="leigo-box" style="margin-top:0.75rem; margin-bottom:0;">
-      <div class="leigo-box-label">O que é "Bulgarian split squat"?</div>
-      <p>É um agachamento unilateral (em uma perna só) em que o pé de trás fica apoiado em um banco. Trabalha intensamente o glúteo, o quadríceps e os estabilizadores do quadril ao mesmo tempo — sendo um dos exercícios mais eficientes para ambas as condições tratadas neste protocolo.</p>
-    </div>
+  <div class="callout c-blue" style="margin-top:0">
+    <div class="callout-label">O que é RPE?</div>
+    <p>Escala de esforço de 6 a 20. RPE 11–12 = leve a moderado — você se exercita mas consegue conversar sem dificuldade.</p>
   </div>
-
-  <div class="fase-card">
-    <div class="fase-header">
-      <div class="fase-num fn4">4</div>
-      <div><div class="fase-title">Manutenção e retorno às atividades</div><div class="fase-sub">Semanas 9–12+ · 2–3 sessões/semana</div></div>
-    </div>
-    <ul>
-      <li>Manutenção dos exercícios da fase 3 com menor frequência</li>
-      <li>Retorno gradual a atividades esportivas ou de lazer</li>
-      <li>Pliometria (exercícios de salto) apenas se o joelho estiver assintomático e VISA-G ≥80</li>
-    </ul>
-    <div class="leigo-box" style="margin-top:0.75rem; margin-bottom:0;">
-      <div class="leigo-box-label">O que é pliometria?</div>
-      <p>São exercícios que envolvem saltos e impactos, como pular corda ou agachamento com salto. Exigem articulações preparadas e são introduzidos apenas na etapa final do tratamento, quando o paciente já está praticamente sem dor.</p>
-    </div>
-  </div>
-
-  <hr class="divider">
-
-  <h2 id="monitoramento">Parte 4 — Como monitorar a dor e o progresso</h2>
-
-  <h3>Escalas de dor e função</h3>
-  <div class="leigo-box">
-    <div class="leigo-box-label">O que é a escala EVA/VAS?</div>
-    <p>A <strong>Escala Visual Analógica (EVA)</strong> é uma régua de 0 a 10 para quantificar a dor: 0 = sem dor, 10 = a pior dor imaginável. É o principal instrumento usado durante os exercícios para decidir se uma carga está adequada ou excessiva.</p>
-  </div>
-  <p>Além da EVA, são usadas duas escalas funcionais específicas:</p>
   <ul>
-    <li><strong>VISA-G</strong> (tendinopatia glútea): questionário de 0 a 100 sobre o quanto a condição limita suas atividades. Melhora mínima clinicamente relevante: 22–29 pontos.</li>
-    <li><strong>KOOS</strong> (joelho): questionário de 0 a 100 sobre dor, função e qualidade de vida relacionada ao joelho. Melhora mínima relevante: ~10 pontos.</li>
+    <li>Abdução isométrica em pé contra a parede: 5 × 10–15 s cada lado</li>
+    <li>Ponte bilateral: 1 × 10 reps</li>
+    <li>Agachamento parcial 0–30°: 1 × 10 reps</li>
+    <li>Abdução no cabo (baixo): 2 × 10 cada lado</li>
+    <li>Cadeira extensora 90°→45°: 3 × 10 reps</li>
+    <li>TKE com elástico: 3 × 15 reps</li>
   </ul>
-  <div class="leigo-box">
-    <div class="leigo-box-label">O que é "melhora clinicamente relevante"?</div>
-    <p>É o tamanho mínimo de melhora que faz diferença real na vida do paciente — não apenas uma diferença estatística em um computador. Por exemplo: uma melhora de 2 pontos em uma escala de 100 pode ser detectada estatisticamente, mas o paciente não vai perceber na prática. Uma melhora de 22 pontos no VISA-G, sim.</p>
+  <div class="callout c-amber" style="margin-top:.75rem;margin-bottom:0">
+    <div class="callout-label">Critério de dor nesta fase</div>
+    <p>Dor máxima 4/10. Zero piora no dia a dia. Sem aumento de dor na manhã seguinte.</p>
   </div>
+</div>
 
-  <h3>Modelo do semáforo — regra de ouro para progressão</h3>
-  <p>Este modelo, adaptado de Silbernagel e Cook & Purdam, orienta quando avançar, manter ou recuar no treinamento:</p>
-  <div class="semaforo">
-    <div class="semaforo-item sem-verde">
-      <div class="sem-titulo">Verde — avançar</div>
-      <div class="sem-texto">Dor ≤3/10 durante o exercício. Dor retorna ao nível de base em até 24 horas. VISA-G ou KOOS melhorando ≥10 pontos em relação ao início.</div>
-    </div>
-    <div class="semaforo-item sem-amarelo">
-      <div class="sem-titulo">Amarelo — manter</div>
-      <div class="sem-texto">Dor entre 3–5/10. Retorno à linha de base entre 24–48 horas. Escalas estáveis. Manter a mesma carga por 1–2 semanas.</div>
-    </div>
-    <div class="semaforo-item sem-vermelho">
-      <div class="sem-titulo">Vermelho — recuar</div>
-      <div class="sem-texto">Dor >5/10 ou piora que dura mais de 48 horas. Reduzir a carga em 25–50% e retornar à fase anterior por 1 semana.</div>
-    </div>
+<div class="fase-card">
+  <div class="fase-head">
+    <div class="fase-num fn2">2</div>
+    <div><div class="fase-title">Carga precoce</div><div class="fase-sub">Semanas 3–4 · 3×/semana · RPE 13–14</div></div>
   </div>
-  <div class="warn-box">
-    <div class="warn-box-label">Princípio de Cook & Purdam sobre tendões</div>
-    <p>Tendões têm <strong>resposta latente</strong>: podem parecer bem durante o exercício e piorar 24 horas depois. Por isso, <strong>a dor no dia seguinte ao treino é o indicador mais importante</strong> de tolerância — não apenas como você se sente durante o exercício.</p>
+  <div class="callout c-blue" style="margin-top:0">
+    <div class="callout-label">O que é "carga precoce"?</div>
+    <p>Introduzir pesos moderados já no início. Tendão e cartilagem precisam de carga progressiva para se recuperar — o repouso prolongado piora o prognóstico.</p>
   </div>
-
-  <h3>Critérios para encerrar a reabilitação supervisionada</h3>
   <ul>
-    <li>VISA-G ≥ 80/100 e KOOS ≥ 85/100</li>
-    <li>Dor ≤ 2/10 na atividade que mais incomodava antes</li>
-    <li>Agachamento unipodal sem dor e sem o joelho caindo para dentro</li>
-    <li>Força do abdutor de quadril ≥ 90% do lado oposto (medida pelo fisioterapeuta)</li>
+    <li>Ponte unilateral com halter 5 kg: 2 × 8–10</li>
+    <li>Agachamento assimétrico na Smith (70/30): 2 × 5 cada lado</li>
+    <li>Subida de degrau lateral 15–20 cm com halteres 4–8 kg: 2 × 8</li>
+    <li>Abdução no cabo (carga média): 2 × 8</li>
+    <li>Monster walk com elástico: 2 × 10 cada direção</li>
+    <li>Leg press 0°→60°: 3 × 10</li>
   </ul>
-  <div class="leigo-box">
-    <div class="leigo-box-label">O que é "abdutor de quadril" e por que medir a força?</div>
-    <p>O <strong>abdutor de quadril</strong> é o músculo que afasta a perna para o lado (principalmente o glúteo médio). A força assimétrica entre os dois lados é um marcador de desequilíbrio muscular que pode perpetuar tanto a tendinopatia quanto a dor no joelho. Atingir 90% da força do lado saudável significa que o lado tratado está praticamente reequilibrado.</p>
+</div>
+
+<div class="fase-card">
+  <div class="fase-head">
+    <div class="fase-num fn3">3</div>
+    <div><div class="fase-title">Carga progressiva — HSR</div><div class="fase-sub">Semanas 5–8 · 3–4×/semana · RPE 15–17</div></div>
   </div>
-
-  <hr class="divider">
-
-  <h2 id="referencias">Referências científicas</h2>
-  <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:1rem;">Lista das principais referências que embasam este protocolo, organizadas por tema.</p>
-
-  <details>
-    <summary>Tendinopatia glútea (referências 1–12)</summary>
-    <div class="details-body">
-      <div class="ref-item"><span class="ref-num">1.</span> Mellor R et al. Education plus exercise versus corticosteroid injection use versus a wait and see approach on global outcome and pain from gluteal tendinopathy. <span class="ref-journal">BMJ.</span> 2018;361:k1662.</div>
-      <div class="ref-item"><span class="ref-num">2.</span> Mellor R et al. Exercise and load modification versus corticosteroid injection versus 'wait and see' for persistent gluteus medius/minimus tendinopathy (the LEAP trial): a protocol. <span class="ref-journal">BMC Musculoskelet Disord.</span> 2016;17:196.</div>
-      <div class="ref-item"><span class="ref-num">3.</span> Grimaldi A, Fearon A. Gluteal Tendinopathy: Integrating Pathomechanics and Clinical Features in Its Management. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2015;45(11):910-922.</div>
-      <div class="ref-item"><span class="ref-num">4.</span> Grimaldi A et al. Gluteal tendinopathy: a review of mechanisms, assessment and management. <span class="ref-journal">Sports Med.</span> 2015;45(8):1107-19.</div>
-      <div class="ref-item"><span class="ref-num">5.</span> Ganderton C et al. Gluteal Loading Versus Sham Exercises to Improve Pain and Dysfunction in Postmenopausal Women with Greater Trochanteric Pain Syndrome: RCT. <span class="ref-journal">J Womens Health.</span> 2018;27(6):815-829.</div>
-      <div class="ref-item"><span class="ref-num">6.</span> Allison K et al. Hip Abductor Muscle Weakness in Individuals with Gluteal Tendinopathy. <span class="ref-journal">Med Sci Sports Exerc.</span> 2016;48(3):346-352.</div>
-      <div class="ref-item"><span class="ref-num">7.</span> Allison K et al. Kinematics and kinetics during walking in individuals with gluteal tendinopathy. <span class="ref-journal">Clin Biomech.</span> 2016;32:56-63.</div>
-      <div class="ref-item"><span class="ref-num">8.</span> Fearon AM et al. Development and validation of a VISA tendinopathy questionnaire for greater trochanteric pain syndrome, the VISA-G. <span class="ref-journal">Manual Therapy.</span> 2015;20(6):805-13.</div>
-      <div class="ref-item"><span class="ref-num">9.</span> Paiva EB et al. Translation, cross-cultural adaptation and validation of the Brazilian Portuguese VISA-G.BR. <span class="ref-journal">Musculoskelet Sci Pract.</span> 2021;52:102341.</div>
-      <div class="ref-item"><span class="ref-num">10.</span> Clifford C et al. Isometric versus isotonic exercise for greater trochanteric pain syndrome: a randomised controlled pilot study. <span class="ref-journal">BMJ Open Sport Exerc Med.</span> 2019;5:e000558.</div>
-      <div class="ref-item"><span class="ref-num">11.</span> Ladurner A et al. Treatment of Gluteal Tendinopathy: A Systematic Review and Stage-Adjusted Treatment Recommendation. <span class="ref-journal">Orthop J Sports Med.</span> 2021;9(7).</div>
-      <div class="ref-item"><span class="ref-num">12.</span> Cowan RM et al. Does Menopausal Hormone Therapy, Exercise, or Both Improve Pain in Postmenopausal Women With GTPS? 2×2 Factorial RCT. <span class="ref-journal">Am J Sports Med.</span> 2022;50(2):515-525.</div>
-    </div>
-  </details>
-
-  <details>
-    <summary>Síndrome da dor patelofemoral e condropatia (referências 13–29)</summary>
-    <div class="details-body">
-      <div class="ref-item"><span class="ref-num">13.</span> Collins NJ et al. 2018 Consensus statement on exercise therapy and physical interventions to treat patellofemoral pain. <span class="ref-journal">Br J Sports Med.</span> 2018;52(18):1170-1178.</div>
-      <div class="ref-item"><span class="ref-num">14.</span> Crossley KM et al. 2016 Patellofemoral pain consensus statement — Part 2: recommended physical interventions. <span class="ref-journal">Br J Sports Med.</span> 2016;50(14):844-852.</div>
-      <div class="ref-item"><span class="ref-num">15.</span> Lack S et al. Proximal muscle rehabilitation is effective for patellofemoral pain: a systematic review with meta-analysis. <span class="ref-journal">Br J Sports Med.</span> 2015;49(21):1365-76.</div>
-      <div class="ref-item"><span class="ref-num">16.</span> Nascimento LR et al. Hip and Knee Strengthening Is More Effective Than Knee Strengthening Alone for Reducing Pain and Improving Activity in PFPS: Systematic Review With Meta-analysis. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2018;48(1):19-31.</div>
-      <div class="ref-item"><span class="ref-num">17.</span> Fukuda TY et al. Short-Term Effects of Hip Abductors and Lateral Rotators Strengthening in Females With PFPS: RCT. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2010;40(11):736-742.</div>
-      <div class="ref-item"><span class="ref-num">18.</span> Fukuda TY et al. Hip Posterolateral Musculature Strengthening in Sedentary Women With PFPS: RCT With 1-Year Follow-Up. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2012;42(10):823-830.</div>
-      <div class="ref-item"><span class="ref-num">19.</span> Khayambashi K et al. The effects of isolated hip abductor and external rotator muscle strengthening on pain and health status in females with PFPS. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2012;42(1):22-29.</div>
-      <div class="ref-item"><span class="ref-num">20.</span> Powers CM. The influence of abnormal hip mechanics on knee injury: a biomechanical perspective. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2010;40(2):42-51.</div>
-      <div class="ref-item"><span class="ref-num">21.</span> Powers CM et al. Patellofemoral Joint Stress During Weight-Bearing and Non-Weight-Bearing Quadriceps Exercises. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2014;44(5):320-327.</div>
-      <div class="ref-item"><span class="ref-num">22.</span> Steinkamp LA et al. Biomechanical considerations in patellofemoral joint rehabilitation. <span class="ref-journal">Am J Sports Med.</span> 1993;21(3):438-444.</div>
-      <div class="ref-item"><span class="ref-num">23.</span> Salem GJ, Powers CM. Patellofemoral joint kinetics during squatting in collegiate women athletes. <span class="ref-journal">Clin Biomech.</span> 2001;16(5):424-30.</div>
-      <div class="ref-item"><span class="ref-num">24.</span> Witvrouw E et al. Open versus closed kinetic chain exercises for patellofemoral pain: a prospective, randomized study. <span class="ref-journal">Am J Sports Med.</span> 2000;28(5):687-94.</div>
-      <div class="ref-item"><span class="ref-num">25.</span> Barton CJ et al. The 'Best Practice Guide to Conservative Management of Patellofemoral Pain'. <span class="ref-journal">Br J Sports Med.</span> 2015;49(14):923-34.</div>
-      <div class="ref-item"><span class="ref-num">26.</span> van der Heijden RA et al. Exercise for treating patellofemoral pain syndrome. <span class="ref-journal">Cochrane Database Syst Rev.</span> 2015;CD010387.</div>
-      <div class="ref-item"><span class="ref-num">27.</span> Rathleff MS et al. Exercise during school hours when added to patient education improves outcome for 2 years in adolescent patellofemoral pain: cluster RCT. <span class="ref-journal">Br J Sports Med.</span> 2015;49(6):406-12.</div>
-      <div class="ref-item"><span class="ref-num">28.</span> Halabi MH et al. The Efficacy of Hip and Knee Muscles Strengthening Versus Knee Alone in Managing PFPS: Systematic Review and Meta-Analysis. <span class="ref-journal">Musculoskeletal Care.</span> 2025;23:e70059.</div>
-      <div class="ref-item"><span class="ref-num">29.</span> Willy RW et al. Patellofemoral Pain. Clinical Practice Guidelines. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2019;49(9):CPG1-CPG95.</div>
-    </div>
-  </details>
-
-  <details>
-    <summary>Princípios gerais de tendinopatia e ativação muscular (referências 30–37)</summary>
-    <div class="details-body">
-      <div class="ref-item"><span class="ref-num">30.</span> Cook JL, Purdam C. Is compressive load a factor in the development of tendinopathy? <span class="ref-journal">Br J Sports Med.</span> 2012;46(3):163-168.</div>
-      <div class="ref-item"><span class="ref-num">31.</span> Cook JL, Purdam CR. The challenge of managing tendinopathy in competing athletes. <span class="ref-journal">Br J Sports Med.</span> 2014;48(7):506-509.</div>
-      <div class="ref-item"><span class="ref-num">32.</span> Malliaras P et al. Patellar Tendinopathy: Clinical Diagnosis, Load Management, and Advice for Challenging Case Presentations. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2015;45(11):887-898.</div>
-      <div class="ref-item"><span class="ref-num">33.</span> Rio E et al. Isometric exercise induces analgesia and reduces inhibition in patellar tendinopathy. <span class="ref-journal">Br J Sports Med.</span> 2015;49(19):1277-1283.</div>
-      <div class="ref-item"><span class="ref-num">34.</span> DiStefano LJ et al. Gluteal muscle activation during common therapeutic exercises. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2009;39(7):532-540.</div>
-      <div class="ref-item"><span class="ref-num">35.</span> Boren K et al. Electromyographic analysis of gluteus medius and gluteus maximus during rehabilitation exercises. <span class="ref-journal">Int J Sports Phys Ther.</span> 2011;6(3):206-23.</div>
-      <div class="ref-item"><span class="ref-num">36.</span> Selkowitz DM et al. Which exercises target the gluteal muscles while minimizing activation of the tensor fascia lata? <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2013;43(2):54-64.</div>
-      <div class="ref-item"><span class="ref-num">37.</span> Reiman MP et al. A literature review of studies evaluating gluteus maximus and gluteus medius activation during rehabilitation exercises. <span class="ref-journal">Physiother Theory Pract.</span> 2012;28(4):257-68.</div>
-    </div>
-  </details>
-
-  <div style="margin-top:2rem; padding:1rem; background:var(--color-background-secondary); border-radius:var(--border-radius-lg); font-size:13px; color:var(--color-text-secondary);">
-    <strong style="color:var(--color-text-primary);">Aviso importante:</strong> Este documento tem finalidade informativa e educacional. Todos os exercícios e progressões devem ser supervisionados por um fisioterapeuta habilitado. Não substitui consulta clínica individualizada.
+  <div class="callout c-blue" style="margin-top:0">
+    <div class="callout-label">O que é HSR?</div>
+    <p><em>Heavy Slow Resistance</em> — cargas mais elevadas com movimentos lentos e controlados (3 segundos subindo, 3 descendo). Especialmente eficaz para tendões e cartilagens.</p>
   </div>
+  <ul>
+    <li>Agachamento unipodal até 45° (lento 3s/3s): 3 × 6–8</li>
+    <li>Hip thrust unilateral com barra 10–20 kg: 3 × 6–8</li>
+    <li>Subida de degrau alto 30 cm com halteres 8–15 kg: 3 × 6–8</li>
+    <li>Abdução no cabo (pesado, lento): 3 × 6–8</li>
+    <li>Bulgarian split squat com halteres 5–15 kg: 3 × 6–8</li>
+    <li>Leg press 0°→90° (se tolerado): 3 × 8–10</li>
+  </ul>
+  <div class="callout c-blue" style="margin-top:.75rem;margin-bottom:0">
+    <div class="callout-label">O que é Bulgarian split squat?</div>
+    <p>Agachamento unilateral com o pé de trás apoiado em um banco. Trabalha glúteo, quadríceps e estabilizadores do quadril ao mesmo tempo.</p>
+  </div>
+</div>
+
+<div class="fase-card">
+  <div class="fase-head">
+    <div class="fase-num fn4">4</div>
+    <div><div class="fase-title">Manutenção e retorno</div><div class="fase-sub">Semanas 9–12+ · 2–3×/semana</div></div>
+  </div>
+  <ul>
+    <li>Manutenção dos exercícios da fase 3 com menor frequência</li>
+    <li>Retorno gradual a esportes e atividades de lazer</li>
+    <li>Pliometria apenas com joelho assintomático e VISA-G ≥ 80</li>
+  </ul>
+  <div class="callout c-blue" style="margin-top:.75rem;margin-bottom:0">
+    <div class="callout-label">O que é pliometria?</div>
+    <p>Exercícios com saltos e impactos (pular corda, agachamento com salto). Introduzidos somente na etapa final, quando o paciente está praticamente sem dor.</p>
+  </div>
+</div>
+
+<hr>
+
+<h2 id="monitor">Parte 4 — Monitorar dor e progresso</h2>
+
+<h3>Escalas utilizadas</h3>
+<div class="callout c-blue">
+  <div class="callout-label">O que é a escala EVA?</div>
+  <p>Régua de 0 a 10 para medir dor: 0 = sem dor, 10 = a pior dor imaginável. Principal critério para ajustar a carga dos exercícios.</p>
+</div>
+<ul>
+  <li><strong>VISA-G</strong> (tendão glúteo): 0–100 pontos; melhora mínima relevante: 22–29 pontos</li>
+  <li><strong>KOOS</strong> (joelho): 0–100 pontos; melhora mínima relevante: ~10 pontos</li>
+</ul>
+<div class="callout c-blue">
+  <div class="callout-label">O que é "melhora clinicamente relevante"?</div>
+  <p>O tamanho mínimo de melhora que faz diferença real na vida do paciente — não apenas uma diferença estatística em computador. Uma melhora de 2 pontos em 100 é detectável matematicamente, mas o paciente não percebe. Uma melhora de 22 pontos no VISA-G, sim.</p>
+</div>
+
+<h3>Modelo do semáforo</h3>
+<p>Orienta quando avançar, manter ou recuar no treino (adaptado de Silbernagel; Cook & Purdam):</p>
+<div class="semaforo">
+  <div class="sem sem-verde">
+    <div class="sem-titulo">Verde — avançar</div>
+    <div class="sem-txt">Dor ≤ 3/10. Volta ao basal em até 24 h. VISA-G ou KOOS melhorando ≥ 10 pts.</div>
+  </div>
+  <div class="sem sem-amarelo">
+    <div class="sem-titulo">Amarelo — manter</div>
+    <div class="sem-txt">Dor 3–5/10. Volta ao basal em 24–48 h. Manter a mesma carga 1–2 semanas.</div>
+  </div>
+  <div class="sem sem-vermelho">
+    <div class="sem-titulo">Vermelho — recuar</div>
+    <div class="sem-txt">Dor > 5/10 ou piora por mais de 48 h. Reduzir carga 25–50% e retornar à fase anterior.</div>
+  </div>
+</div>
+<div class="callout c-amber">
+  <div class="callout-label">Princípio de Cook & Purdam — resposta latente do tendão</div>
+  <p>Tendões podem parecer bem durante o exercício e piorar 24 horas depois. <strong>A dor no dia seguinte ao treino é o indicador mais importante</strong> de tolerância — não apenas como você se sente durante a sessão.</p>
+</div>
+
+<h3>Critérios para alta da reabilitação supervisionada</h3>
+<ul>
+  <li>VISA-G ≥ 80/100 e KOOS ≥ 85/100</li>
+  <li>Dor ≤ 2/10 na atividade que mais incomodava</li>
+  <li>Agachamento unipodal sem dor e sem valgo dinâmico</li>
+  <li>Força do abdutor de quadril ≥ 90% do lado oposto</li>
+</ul>
+<div class="callout c-blue">
+  <div class="callout-label">O que é "abdutor de quadril" e por que medir a força?</div>
+  <p>O <strong>abdutor de quadril</strong> (principalmente o glúteo médio) afasta a perna para o lado. Assimetria de força entre os dois lados perpetua tanto a tendinopatia quanto a dor no joelho. Atingir 90% da força do lado saudável indica que o reequilíbrio muscular foi alcançado.</p>
+</div>
+
+<hr>
+
+<h2 id="refs">Referências científicas</h2>
+
+<details>
+  <summary>Tendinopatia glútea (refs. 1–12) <span class="icon"></span></summary>
+  <div class="det-body">
+    <div class="ref-item"><span class="ref-num">1.</span>Mellor R et al. Education plus exercise versus corticosteroid injection use versus a wait and see approach on global outcome and pain from gluteal tendinopathy. <span class="ref-journal">BMJ.</span> 2018;361:k1662.</div>
+    <div class="ref-item"><span class="ref-num">2.</span>Mellor R et al. Exercise and load modification versus corticosteroid injection versus 'wait and see' for persistent gluteus medius/minimus tendinopathy (LEAP trial): a protocol. <span class="ref-journal">BMC Musculoskelet Disord.</span> 2016;17:196.</div>
+    <div class="ref-item"><span class="ref-num">3.</span>Grimaldi A, Fearon A. Gluteal Tendinopathy: Integrating Pathomechanics and Clinical Features. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2015;45(11):910-922.</div>
+    <div class="ref-item"><span class="ref-num">4.</span>Grimaldi A et al. Gluteal tendinopathy: a review of mechanisms, assessment and management. <span class="ref-journal">Sports Med.</span> 2015;45(8):1107-19.</div>
+    <div class="ref-item"><span class="ref-num">5.</span>Ganderton C et al. Gluteal Loading Versus Sham Exercises to Improve Pain and Dysfunction in Postmenopausal Women with GTPS: RCT. <span class="ref-journal">J Womens Health.</span> 2018;27(6):815-829.</div>
+    <div class="ref-item"><span class="ref-num">6.</span>Allison K et al. Hip Abductor Muscle Weakness in Individuals with Gluteal Tendinopathy. <span class="ref-journal">Med Sci Sports Exerc.</span> 2016;48(3):346-352.</div>
+    <div class="ref-item"><span class="ref-num">7.</span>Allison K et al. Kinematics and kinetics during walking in individuals with gluteal tendinopathy. <span class="ref-journal">Clin Biomech.</span> 2016;32:56-63.</div>
+    <div class="ref-item"><span class="ref-num">8.</span>Fearon AM et al. Development and validation of a VISA tendinopathy questionnaire for GTPS, the VISA-G. <span class="ref-journal">Manual Therapy.</span> 2015;20(6):805-13.</div>
+    <div class="ref-item"><span class="ref-num">9.</span>Paiva EB et al. Translation and validation of the Brazilian Portuguese VISA-G.BR. <span class="ref-journal">Musculoskelet Sci Pract.</span> 2021;52:102341.</div>
+    <div class="ref-item"><span class="ref-num">10.</span>Clifford C et al. Isometric versus isotonic exercise for greater trochanteric pain syndrome: pilot RCT. <span class="ref-journal">BMJ Open Sport Exerc Med.</span> 2019;5:e000558.</div>
+    <div class="ref-item"><span class="ref-num">11.</span>Ladurner A et al. Treatment of Gluteal Tendinopathy: Systematic Review and Stage-Adjusted Recommendation. <span class="ref-journal">Orthop J Sports Med.</span> 2021;9(7).</div>
+    <div class="ref-item"><span class="ref-num">12.</span>Cowan RM et al. Menopausal Hormone Therapy, Exercise, or Both for GTPS: 2×2 Factorial RCT. <span class="ref-journal">Am J Sports Med.</span> 2022;50(2):515-525.</div>
+  </div>
+</details>
+
+<details>
+  <summary>Síndrome da dor patelofemoral (refs. 13–29) <span class="icon"></span></summary>
+  <div class="det-body">
+    <div class="ref-item"><span class="ref-num">13.</span>Collins NJ et al. 2018 Consensus statement on exercise therapy to treat patellofemoral pain. <span class="ref-journal">Br J Sports Med.</span> 2018;52(18):1170-1178.</div>
+    <div class="ref-item"><span class="ref-num">14.</span>Crossley KM et al. 2016 Patellofemoral pain consensus statement — Part 2: physical interventions. <span class="ref-journal">Br J Sports Med.</span> 2016;50(14):844-852.</div>
+    <div class="ref-item"><span class="ref-num">15.</span>Lack S et al. Proximal muscle rehabilitation is effective for patellofemoral pain: systematic review with meta-analysis. <span class="ref-journal">Br J Sports Med.</span> 2015;49(21):1365-76.</div>
+    <div class="ref-item"><span class="ref-num">16.</span>Nascimento LR et al. Hip and Knee Strengthening Is More Effective Than Knee Strengthening Alone for PFPS: Systematic Review With Meta-analysis. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2018;48(1):19-31.</div>
+    <div class="ref-item"><span class="ref-num">17.</span>Fukuda TY et al. Short-Term Effects of Hip Abductors and Lateral Rotators Strengthening in Females With PFPS: RCT. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2010;40(11):736-742.</div>
+    <div class="ref-item"><span class="ref-num">18.</span>Fukuda TY et al. Hip Posterolateral Musculature Strengthening in Sedentary Women With PFPS: RCT With 1-Year Follow-Up. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2012;42(10):823-830.</div>
+    <div class="ref-item"><span class="ref-num">19.</span>Khayambashi K et al. Effects of isolated hip abductor and external rotator strengthening on pain in females with PFPS. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2012;42(1):22-29.</div>
+    <div class="ref-item"><span class="ref-num">20.</span>Powers CM. The influence of abnormal hip mechanics on knee injury. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2010;40(2):42-51.</div>
+    <div class="ref-item"><span class="ref-num">21.</span>Powers CM et al. Patellofemoral Joint Stress During Weight-Bearing and Non-Weight-Bearing Quadriceps Exercises. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2014;44(5):320-327.</div>
+    <div class="ref-item"><span class="ref-num">22.</span>Steinkamp LA et al. Biomechanical considerations in patellofemoral joint rehabilitation. <span class="ref-journal">Am J Sports Med.</span> 1993;21(3):438-444.</div>
+    <div class="ref-item"><span class="ref-num">23.</span>Salem GJ, Powers CM. Patellofemoral joint kinetics during squatting in collegiate women athletes. <span class="ref-journal">Clin Biomech.</span> 2001;16(5):424-30.</div>
+    <div class="ref-item"><span class="ref-num">24.</span>Witvrouw E et al. Open versus closed kinetic chain exercises for patellofemoral pain: prospective randomized study. <span class="ref-journal">Am J Sports Med.</span> 2000;28(5):687-94.</div>
+    <div class="ref-item"><span class="ref-num">25.</span>Barton CJ et al. Best Practice Guide to Conservative Management of Patellofemoral Pain. <span class="ref-journal">Br J Sports Med.</span> 2015;49(14):923-34.</div>
+    <div class="ref-item"><span class="ref-num">26.</span>van der Heijden RA et al. Exercise for treating patellofemoral pain syndrome. <span class="ref-journal">Cochrane Database Syst Rev.</span> 2015;CD010387.</div>
+    <div class="ref-item"><span class="ref-num">27.</span>Rathleff MS et al. Exercise during school hours improves outcome in adolescent patellofemoral pain: cluster RCT. <span class="ref-journal">Br J Sports Med.</span> 2015;49(6):406-12.</div>
+    <div class="ref-item"><span class="ref-num">28.</span>Halabi MH et al. Efficacy of Hip and Knee Muscles Strengthening Versus Knee Alone in PFPS: Systematic Review and Meta-Analysis. <span class="ref-journal">Musculoskeletal Care.</span> 2025;23:e70059.</div>
+    <div class="ref-item"><span class="ref-num">29.</span>Willy RW et al. Patellofemoral Pain. Clinical Practice Guidelines. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2019;49(9):CPG1-CPG95.</div>
+  </div>
+</details>
+
+<details>
+  <summary>Princípios gerais e ativação muscular (refs. 30–37) <span class="icon"></span></summary>
+  <div class="det-body">
+    <div class="ref-item"><span class="ref-num">30.</span>Cook JL, Purdam C. Is compressive load a factor in the development of tendinopathy? <span class="ref-journal">Br J Sports Med.</span> 2012;46(3):163-168.</div>
+    <div class="ref-item"><span class="ref-num">31.</span>Cook JL, Purdam CR. The challenge of managing tendinopathy in competing athletes. <span class="ref-journal">Br J Sports Med.</span> 2014;48(7):506-509.</div>
+    <div class="ref-item"><span class="ref-num">32.</span>Malliaras P et al. Patellar Tendinopathy: Clinical Diagnosis, Load Management, and Advice. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2015;45(11):887-898.</div>
+    <div class="ref-item"><span class="ref-num">33.</span>Rio E et al. Isometric exercise induces analgesia and reduces inhibition in patellar tendinopathy. <span class="ref-journal">Br J Sports Med.</span> 2015;49(19):1277-1283.</div>
+    <div class="ref-item"><span class="ref-num">34.</span>DiStefano LJ et al. Gluteal muscle activation during common therapeutic exercises. <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2009;39(7):532-540.</div>
+    <div class="ref-item"><span class="ref-num">35.</span>Boren K et al. Electromyographic analysis of gluteus medius and gluteus maximus during rehabilitation exercises. <span class="ref-journal">Int J Sports Phys Ther.</span> 2011;6(3):206-23.</div>
+    <div class="ref-item"><span class="ref-num">36.</span>Selkowitz DM et al. Which exercises target the gluteal muscles while minimizing tensor fascia lata activation? <span class="ref-journal">J Orthop Sports Phys Ther.</span> 2013;43(2):54-64.</div>
+    <div class="ref-item"><span class="ref-num">37.</span>Reiman MP et al. A literature review evaluating gluteus maximus and medius activation during rehabilitation exercises. <span class="ref-journal">Physiother Theory Pract.</span> 2012;28(4):257-68.</div>
+  </div>
+</details>
+
+<div class="notice"><strong style="color:var(--color-text-primary)">Aviso:</strong> Este documento tem finalidade informativa e educacional. Todos os exercícios devem ser supervisionados por um fisioterapeuta habilitado. Não substitui consulta clínica individualizada.</div>
+
 </div>
