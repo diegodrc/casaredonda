@@ -59,7 +59,7 @@
 
   function getLangUrl(targetLang) {
     const path = window.location.pathname;
-    const slugs = ['casa-redonda', 'casa-alto-astral', 'casa-montanha', 'casinha'];
+    const slugs = ['casa-redonda', 'casa-alto-astral', 'casa-montanha', 'casinha', 'casa-templo'];
 
     // Find current page slug
     const slug = slugs.find(s => path.includes('/' + s + '/') || path.endsWith('/' + s)) || '';
