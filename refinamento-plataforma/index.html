@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plataforma de consolidação do investidor | Refinamento</title>
+<meta name="description" content="Guia navegável para o refinamento da plataforma de consolidação do investidor (backoffice, frontend): domínio, regulação, integração, React, exportação, segurança, perguntas com campo de resposta, pauta e fontes.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8A%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+<script>
+  try { var t = JSON.parse(localStorage.getItem('rt-theme') || '"auto"'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
+<style>
+:root{
+  --paper:#F5F7FA; --paper-blur:rgba(245,247,250,.9); --surface:#FFFFFF; --hover:#EAEFF6;
+  --ink:#18202E; --ink-soft:#4B5566; --rule:#DCE1E8; --rule-strong:#B6BFCC;
+  --link:#1B4DD6; --focus:#1B4DD6;
+  --mark:#FFE27A; --note:#FFF8D9; --note-rule:#D9B21E;
+  --src:#EEF3FF; --src-rule:#AFC2F3;
+  --alta:#17713F; --alta-bg:#E2F3E9;
+  --media:#8F5400; --media-bg:#FCEFD8;
+  --baixa:#AE3326; --baixa-bg:#FBE5E2;
+  --lacuna:#535D6C; --lacuna-bg:#ECEFF3;
+  --code-bg:#1C2433; --code-ink:#E8EDF4; --code-soft:#A7B2C3;
+  --font-ui:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-read:"Literata",Georgia,"Times New Roman",serif;
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --topbar:58px;
+  --ext:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6'/%3E%3Cpath d='M20 4 10 14'/%3E%3Cpath d='M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E");
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#131A25; --paper-blur:rgba(19,26,37,.9); --surface:#1A2230; --hover:#232D3D;
+    --ink:#E7EBF1; --ink-soft:#A8B2C1; --rule:#2C3646; --rule-strong:#4A5568;
+    --link:#93B2FF; --focus:#93B2FF;
+    --mark:#5E4F12; --note:#2A2614; --note-rule:#B8962A;
+    --src:#1B2742; --src-rule:#3D5390;
+    --alta:#62D49A; --alta-bg:#15301F;
+    --media:#F2B661; --media-bg:#36270F;
+    --baixa:#FF9183; --baixa-bg:#3A1C19;
+    --lacuna:#B6BFCB; --lacuna-bg:#262F3C;
+    --code-bg:#0F1520;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131A25; --paper-blur:rgba(19,26,37,.9); --surface:#1A2230; --hover:#232D3D;
+  --ink:#E7EBF1; --ink-soft:#A8B2C1; --rule:#2C3646; --rule-strong:#4A5568;
+  --link:#93B2FF; --focus:#93B2FF;
+  --mark:#5E4F12; --note:#2A2614; --note-rule:#B8962A;
+  --src:#1B2742; --src-rule:#3D5390;
+  --alta:#62D49A; --alta-bg:#15301F;
+  --media:#F2B661; --media-bg:#36270F;
+  --baixa:#FF9183; --baixa-bg:#3A1C19;
+  --lacuna:#B6BFCB; --lacuna-bg:#262F3C;
+  --code-bg:#0F1520;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ui);font-size:1rem;line-height:1.55;overflow-wrap:break-word}
+body.lock{overflow:hidden}
+svg{flex:none}
+a{color:var(--link);text-underline-offset:.18em}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:1rem;top:-200px;z-index:100;background:var(--ink);color:var(--paper);padding:.7rem 1rem;border-radius:8px;font-weight:700}
+.skip:focus{top:1rem}
+
+/* Barra de progresso de leitura */
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:70;pointer-events:none}
+.progress span{display:block;height:100%;background:var(--link);transform-origin:0 50%;transform:scaleX(0)}
+
+/* Topo (telas menores) */
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:.6rem;height:var(--topbar);padding:0 .75rem;background:var(--paper-blur);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.topbar-title{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}
+.topbar-title .tb-small{font-size:.75rem;color:var(--ink-soft)}
+.topbar-title #topbar-section{font-weight:700;font-size:.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{appearance:none;-webkit-appearance:none;border:1px solid var(--rule);background:var(--surface);color:var(--ink);width:44px;height:44px;border-radius:12px;display:inline-grid;place-items:center;cursor:pointer;padding:0}
+.icon-btn:hover{background:var(--hover)}
+
+/* Navegação lateral / gaveta */
+.sidebar{position:fixed;top:0;bottom:0;left:0;z-index:50;width:min(86vw,330px);background:var(--surface);border-right:1px solid var(--rule);overflow-y:auto;overscroll-behavior:contain;padding:1rem 1rem 2rem;display:flex;flex-direction:column;gap:1rem;transform:translateX(-104%);visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s}
+.sidebar.open{transform:none;visibility:visible;transition:transform .25s ease,visibility 0s}
+.scrim{position:fixed;inset:0;z-index:45;background:rgba(8,12,20,.5);opacity:0;pointer-events:none;transition:opacity .2s ease}
+.scrim.show{opacity:1;pointer-events:auto}
+.side-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+.brand{display:block;text-decoration:none;color:var(--ink);font-weight:700;font-size:1.1rem;line-height:1.25;padding:.25rem .2rem}
+.brand span{display:block;font-weight:400;font-size:.88rem;color:var(--ink-soft);margin-top:.15rem}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.toc a{display:flex;align-items:center;gap:.65rem;min-height:42px;padding:.45rem .6rem;border-radius:9px;text-decoration:none;color:var(--ink-soft);font-size:.96rem;line-height:1.3}
+.toc a:hover{background:var(--hover);color:var(--ink)}
+.toc a[aria-current="true"]{background:var(--src);color:var(--ink);font-weight:700}
+.tick{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--rule-strong);display:grid;place-items:center;flex:none;transition:background-color .15s,border-color .15s}
+.toc li.done .tick{background:var(--alta);border-color:var(--alta)}
+.toc li.done .tick::after{content:"";width:9px;height:5px;border-left:2px solid var(--surface);border-bottom:2px solid var(--surface);transform:translateY(-1px) rotate(-45deg)}
+.study{border:1px solid var(--rule);border-radius:12px;padding:.85rem .9rem;display:flex;flex-direction:column;gap:.55rem}
+.study-row{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;font-size:.92rem}
+.meter{height:6px;border-radius:99px;background:var(--rule);overflow:hidden}
+.meter span{display:block;height:100%;width:0;background:var(--alta);transition:width .25s ease}
+.link-btn{appearance:none;background:none;border:0;padding:.2rem 0;font:inherit;font-size:.88rem;color:var(--link);text-decoration:underline;text-underline-offset:.18em;cursor:pointer;align-self:flex-start}
+.side-bottom{margin-top:auto}
+
+/* Layout principal */
+main{padding:1.25rem 1.1rem 5rem;max-width:920px;margin:0 auto}
+@media (min-width:1024px){
+  .topbar,.scrim,.drawer-close{display:none!important}
+  .shell{display:grid;grid-template-columns:300px minmax(0,1fr)}
+  .sidebar{position:sticky;top:0;height:100vh;width:auto;transform:none;visibility:visible;z-index:auto;transition:none}
+  main{padding:3rem 3rem 6rem;width:100%}
+}
+
+/* Tipografia */
+h1,h2,h3,h4{font-family:var(--font-ui);color:var(--ink);line-height:1.15;text-wrap:balance}
+h1{font-size:clamp(2.05rem,6vw,3.5rem);letter-spacing:-.025em;margin:.2em 0 .25em;font-weight:700}
+h2{font-size:clamp(1.55rem,3.8vw,2.2rem);letter-spacing:-.015em;margin:0 0 .7em;display:flex;align-items:baseline;gap:.55rem}
+h2 .num{color:var(--ink-soft);font-weight:400;min-width:1ch}
+h3{font-size:clamp(1.15rem,2.4vw,1.3rem);margin:2.2rem 0 .7rem}
+h4{font-size:1.02rem;margin:1.4rem 0 .45rem}
+.prose p,.prose li,.read{font-family:var(--font-read);font-size:1.04rem;line-height:1.72}
+.prose p{max-width:68ch}
+.prose li{max-width:68ch;margin:.35rem 0}
+strong{font-weight:700}
+.prose strong{font-weight:600}
+.muted{color:var(--ink-soft)}
+
+/* Links de fonte: âncora destacada, como um comentário de revisão */
+a.src{color:var(--link);text-decoration:none;font-weight:600;background-image:linear-gradient(var(--mark),var(--mark));background-repeat:no-repeat;background-size:100% .36em;background-position:0 94%;border-radius:2px;padding:0 .06em;transition:background-size .15s ease}
+a.src:hover{background-size:100% 100%}
+.ui a.src,table a.src,.check-list a.src{font-weight:700}
+main a[href^="http"]::after{content:"";display:inline-block;width:.7em;height:.7em;margin-left:.2em;vertical-align:-.02em;background-color:currentColor;-webkit-mask:var(--ext) no-repeat center/contain;mask:var(--ext) no-repeat center/contain}
+
+/* Seções */
+.sec{padding:3rem 0 1rem;border-top:1px solid var(--rule);scroll-margin-top:calc(var(--topbar) + 6px)}
+.sec.hero{border-top:0;padding-top:1rem}
+@media (min-width:1024px){.sec{scroll-margin-top:12px}.sec.hero{padding-top:0}}
+.intro{color:var(--ink-soft);font-size:1rem;max-width:65ch;margin:-.2rem 0 1.2rem}
+
+/* Hero */
+.subtitle{font-family:var(--font-read);font-style:italic;font-size:clamp(1.08rem,2.6vw,1.35rem);color:var(--ink-soft);margin:0 0 1.6rem;max-width:42ch;line-height:1.45}
+.docmeta{margin:0 0 2rem;border:1px solid var(--rule);border-radius:14px;background:var(--surface);display:grid;grid-template-columns:1fr;overflow:hidden}
+.docmeta > div{display:grid;grid-template-columns:7.6rem minmax(0,1fr);gap:.8rem;align-items:baseline;padding:.75rem 1rem;border-top:1px solid var(--rule)}
+.docmeta > div:first-child{border-top:0}
+.docmeta dt{font-size:.88rem;color:var(--ink-soft)}
+.docmeta dd{margin:0;font-weight:700}
+.docmeta .legend{display:flex;flex-wrap:wrap;gap:.35rem}
+.status{display:inline-flex;align-items:center;gap:.4rem}
+.status::before{content:"";width:.6rem;height:.6rem;border-radius:50%;background:var(--alta)}
+@media (min-width:720px){
+  .docmeta{grid-template-columns:1fr 1fr}
+  .docmeta > div:nth-child(2){border-top:0}
+  .docmeta > div:nth-child(odd){border-right:1px solid var(--rule)}
+  .docmeta > div{grid-template-columns:8.5rem minmax(0,1fr)}
+}
+.lead{font-family:var(--font-read);font-size:clamp(1.12rem,2.5vw,1.38rem);line-height:1.62;max-width:60ch;margin:0 0 2.5rem}
+.tldr{display:flex;flex-direction:column;gap:0;margin:0 0 1.5rem;border-top:2px solid var(--ink)}
+.tldr article{padding:1.1rem 0;border-bottom:1px solid var(--rule)}
+.tldr h3{margin:0 0 .4rem;font-size:1.12rem}
+.tldr p{margin:0;font-family:var(--font-read);font-size:1.02rem;line-height:1.7;max-width:68ch}
+@media (min-width:760px){
+  .tldr article{display:grid;grid-template-columns:11rem minmax(0,1fr);gap:1.5rem}
+  .tldr h3{margin:0;padding-top:.2rem}
+}
+.howto{font-size:.95rem;color:var(--ink-soft);max-width:65ch}
+
+/* Badges de confiança */
+.conf{display:inline-flex;align-items:center;gap:.35em;font-family:var(--font-ui);font-size:.8rem;font-weight:700;line-height:1.2;padding:.22em .6em;border-radius:99px;border:1px solid currentColor;white-space:nowrap;vertical-align:.08em}
+.conf::before{content:"";width:.5em;height:.5em;border-radius:50%;background:currentColor}
+.conf.alta{color:var(--alta);background:var(--alta-bg)}
+.conf.media{color:var(--media);background:var(--media-bg)}
+.conf.baixa{color:var(--baixa);background:var(--baixa-bg)}
+.conf.lacuna{color:var(--lacuna);background:var(--lacuna-bg)}
+.conf-note{display:block;font-size:.84rem;color:var(--ink-soft);font-weight:400;margin-top:.35rem;line-height:1.4}
+.tag-sint{display:inline-block;font-size:.76rem;font-weight:700;padding:.1em .5em;border-radius:5px;background:var(--note);color:var(--ink);border:1px solid var(--note-rule);margin-left:.3rem;vertical-align:.1em;white-space:nowrap}
+
+/* Pontos do resumo */
+.points{list-style:none;padding:0;margin:1rem 0 0}
+.points > li{padding:.15rem 0 .15rem 1.1rem;border-left:3px solid var(--rule);margin:0 0 1.4rem}
+.points .ph{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:0 0 .3rem;font-family:var(--font-ui);font-weight:700;font-size:1.07rem;line-height:1.3}
+.points p{margin:0}
+
+/* Callout de interpretação (síntese, não fonte) */
+.interp{margin:1.8rem 0;padding:1rem 1.15rem;background:var(--note);border-left:4px solid var(--note-rule);border-radius:0 12px 12px 0}
+.interp h4{margin:0 0 .35rem;font-size:.98rem}
+.interp p{margin:0;font-family:var(--font-read);line-height:1.7;max-width:68ch}
+
+/* Detalhes expansíveis */
+.claims{display:flex;flex-direction:column;gap:.6rem}
+details.claim{border:1px solid var(--rule);border-radius:12px;background:var(--surface)}
+details.claim > summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:52px;padding:.7rem 1rem;font-weight:700;border-radius:12px}
+details.claim > summary::-webkit-details-marker{display:none}
+details.claim > summary:hover{background:var(--hover)}
+details.claim > summary .chev{width:22px;height:22px;transition:transform .2s ease;color:var(--ink-soft)}
+details.claim[open] > summary .chev{transform:rotate(180deg)}
+details.claim[open] > summary{border-bottom:1px solid var(--rule);border-radius:12px 12px 0 0}
+.claim-body{padding:.9rem 1.1rem 1.1rem}
+.claim-body p,.claim-body li{font-family:var(--font-read);line-height:1.7;max-width:68ch}
+.claim-body p{margin:.4rem 0 .8rem}
+.claim-body ul,.claim-body ol{padding-left:1.3rem;margin:.4rem 0 .9rem}
+.claim-body .read-more{font-family:var(--font-ui);font-size:.95rem;margin:.6rem 0 0}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin:.6rem 0;font-family:var(--font-ui)}
+.flow .node{padding:.35rem .7rem;border:1px solid var(--rule-strong);border-radius:8px;background:var(--paper);font-size:.92rem;font-weight:700}
+.flow .arr{color:var(--ink-soft)}
+
+/* Para aprofundar */
+.deeper{margin:1.6rem 0;padding:1rem 1.15rem;background:var(--src);border:1px solid var(--src-rule);border-radius:12px}
+.deeper h4{margin:0 0 .5rem;font-size:.98rem}
+.deeper ul{margin:0;padding-left:1.15rem}
+.deeper li{margin:.35rem 0;line-height:1.45}
+.deeper .yr{color:var(--ink-soft);font-size:.88rem}
+
+/* Tabelas */
+.table-wrap{margin:1.2rem 0;border:1px solid var(--rule);border-radius:14px;background:var(--surface);overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:.95rem;line-height:1.5}
+th,td{text-align:left;vertical-align:top;padding:.8rem .9rem;border-bottom:1px solid var(--rule)}
+thead th{font-size:.84rem;color:var(--ink-soft);background:var(--paper);font-weight:700;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+tbody td:first-child{font-weight:700;min-width:9rem}
+td .sub{display:block;font-weight:400;font-size:.86rem;color:var(--ink-soft);margin-top:.2rem}
+td .host{display:block;font-size:.84rem;color:var(--ink-soft);margin-top:.15rem;word-break:break-all}
+@media (min-width:720px){ table.stack{min-width:680px} }
+@media (max-width:719px){
+  table.stack,table.stack tbody,table.stack tr,table.stack td{display:block;width:100%}
+  table.stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  table.stack tr{padding:1rem 1rem .8rem;border-bottom:1px solid var(--rule)}
+  table.stack tbody tr:last-child{border-bottom:0}
+  table.stack td{border:0;padding:.3rem 0;min-width:0}
+  table.stack td::before{content:attr(data-label);display:block;font-size:.76rem;font-weight:700;color:var(--ink-soft);margin-bottom:.1rem}
+  table.stack td:first-child{font-size:1.06rem;padding-top:0}
+  table.stack td:first-child::before{display:none}
+}
+
+/* Controles */
+.btn{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:.45rem;min-height:44px;padding:.55rem 1rem;border-radius:10px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink);font:inherit;font-size:.94rem;font-weight:700;cursor:pointer;text-decoration:none;line-height:1.2}
+.btn:hover{background:var(--hover)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.btn.primary:hover{opacity:.92;background:var(--ink)}
+.toolbar{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:1rem 0}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin:.8rem 0 .4rem}
+.chip{appearance:none;-webkit-appearance:none;min-height:40px;padding:.4rem .9rem;border-radius:99px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink);font:inherit;font-size:.92rem;font-weight:700;cursor:pointer}
+.chip:hover{background:var(--hover)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.count-line{font-size:.88rem;color:var(--ink-soft);margin:.3rem 0 0}
+
+/* Checklist */
+.tabs{display:flex;gap:.25rem;border-bottom:1px solid var(--rule);margin:1rem 0 0;overflow-x:auto}
+.tab{appearance:none;-webkit-appearance:none;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;padding:.8rem 1rem;min-height:48px;font:inherit;font-weight:700;color:var(--ink-soft);cursor:pointer;white-space:nowrap;display:inline-flex;gap:.5rem;align-items:center}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--link)}
+.tab-count{font-weight:400;font-size:.85rem;padding:.05rem .45rem;border-radius:99px;background:var(--hover);color:var(--ink-soft)}
+.panel{padding-top:.4rem}
+.check-group{margin:1.6rem 0 0}
+.check-group > h4{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin:0 0 .55rem}
+.check-group .count{font-size:.86rem;font-weight:400;color:var(--ink-soft);white-space:nowrap}
+.group-note{font-size:.9rem;color:var(--ink-soft);margin:-.3rem 0 .6rem}
+.check-list{list-style:none;margin:0;padding:0;border:1px solid var(--rule);border-radius:12px;background:var(--surface);overflow:hidden}
+.check-list li + li{border-top:1px solid var(--rule)}
+.check-list label{display:grid;grid-template-columns:1.35rem minmax(0,1fr);gap:.75rem;padding:.8rem 1rem;cursor:pointer;line-height:1.5}
+.check-list label:hover{background:var(--hover)}
+.check-list input{width:1.2rem;height:1.2rem;margin:.18rem 0 0;accent-color:var(--alta);cursor:pointer}
+.check-list input:checked + .txt{color:var(--ink-soft)}
+.vitals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin:.2rem 0 .8rem}
+.vitals div{border:1px solid var(--rule);border-radius:10px;background:var(--surface);padding:.6rem .7rem}
+.vitals dt{font-size:.8rem;color:var(--ink-soft)}
+.vitals dd{margin:.1rem 0 0;font-weight:700;font-size:1.15rem;white-space:nowrap}
+
+/* Template */
+.code{margin:1.2rem 0;background:var(--code-bg);color:var(--code-ink);border-radius:14px;overflow:hidden}
+.code-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.6rem;padding:.6rem .7rem .6rem 1rem;border-bottom:1px solid rgba(255,255,255,.12)}
+.code-name{font-family:var(--font-mono);font-size:.85rem;color:var(--code-soft)}
+.code-actions{display:flex;flex-wrap:wrap;gap:.4rem}
+.btn.on-dark{background:transparent;color:var(--code-ink);border-color:rgba(255,255,255,.3)}
+.btn.on-dark:hover{background:rgba(255,255,255,.08)}
+.code pre{margin:0;padding:1rem 1.1rem 1.2rem;max-height:72vh;overflow:auto;font-family:var(--font-mono);font-size:.85rem;line-height:1.65;white-space:pre-wrap;word-break:break-word;tab-size:2}
+.code pre:focus-visible{outline-offset:-3px}
+.steps{list-style:none;counter-reset:passo;margin:1rem 0 0;padding:0}
+.steps li{counter-increment:passo;position:relative;padding:0 0 1.3rem 3rem;font-family:var(--font-read);line-height:1.7;max-width:70ch}
+.steps li::before{content:counter(passo);position:absolute;left:0;top:-.05rem;width:2.1rem;height:2.1rem;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--paper);font-family:var(--font-ui);font-weight:700;font-size:.95rem}
+.steps li:not(:last-child)::after{content:"";position:absolute;left:1.02rem;top:2.25rem;bottom:.2rem;width:2px;background:var(--rule)}
+
+/* Fontes */
+.search{display:flex;flex-direction:column;gap:.35rem;margin:1rem 0 .4rem;max-width:520px}
+.search label{font-weight:700;font-size:.92rem}
+.search input{font:inherit;min-height:46px;padding:.6rem .9rem;border-radius:10px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink);width:100%}
+.search input::placeholder{color:var(--ink-soft);opacity:1}
+.age{display:inline-block;margin-top:.2rem;font-size:.84rem;font-weight:700;color:var(--media)}
+.empty{padding:1rem;border:1px dashed var(--rule-strong);border-radius:12px;color:var(--ink-soft)}
+
+/* Rodapé de seção */
+.sec-foot{display:flex;flex-wrap:wrap;gap:.75rem 1.25rem;align-items:center;justify-content:space-between;margin-top:2.4rem;padding-top:1.1rem;border-top:1px dashed var(--rule)}
+.done-btn .ico{width:18px;height:18px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center}
+.done-btn[aria-pressed="true"]{background:var(--alta-bg);border-color:var(--alta);color:var(--alta)}
+.done-btn[aria-pressed="true"] .ico{background:var(--alta);border-color:var(--alta)}
+.done-btn[aria-pressed="true"] .ico::after{content:"";width:9px;height:5px;border-left:2px solid var(--alta-bg);border-bottom:2px solid var(--alta-bg);transform:translateY(-1px) rotate(-45deg)}
+.next{font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;min-height:44px}
+.next:hover{text-decoration:underline}
+
+/* Lacunas e ressalvas */
+.gaps{list-style:none;padding:0;margin:1rem 0 0}
+.gaps > li{padding:1rem 0;border-bottom:1px solid var(--rule)}
+.gaps > li:first-child{padding-top:.2rem}
+.gaps .gh{display:block;font-family:var(--font-ui);font-weight:700;font-size:1.03rem;margin-bottom:.25rem}
+.gaps p{margin:0}
+
+footer.site{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--rule);color:var(--ink-soft);font-size:.9rem;max-width:70ch}
+
+/* Voltar ao topo e aviso */
+.to-top{position:fixed;right:1rem;bottom:1rem;z-index:30;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .2s ease,transform .2s ease;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.to-top.show{opacity:1;transform:none;pointer-events:auto}
+.toast{position:fixed;left:50%;bottom:1.2rem;z-index:80;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:var(--ink);color:var(--paper);padding:.7rem 1.1rem;border-radius:10px;font-weight:700;font-size:.94rem;max-width:calc(100vw - 2rem);text-align:center;transition:opacity .2s ease,transform .2s ease}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+@media (max-width:420px){
+  main{padding-left:.9rem;padding-right:.9rem}
+  .docmeta > div{grid-template-columns:1fr;gap:.15rem}
+  .vitals dd{font-size:1rem}
+}
+@media print{
+  .topbar,.sidebar,.scrim,.progress,.to-top,.toast,.sec-foot,.toolbar,.chips,.search,.tabs,.code-actions{display:none!important}
+  .shell{display:block}
+  main{max-width:none;padding:0}
+  [role="tabpanel"]{display:block!important}
+  details.claim{border:0}
+  .code pre{max-height:none}
+  body{background:#fff;color:#000}
+}
+
+/* ===== Acréscimos desta página ===== */
+code{font-family:var(--font-mono);font-size:.86em;background:var(--hover);padding:.08em .35em;border-radius:5px;overflow-wrap:anywhere}
+.bul{padding-left:1.25rem;margin:.5rem 0 1.2rem}
+.bul li{margin:.45rem 0}
+.source-note{margin:1.4rem 0;padding:1rem 1.15rem;background:var(--src);border-left:4px solid var(--src-rule);border-radius:0 12px 12px 0}
+.source-note h4{margin:0 0 .35rem;font-size:.98rem}
+.source-note p{margin:0;font-family:var(--font-read);line-height:1.7;max-width:68ch}
+.interp ul{margin:.4rem 0 0;padding-left:1.2rem;font-family:var(--font-read);line-height:1.65}
+.interp li{margin:.3rem 0;max-width:66ch}
+.conf-row{display:flex;flex-direction:column;gap:.55rem;margin:1.4rem 0;padding:.9rem 1rem;border:1px solid var(--rule);border-radius:12px;background:var(--surface);font-size:.95rem}
+.conf-row div{display:flex;gap:.6rem;align-items:baseline;flex-wrap:wrap}
+.tag-good{display:inline-block;margin-top:.35rem;font-size:.76rem;font-weight:700;padding:.12em .55em;border-radius:5px;color:var(--alta);background:var(--alta-bg);border:1px solid var(--alta)}
+td.say{font-family:var(--font-read);font-style:italic;font-weight:400!important}
+.hero-points{margin:0 0 1.5rem;border-top:2px solid var(--ink)}
+.hero-points article{padding:1.05rem 0;border-bottom:1px solid var(--rule)}
+.hero-points h3{margin:0 0 .35rem;font-size:1.08rem}
+.hero-points p{margin:0;font-family:var(--font-read);font-size:1.02rem;line-height:1.7;max-width:68ch}
+@media (min-width:760px){
+  .hero-points article{display:grid;grid-template-columns:13rem minmax(0,1fr);gap:1.5rem}
+  .hero-points h3{padding-top:.15rem}
+}
+.defs{list-style:none;margin:0 0 2rem;padding:0;display:grid;gap:.5rem;grid-template-columns:1fr}
+.defs li{display:flex;gap:.7rem;align-items:center;padding:.65rem .85rem;border:1px solid var(--rule);border-radius:10px;background:var(--surface);font-weight:700;font-size:.97rem;line-height:1.35}
+.defs li::before{content:"";flex:none;width:12px;height:12px;border-radius:3px;border:2px solid var(--note-rule);background:var(--note)}
+@media (min-width:720px){.defs{grid-template-columns:1fr 1fr}}
+
+/* Demonstração ao vivo */
+.demo{margin:1.3rem 0;border:1px solid var(--rule);border-radius:14px;background:var(--surface);overflow:hidden}
+.demo-head{padding:.75rem 1rem;border-bottom:1px solid var(--rule)}
+.demo-head h4{margin:0;font-size:.98rem}
+.demo-head p{margin:.2rem 0 0;font-size:.88rem;color:var(--ink-soft)}
+.demo dl{margin:0}
+.demo .row{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:.35rem 1rem;padding:.75rem 1rem;border-top:1px solid var(--rule);align-items:baseline}
+.demo .row:first-child{border-top:0}
+.demo dt{font-size:.9rem}
+.demo dt span{display:block;color:var(--ink-soft);font-size:.84rem;margin-top:.25rem}
+.demo dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+@media (max-width:600px){.demo .row{grid-template-columns:1fr}}
+
+/* Perguntas com respostas */
+.themes{display:flex;flex-direction:column;gap:.6rem;margin-top:.8rem}
+details.theme{border:1px solid var(--rule);border-radius:12px;background:var(--surface)}
+details.theme > summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:.8rem;min-height:54px;padding:.7rem 1rem;font-weight:700;border-radius:12px}
+details.theme > summary::-webkit-details-marker{display:none}
+details.theme > summary:hover{background:var(--hover)}
+details.theme > summary .sname{flex:1;min-width:0}
+details.theme > summary .qcount{font-weight:400;font-size:.86rem;color:var(--ink-soft);white-space:nowrap}
+details.theme > summary .chev{width:22px;height:22px;transition:transform .2s ease;color:var(--ink-soft)}
+details.theme[open] > summary .chev{transform:rotate(180deg)}
+details.theme[open] > summary{border-bottom:1px solid var(--rule);border-radius:12px 12px 0 0}
+details.theme .table-wrap{margin:0;border:0;border-radius:0 0 12px 12px}
+details.theme.complete > summary .qcount{color:var(--alta);font-weight:700}
+table.qtable{min-width:0}
+table.qtable td:nth-child(1){width:34%}
+table.qtable td:nth-child(2){width:28%;font-weight:400;color:var(--ink-soft)}
+table.qtable td:nth-child(3){width:38%}
+table.qtable tr.answered td:first-child{box-shadow:inset 3px 0 0 var(--alta)}
+textarea.ans{display:block;width:100%;min-height:2.8rem;max-height:18rem;font:inherit;font-size:.93rem;line-height:1.45;padding:.5rem .65rem;border:1px solid var(--rule-strong);border-radius:8px;background:var(--paper);color:var(--ink);resize:vertical;field-sizing:content}
+textarea.ans::placeholder{color:var(--ink-soft);opacity:1}
+@media (max-width:719px){
+  table.qtable td:nth-child(n){width:100%}
+  table.stack.qtable tr.answered{box-shadow:inset 3px 0 0 var(--alta)}
+  table.qtable tr.answered td:first-child{box-shadow:none}
+}
+.total-line{font-size:.95rem;margin:.2rem 0 0}
+.total-line strong{font-variant-numeric:tabular-nums}
+
+/* Pauta com cronômetro */
+.timer{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem;margin:1rem 0 .4rem;padding:.9rem 1rem;border:1px solid var(--rule);border-radius:14px;background:var(--surface)}
+.clock{font-size:1.75rem;font-weight:700;font-variant-numeric:tabular-nums;min-width:5.2ch;line-height:1}
+.clock small{font-size:.9rem;font-weight:400;color:var(--ink-soft)}
+.timer .btns{display:flex;gap:.45rem;flex-wrap:wrap}
+.timer-now{flex-basis:100%;margin:0;font-size:.92rem;color:var(--ink-soft)}
+.agenda{list-style:none;margin:.6rem 0 0;padding:0;counter-reset:ag}
+.agenda li{counter-increment:ag;display:grid;grid-template-columns:2.2rem minmax(0,1fr) auto;column-gap:.85rem;row-gap:.15rem;padding:.9rem .5rem;border-bottom:1px solid var(--rule);border-radius:10px;transition:background-color .2s}
+.agenda li::before{content:counter(ag);grid-row:1 / span 3;width:2.1rem;height:2.1rem;border-radius:50%;display:grid;place-items:center;background:var(--hover);font-weight:700;font-size:.95rem}
+.agenda .ag-t{font-weight:700;line-height:1.35}
+.agenda .ag-min{font-size:.9rem;color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums}
+.agenda .ag-d{grid-column:2 / 4;margin:0;font-family:var(--font-read);line-height:1.6;max-width:66ch}
+.agenda .ag-bar{grid-column:2 / 4;position:relative;height:6px;margin-top:.45rem;border-radius:99px;background:var(--rule)}
+.agenda .ag-bar span{position:absolute;top:0;bottom:0;left:calc(var(--s) / 85 * 100%);width:calc(var(--m) / 85 * 100%);border-radius:99px;background:var(--ink-soft)}
+.agenda li[aria-current="step"]{background:var(--src)}
+.agenda li[aria-current="step"]::before{background:var(--link);color:var(--surface)}
+.agenda li[aria-current="step"] .ag-bar span{background:var(--link)}
+.agenda li.past::before{background:var(--alta-bg);color:var(--alta)}
+.after{margin-top:1.6rem}
+@media print{
+  .timer{display:none!important}
+  details.theme{border:0}
+  textarea.ans{border:0;padding:0;background:none;min-height:0}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="progress" aria-hidden="true"><span></span></div>
+
+<header class="topbar">
+  <button class="icon-btn" id="menu-btn" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Abrir menu de seções">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+  </button>
+  <div class="topbar-title">
+    <span class="tb-small">Consolidação do investidor</span>
+    <span id="topbar-section">Visão geral</span>
+  </div>
+  <button class="icon-btn" type="button" data-theme-toggle aria-label="Alternar tema">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>
+  </button>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" id="sidebar" aria-label="Seções do guia">
+    <div class="side-top">
+      <a class="brand" href="#inicio">Plataforma de consolidação do investidor<span>Refinamento de backoffice e frontend</span></a>
+      <button class="icon-btn drawer-close" id="drawer-close" type="button" aria-label="Fechar menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <ul class="toc">
+      <li><a href="#inicio"><span class="tick" aria-hidden="true"></span><span class="t">Visão geral</span><span class="sr-only st"></span></a></li>
+      <li><a href="#dominio"><span class="tick" aria-hidden="true"></span><span class="t">Entendendo o domínio</span><span class="sr-only st"></span></a></li>
+      <li><a href="#regulacao"><span class="tick" aria-hidden="true"></span><span class="t">Regulação e compliance</span><span class="sr-only st"></span></a></li>
+      <li><a href="#integracao"><span class="tick" aria-hidden="true"></span><span class="t">Cenários de integração</span><span class="sr-only st"></span></a></li>
+      <li><a href="#frontend"><span class="tick" aria-hidden="true"></span><span class="t">Frontend React</span><span class="sr-only st"></span></a></li>
+      <li><a href="#exportacao"><span class="tick" aria-hidden="true"></span><span class="t">Exportação de relatórios</span><span class="sr-only st"></span></a></li>
+      <li><a href="#seguranca"><span class="tick" aria-hidden="true"></span><span class="t">Segurança e auditoria</span><span class="sr-only st"></span></a></li>
+      <li><a href="#qualidade"><span class="tick" aria-hidden="true"></span><span class="t">Qualidade e entrega</span><span class="sr-only st"></span></a></li>
+      <li><a href="#perguntas"><span class="tick" aria-hidden="true"></span><span class="t">Perguntas</span><span class="sr-only st"></span></a></li>
+      <li><a href="#alertas"><span class="tick" aria-hidden="true"></span><span class="t">Sinais de alerta e riscos</span><span class="sr-only st"></span></a></li>
+      <li><a href="#pauta"><span class="tick" aria-hidden="true"></span><span class="t">Pauta e checklist de saída</span><span class="sr-only st"></span></a></li>
+      <li><a href="#fontes"><span class="tick" aria-hidden="true"></span><span class="t">Fontes</span><span class="sr-only st"></span></a></li>
+      <li><a href="#lacunas"><span class="tick" aria-hidden="true"></span><span class="t">Lacunas</span><span class="sr-only st"></span></a></li>
+    </ul>
+    <div class="study" aria-live="polite">
+      <div class="study-row"><strong>Seções estudadas</strong><span id="study-count">0 de 13</span></div>
+      <div class="meter" aria-hidden="true"><span id="study-meter"></span></div>
+      <button class="link-btn" id="study-reset" type="button">Recomeçar progresso</button>
+    </div>
+    <div class="side-bottom">
+      <button class="btn" type="button" data-theme-toggle>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>
+        <span class="label">Tema automático</span>
+      </button>
+    </div>
+  </nav>
+  <div class="scrim" aria-hidden="true"></div>
+
+  <main id="conteudo" tabindex="-1">
+
+    <!-- VISÃO GERAL -->
+    <section id="inicio" class="sec hero" aria-labelledby="t-inicio">
+      <h1 id="t-inicio">Plataforma de consolidação do investidor</h1>
+      <p class="subtitle">Refinamento técnico de backoffice, com foco no frontend</p>
+
+      <dl class="docmeta">
+        <div><dt>Data</dt><dd>06/10/2026</dd></div>
+        <div><dt>Autor</dt><dd>Diego</dd></div>
+        <div><dt>Pauta sugerida</dt><dd><a href="#pauta">Cerca de 85 minutos</a></dd></div>
+        <div><dt>Fontes com link</dt><dd><a href="#fontes"><span id="hero-fontes">18</span> fontes consultadas</a></dd></div>
+      </dl>
+
+      <p class="lead" style="margin-bottom:1rem">A reunião precisa terminar com cinco definições que hoje bloqueiam o frontend:</p>
+      <ul class="defs">
+        <li>Quem usa e com quais permissões</li>
+        <li>Quais produtos e dados entram</li>
+        <li>Se a integração é por BFF ou por várias APIs</li>
+        <li>Como funciona a exportação</li>
+        <li>Quais regras de auditoria e privacidade se aplicam</li>
+      </ul>
+      <p class="lead">Sem elas, qualquer estimativa de frontend é chute.</p>
+
+      <h2 id="t-resumo">Resumo executivo</h2>
+      <div class="hero-points">
+        <article>
+          <h3>Dado de investidor é sigiloso</h3>
+          <p>Num backoffice de banco, ver ou exportar a posição de um cliente envolve sigilo bancário e LGPD. Para o front, isso vira requisitos concretos: mascaramento, controle de acesso por perfil e registro de quem viu ou exportou o quê. Detalhes em <a href="#regulacao">Regulação e compliance</a>.</p>
+        </article>
+        <article>
+          <h3>Consolidar é juntar fontes com relógios diferentes</h3>
+          <p>Renda fixa, fundos, renda variável e previdência têm datas de referência e formas de cálculo distintas. A tela precisa mostrar a data de referência de cada bloco e saber lidar com uma fonte fora do ar.</p>
+        </article>
+        <article>
+          <h3>BFF ou várias APIs muda o tamanho do trabalho</h3>
+          <p>Sem BFF, o frontend herda orquestração, falha parcial, normalização e consistência entre fontes. Essa pergunta precisa de resposta antes de qualquer estimativa. Ver <a href="#integracao">Cenários de integração</a>.</p>
+        </article>
+        <article>
+          <h3>Exportação é uma feature, não um botão</h3>
+          <p>Formato, volume, geração síncrona ou assíncrona, fidelidade aos filtros da tela e auditoria precisam ser decididos.</p>
+        </article>
+        <article>
+          <h3>Valores monetários exigem contrato explícito</h3>
+          <p>Defina como os números chegam (string decimal ou centavos inteiros), quem calcula totais e rentabilidade, e como o front formata em pt-BR.</p>
+        </article>
+        <article>
+          <h3>Primeira fatia sugerida</h3>
+          <p>Uma visão de consulta, somente leitura, para um único perfil de usuário, atrás de feature flag, com piloto interno antes de abrir para todos.</p>
+        </article>
+      </div>
+      <p class="howto">A seção de <a href="#perguntas">perguntas</a> traz as 10 prioritárias marcadas. Os demais tópicos servem de base para entender a resposta que vier. Durante a reunião, use os campos de resposta, o cronômetro da pauta e o checklist de saída: tudo fica salvo neste navegador e pode ser exportado em Markdown.</p>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="inicio" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#dominio">Próxima seção: Entendendo o domínio</a>
+      </div>
+    </section>
+
+    <!-- DOMÍNIO -->
+    <section id="dominio" class="sec" aria-labelledby="t-dominio">
+      <h2 id="t-dominio">Entendendo o domínio</h2>
+      <div class="prose">
+        <p>Consolidar dados do investidor significa juntar, numa única visão, posições e movimentações que nascem em sistemas diferentes, com regras de cálculo e datas de referência diferentes. O risco técnico do frontend está nessas diferenças, não na tela em si.</p>
+      </div>
+
+      <div class="source-note">
+        <h4>Referência de mercado</h4>
+        <p>A Área do Investidor da B3 é o exemplo público mais próximo. Ela consolida, para pessoa física, posições em ações, ETFs, FIIs, CDBs, LCIs e LCAs, e permite extrair os dados de todas as telas em PDF ou Excel (<a class="src" href="https://b3.com.br/pt_br/noticias/b3-lanca-nova-area-logada-do-investidor.htm">B3, 2021</a>). As APIs que a B3 oferece a instituições, mediante autorização do investidor, já mostram como o domínio costuma ser fatiado: Posição, Movimentação, Ofertas Públicas, Garantias, Eventos Provisionados e Negociação de ativos (<a class="src" href="https://b3.com.br/pt_br/produtos-e-servicos/central-depositaria/canal-com-investidores/integracoes-da-area-do-investidor-apis/">B3</a>). Vale perguntar se o banco usa esses dados como fonte ou apenas dados próprios.</p>
+      </div>
+
+      <h3>Glossário mínimo para conversar com produto</h3>
+      <p class="intro">Definições de conhecimento geral de mercado. Confirme com o time de produto como cada termo é calculado no banco.</p>
+      <div class="table-wrap">
+        <table class="stack">
+          <thead><tr><th scope="col">Termo</th><th scope="col">O que é</th><th scope="col">Por que importa para o front</th></tr></thead>
+          <tbody>
+            <tr><td>Posição</td><td>Saldo do investidor por ativo numa data</td><td>É o coração da tela; precisa de data de referência</td></tr>
+            <tr><td>Movimentação / extrato</td><td>Aplicações, resgates, compras, vendas, transferências</td><td>Volume grande; pede paginação e filtro por período</td></tr>
+            <tr><td>Saldo bruto x líquido</td><td>Valor antes e depois de IR e IOF estimados</td><td>Mostrar os dois exige saber quem calcula e com que regra</td></tr>
+            <tr><td>Rentabilidade</td><td>Ganho no período, em % ou R$</td><td>Período, base e método (curva, mercado) mudam o número</td></tr>
+            <tr><td>Marcação a mercado</td><td>Valor do título pelo preço de venda do dia</td><td>Valor oscila; difere do valor “na curva”</td></tr>
+            <tr><td>Curva</td><td>Valor pela taxa contratada até a data</td><td>Duas colunas possíveis para o mesmo ativo</td></tr>
+            <tr><td>Cota (fundos)</td><td>Preço unitário do fundo, divulgado por dia</td><td>Pode chegar com atraso de um dia útil ou mais</td></tr>
+            <tr><td>Come-cotas</td><td>IR antecipado semestral em fundos abertos</td><td>Reduz a quantidade de cotas; gera movimentação “sem ação” do cliente</td></tr>
+            <tr><td>Proventos</td><td>Dividendos, JCP, rendimentos de FII</td><td>Lista separada, com datas de corte e pagamento</td></tr>
+            <tr><td>Custódia</td><td>Onde o ativo está registrado (B3, Selic, administrador)</td><td>Ajuda a explicar divergências entre fontes</td></tr>
+            <tr><td>Suitability</td><td>Perfil de risco do investidor</td><td>Pode aparecer na tela e tem regra própria (ver <a href="#regulacao">Regulação</a>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Armadilhas de dados</h3>
+      <ul class="points prose">
+        <li><p class="ph">Datas de referência diferentes por produto</p><p>Ações costumam usar preço de fechamento; fundos dependem da cota divulgada; renda fixa pode estar na curva ou a mercado. Uma visão “consolidada” pode somar valores de dias diferentes sem avisar. A UI deve mostrar a data de referência por bloco ou por linha.</p></li>
+        <li><p class="ph">Uma fonte cai e as outras não</p><p>O total consolidado fica errado se uma fonte falhar em silêncio. A tela precisa de um estado de “dado parcial” explícito.</p></li>
+        <li><p class="ph">Totais e percentuais</p><p>Se o front somar valores, arredondamentos podem divergir do total oficial. A regra mais segura é o backend entregar totais prontos.</p></li>
+        <li><p class="ph">Precisão numérica</p><p>Valores monetários em ponto flutuante geram erros de centavos. O contrato da API precisa definir o formato (detalhes em <a href="#numeros">Números, moeda e datas</a>).</p></li>
+        <li><p class="ph">Histórico x posição atual</p><p>“Posição em 31/12” e “posição hoje” podem vir de serviços diferentes. Pergunte se haverá consulta por data passada.</p></li>
+      </ul>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="dominio" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#regulacao">Próxima seção: Regulação e compliance</a>
+      </div>
+    </section>
+
+    <!-- REGULAÇÃO -->
+    <section id="regulacao" class="sec" aria-labelledby="t-regulacao">
+      <h2 id="t-regulacao">Regulação e compliance com impacto no frontend</h2>
+      <div class="prose">
+        <p>Quatro normas tocam diretamente uma tela interna que mostra e exporta posições de investidores. O frontend não decide as regras, mas precisa saber delas para estimar e desenhar a tela. Quem define o detalhe é Jurídico, Compliance, Segurança da Informação e o encarregado de dados (DPO). Este resumo não é parecer jurídico.</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="stack">
+          <thead><tr><th scope="col">Norma</th><th scope="col">O que diz (resumo)</th><th scope="col">Implicação para o front</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><a class="src" href="https://planalto.gov.br/ccivil_03/leis/lcp/lcp105.htm">LC 105/2001</a><span class="sub">Sigilo bancário</span></td>
+              <td>Art. 1º: instituições financeiras mantêm sigilo sobre operações ativas e passivas e serviços prestados. Art. 10: quebra fora das hipóteses legais é crime</td>
+              <td>Acesso a dados do cliente só por quem tem motivo; cada consulta deve ser rastreável</td>
+            </tr>
+            <tr>
+              <td><a class="src" href="https://www.legisweb.com.br/legislacao/?id=413132">LGPD, Lei 13.709/2018</a></td>
+              <td>Art. 6º: princípios de necessidade e segurança. Art. 37: registro das operações de tratamento. Art. 46: medidas técnicas e administrativas contra acesso não autorizado e vazamento</td>
+              <td>Mostrar só o necessário a cada perfil; mascarar dados pessoais; exportação é tratamento e deve ser registrada</td>
+            </tr>
+            <tr>
+              <td><a class="src" href="https://okai.com.br/documento/2021-02-26/resolucao-cmn-n-4-893">Res. CMN 4.893/2021</a><span class="sub">Alterada pela Res. CMN 5.274/2025</span></td>
+              <td>A política de segurança cibernética passa a contemplar, no mínimo, autenticação, criptografia, rastreabilidade e controles de acesso, entre outros. Prazo de adequação encerrado em 1º/3/2026 (<a class="src" href="https://monitormercantil.com.br/instituicoes-financeiras-devem-se-adaptar-a-novas-exigencias-de-seguranca-cibernetica/">Monitor Mercantil</a>)</td>
+              <td>SSO corporativo, autorização por perfil, trilha de auditoria. Para corretoras e DTVMs, a norma equivalente é a Res. BCB 85/2021, alterada pela Res. BCB 538/2025 (<a class="src" href="https://www.demarest.com.br/?p=165566">Demarest</a>)</td>
+            </tr>
+            <tr>
+              <td><a class="src" href="https://cdn.toroinvestimentos.com.br/corretora/documents/Resolução-CVM-30.pdf">Res. CVM 30/2021</a><span class="sub">Suitability</span></td>
+              <td>Dever de verificar a adequação de produtos ao perfil do cliente, com categorias de perfil de risco</td>
+              <td>Se a tela mostrar perfil de risco, perfil desatualizado ou desenquadramento, as regras de exibição vêm de Compliance</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="interp">
+        <h4>O que isso vira na prática para o frontend</h4>
+        <p>Síntese, a validar com Compliance e Segurança.</p>
+        <ul>
+          <li><strong>Auditoria de acesso.</strong> Registrar quem abriu a visão de qual cliente, quando e com qual finalidade. Pergunte se o log é feito no backend (recomendado) ou se o front precisa disparar eventos.</li>
+          <li><strong>Motivo de acesso.</strong> Alguns backoffices exigem informar o motivo (protocolo de atendimento, chamado) antes de abrir os dados do cliente. Isso muda o fluxo da tela.</li>
+          <li><strong>Mascaramento por perfil.</strong> CPF, nome e saldos podem aparecer completos para um perfil e mascarados para outro. A regra deve vir do backend; o front só exibe.</li>
+          <li><strong>Exportação controlada.</strong> Quem pode exportar, quais colunas, com que limite, com marca d'água e com registro de evento.</li>
+          <li><strong>Nada sensível no navegador além do necessário.</strong> Sem dados de cliente em localStorage, em URLs, em logs de erro ou em ferramentas de analytics.</li>
+          <li><strong>Retenção de arquivos exportados.</strong> Se a exportação for assíncrona e gerar arquivo no servidor, por quanto tempo ele fica disponível e quem pode baixá-lo.</li>
+        </ul>
+      </div>
+
+      <div class="conf-row">
+        <div><span class="conf alta">Alta</span><span>Texto das normas: fontes oficiais ou reproduções fiéis.</span></div>
+        <div><span class="conf media">Média</span><span>Implicações: são interpretação de engenharia e dependem da política interna do banco.</span></div>
+      </div>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="regulacao" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#integracao">Próxima seção: Cenários de integração</a>
+      </div>
+    </section>
+
+    <!-- INTEGRAÇÃO -->
+    <section id="integracao" class="sec" aria-labelledby="t-integracao">
+      <h2 id="t-integracao">Cenários de integração</h2>
+      <div class="prose">
+        <p>Para uma tela que consolida várias fontes, o padrão mais seguro é um BFF dedicado ao backoffice. Sem ele, o frontend vira o orquestrador e herda a parte mais difícil do problema. Como a decisão ainda não foi tomada, leve os cenários abaixo para a reunião.</p>
+      </div>
+
+      <div class="source-note">
+        <h4>O que a fonte diz</h4>
+        <p>O padrão Backends for Frontends, descrito por Sam Newman, cria uma camada de backend para cada interface. Essa camada lida só com o que é específico daquela experiência (<a class="src" href="https://learn.microsoft.com/en-us/azure/architecture/patterns/backends-for-frontends">Microsoft Azure Architecture Center</a>). A mesma fonte faz três ressalvas. Monitoramento e autorização devem ficar fora do BFF, num gateway. O salto extra de rede pode aumentar a latência. E, se a organização já usa GraphQL com resolvers por frontend, ou um API gateway com agregação, o BFF pode não agregar valor.</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="stack">
+          <thead><tr><th scope="col">Cenário</th><th scope="col">Como funciona</th><th scope="col">O que o front ganha</th><th scope="col">O que o front herda</th></tr></thead>
+          <tbody>
+            <tr><td>A. BFF do backoffice<br><span class="tag-good">Padrão mais seguro</span></td><td>Front chama uma API moldada para as telas; o BFF agrega as fontes, normaliza e calcula totais</td><td>Contrato único, menos chamadas, totais confiáveis, estados de erro já resolvidos</td><td>Dependência do time dono do BFF; risco de o BFF virar gargalo</td></tr>
+            <tr><td>B. Várias APIs de domínio</td><td>Front chama renda fixa, fundos, renda variável e outras, cada uma com seu contrato</td><td>Começa mais rápido se as APIs já existem</td><td>Orquestração, falha parcial, normalização de formatos, totais no cliente, várias autenticações, mais latência</td></tr>
+            <tr><td>C. Gateway com agregação</td><td>Um gateway combina chamadas e aplica autenticação e logs (<a class="src" href="https://learn.microsoft.com/en-us/azure/architecture/patterns/gateway-aggregation">Gateway Aggregation</a>)</td><td>Menos chamadas, segurança centralizada</td><td>Lógica de tela continua no front se o gateway só repassar</td></tr>
+            <tr><td>D. GraphQL</td><td>Front pede só os campos de que precisa, num schema federado</td><td>Flexibilidade de campos por tela</td><td>Precisa de infraestrutura existente; custo de adoção alto se não houver</td></tr>
+            <tr><td>E. Híbrido</td><td>BFF para a visão consolidada; APIs de domínio para detalhes de cada produto</td><td>Primeira entrega mais rápida</td><td>Dois modelos de erro e de autenticação convivendo</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="interp">
+        <h4>Ponto de atenção específico de backoffice <span class="tag-sint">Síntese</span></h4>
+        <p>APIs feitas para o app do cliente costumam autorizar com base em “o usuário logado é o dono dos dados”. No backoffice, um funcionário consulta dados de outra pessoa. Reaproveitar essas APIs exige outra regra de autorização, outra auditoria e, muitas vezes, outro escopo de token. Pergunte explicitamente se as APIs existentes já suportam esse modelo.</p>
+      </div>
+
+      <h3>Se o cenário for B, a estimativa do front deve incluir</h3>
+      <ul class="bul prose">
+        <li>Camada de orquestração e normalização</li>
+        <li>Tratamento de falha parcial por bloco</li>
+        <li>Política de timeout e retry por fonte</li>
+        <li>Cálculo ou ausência de totais</li>
+        <li>Testes de contrato com cada API</li>
+      </ul>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="integracao" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#frontend">Próxima seção: Frontend React</a>
+      </div>
+    </section>
+
+    <!-- FRONTEND -->
+    <section id="frontend" class="sec" aria-labelledby="t-frontend">
+      <h2 id="t-frontend">Frontend React para backoffice com muitos dados</h2>
+      <div class="prose">
+        <p>Numa tela de consolidação, o frontend acerta ou erra em cinco lugares: como busca os dados, como guarda os filtros, como monta as tabelas, como formata números e datas, e como mostra os estados intermediários. Esta seção é síntese técnica, com fontes onde há norma ou documentação.</p>
+      </div>
+
+      <h3>Busca de dados e cache</h3>
+      <ul class="points prose">
+        <li><p class="ph">Separe estado do servidor de estado de UI</p><p>Posição, extrato e proventos são estado do servidor: precisam de cache, deduplicação, retry e controle de “dado velho”. Use a biblioteca que o time já adota (TanStack Query é a mais comum em React). Filtros abertos e abas são estado de UI.</p></li>
+        <li><p class="ph">Um bloco, uma query</p><p>Cada bloco da tela (renda fixa, fundos, renda variável) busca e falha de forma independente. Uma fonte fora do ar não pode derrubar a tela inteira. Error boundaries por bloco ajudam.</p></li>
+        <li><p class="ph">Evite cascata de requisições</p><p>Se o bloco B depende de um ID que vem do bloco A, a tela fica lenta. Esse é um argumento a favor do BFF.</p></li>
+        <li><p class="ph">Defina o tempo de vida do cache com o negócio</p><p>Dado D+1 pode ficar em cache por horas. Dado intradiário, não.</p></li>
+      </ul>
+
+      <h3>Filtros e URL</h3>
+      <ul class="points prose">
+        <li><p class="ph">Filtros na URL</p><p>Guarde cliente, período, produto e aba na URL. Assim o usuário compartilha o link, usa o botão voltar e reabre a mesma visão.</p></li>
+        <li><p class="ph">Nunca coloque CPF ou nome na URL</p><p>URLs vão parar em histórico do navegador, logs de proxy e ferramentas de analytics. Use um identificador interno opaco.</p></li>
+      </ul>
+
+      <h3>Tabelas</h3>
+      <ul class="points prose">
+        <li><p class="ph">Tabela de leitura: use <code>&lt;table&gt;</code> nativo</p><p>A W3C recomenda o elemento nativo sempre que possível, com <code>aria-sort</code> no cabeçalho da coluna ordenada (<a class="src" href="https://w3.org/WAI/ARIA/apg/patterns/table">W3C APG, Table</a>).</p></li>
+        <li><p class="ph">Grid só se for interativo</p><p>O padrão grid, com navegação por setas, é indicado para dados editáveis ou com muitos elementos interativos (<a class="src" href="https://www.w3.org/WAI/ARIA/apg/patterns/grid">W3C APG, Grid</a>). Para consulta e exportação, provavelmente não é necessário.</p></li>
+        <li><p class="ph">Paginação no servidor para extratos</p><p>Movimentações de anos podem ter milhares de linhas. Ordenação e filtro também no servidor, para que tela e exportação usem a mesma regra.</p></li>
+        <li><p class="ph">Virtualização</p><p>Só quando a tabela precisar renderizar muitas linhas de uma vez. Ela complica acessibilidade e busca do navegador (Ctrl+F).</p></li>
+      </ul>
+
+      <h3 id="numeros">Números, moeda e datas</h3>
+      <ul class="points prose">
+        <li><p class="ph">Valores monetários não devem trafegar como float</p><p>O <code>Number</code> do JavaScript é ponto flutuante binário, então somas simples podem gerar erros de centavo. Combine no contrato: string decimal (“1234.56”) ou inteiro em centavos, e o backend entrega os totais.</p></li>
+        <li><p class="ph">Formatação com <code>Intl</code></p><p><code>Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" })</code> para moeda e <code>style: "percent"</code> para rentabilidade (<a class="src" href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Intl/NumberFormat">MDN</a>). Defina com produto quantas casas decimais usar em cotas e percentuais.</p></li>
+        <li><p class="ph">Armadilha de data</p><p>Em JavaScript, <code>new Date("2026-10-05")</code> é interpretado como meia-noite UTC e aparece como 04/10 no horário de Brasília. Datas de referência devem ser tratadas como data sem hora, ou formatadas com <code>timeZone: "America/Sao_Paulo"</code>.</p></li>
+      </ul>
+
+      <div class="demo" aria-labelledby="demo-t">
+        <div class="demo-head">
+          <h4 id="demo-t">Veja no seu navegador</h4>
+          <p>Resultados calculados agora, pelo JavaScript desta página.</p>
+        </div>
+        <dl>
+          <div class="row"><dt><code>0.1 + 0.2</code><span>Soma em ponto flutuante</span></dt><dd id="demo-float">—</dd></div>
+          <div class="row"><dt><code>new Date("2026-10-05")</code><span>Exibida em pt-BR no fuso America/Sao_Paulo</span></dt><dd id="demo-date">—</dd></div>
+          <div class="row"><dt><code>Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(1234.56)</code></dt><dd id="demo-brl">—</dd></div>
+          <div class="row"><dt><code>Intl.NumberFormat("pt-BR", { style: "percent", minimumFractionDigits: 2 }).format(-0.0125)</code></dt><dd id="demo-pct">—</dd></div>
+        </dl>
+      </div>
+
+      <h3>Estados de tela</h3>
+      <div class="table-wrap">
+        <table class="stack">
+          <thead><tr><th scope="col">Estado</th><th scope="col">Exemplo</th><th scope="col">O que a UI mostra</th></tr></thead>
+          <tbody>
+            <tr><td>Carregando</td><td>Primeira busca do cliente</td><td>Skeleton por bloco, sem travar a página</td></tr>
+            <tr><td>Vazio</td><td>Cliente sem investimentos naquele produto</td><td>Mensagem clara, diferente de erro</td></tr>
+            <tr><td>Parcial</td><td>Fonte de fundos fora do ar</td><td>Blocos que carregaram + aviso no bloco que falhou + total marcado como incompleto</td></tr>
+            <tr><td>Desatualizado</td><td>Cota de fundo ainda não divulgada</td><td>Data de referência visível e destacada</td></tr>
+            <tr><td>Erro total</td><td>BFF fora do ar</td><td>Mensagem com opção de tentar de novo e código para suporte</td></tr>
+            <tr><td>Sem permissão</td><td>Perfil sem acesso àquele dado</td><td>Mensagem neutra, sem revelar se o dado existe</td></tr>
+            <tr><td>Não encontrado</td><td>Cliente inexistente ou sem conta de investimento</td><td>Mensagem e volta à busca</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Micro-frontends e design system</h3>
+      <ul class="bul prose">
+        <li>Pergunte se o backoffice do banco já tem um shell (portal) que hospeda módulos de vários times. Se tiver, a plataforma provavelmente entra como módulo, com regras de roteamento, autenticação e versão de React já definidas.</li>
+        <li>Use os componentes de tabela, filtro e exportação do design system interno, se existirem. Criar uma tabela própria costuma custar mais do que parece.</li>
+      </ul>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="frontend" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#exportacao">Próxima seção: Exportação de relatórios</a>
+      </div>
+    </section>
+
+    <!-- EXPORTAÇÃO -->
+    <section id="exportacao" class="sec" aria-labelledby="t-exportacao">
+      <h2 id="t-exportacao">Exportação de relatórios</h2>
+      <div class="prose">
+        <p>A recomendação para dados de investidor é gerar a exportação no servidor, com os mesmos filtros e as mesmas regras de cálculo da tela, e registrar cada exportação como evento auditável. Gerar no navegador só faz sentido para volumes pequenos de dados já carregados.</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="stack">
+          <thead><tr><th scope="col">Abordagem</th><th scope="col">Quando usar</th><th scope="col">Vantagens</th><th scope="col">Riscos</th></tr></thead>
+          <tbody>
+            <tr><td>No navegador</td><td>Poucas linhas, dados já na tela</td><td>Rápido de fazer, sem backend</td><td>Exporta só a página carregada; formatação pode divergir; auditoria depende do front; bibliotecas de XLSX e PDF pesam no bundle</td></tr>
+            <tr><td>No servidor, síncrona</td><td>Volume médio, resposta em poucos segundos</td><td>Mesma regra da tela; auditoria no backend</td><td>Timeout em períodos longos</td></tr>
+            <tr><td>No servidor, assíncrona</td><td>Volume grande ou PDF complexo</td><td>Não trava a tela; permite fila e limites</td><td>Precisa de status, notificação, expiração do arquivo e lista de exportações</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Exportação assíncrona</h3>
+      <div class="prose">
+        <p>O padrão Asynchronous Request-Reply descreve o fluxo: o servidor responde 202 (Accepted), o cliente consulta um endpoint de status e, ao final, é redirecionado ao arquivo. A fonte também sugere permitir cancelamento por um DELETE no recurso de status (<a class="src" href="https://learn.microsoft.com/azure/architecture/patterns/async-request-reply">Microsoft Azure Architecture Center</a>).</p>
+      </div>
+      <div class="flow" role="group" aria-label="Fluxo: pedido de exportação, resposta 202 Accepted, consulta ao endpoint de status, redirecionamento ao arquivo">
+        <span class="node">Pedido de exportação</span><span class="arr" aria-hidden="true">→</span><span class="node">202 Accepted</span><span class="arr" aria-hidden="true">→</span><span class="node">Consulta ao status</span><span class="arr" aria-hidden="true">→</span><span class="node">Redireciona ao arquivo</span>
+      </div>
+      <div class="prose">
+        <p>Para o front, isso vira uma tela ou painel de “meus relatórios”, com estados de “em processamento”, “pronto”, “expirado” e “falhou”.</p>
+      </div>
+
+      <h3>CSV injection</h3>
+      <div class="prose">
+        <p>Células que começam com <code>=</code>, <code>+</code>, <code>-</code> ou <code>@</code> podem ser executadas como fórmula ao abrir o arquivo numa planilha. A OWASP alerta que não existe sanitização universal e que o Excel pode desfazer o escape depois de salvar e reabrir o arquivo (<a class="src" href="https://owasp.org/www-community/attacks/CSV_Injection">OWASP</a>).</p>
+      </div>
+      <div class="interp">
+        <h4>Armadilha extra no domínio de investimentos <span class="tag-sint">Síntese</span></h4>
+        <p>Valores negativos, como rentabilidade de -1,25%, começam com <code>-</code>. A sanitização deve valer só para campos de texto, como nome e descrição. Números devem ir como números, de preferência em XLSX com tipo de célula definido.</p>
+      </div>
+      <div class="interp">
+        <h4>Detalhes práticos de CSV no Brasil <span class="tag-sint">Síntese</span></h4>
+        <p>Sem fonte primária: o Excel em pt-BR espera <code>;</code> como separador e vírgula decimal. Arquivos sem BOM UTF-8 costumam abrir com acentos quebrados. Combine o formato com quem vai usar o arquivo.</p>
+      </div>
+
+      <h3>O que decidir na reunião</h3>
+      <ul class="bul prose">
+        <li>Formatos (CSV, XLSX, PDF) e quem consome o arquivo: uma pessoa no Excel ou outro sistema.</li>
+        <li>Colunas exportadas por perfil, e se dados pessoais saem mascarados.</li>
+        <li>Limites: período máximo, número de linhas, exportações por usuário por dia.</li>
+        <li>Rastreabilidade: registro de quem exportou, quando, com quais filtros e quantas linhas. Marca d'água com usuário e data no PDF.</li>
+        <li>Retenção: por quanto tempo o arquivo fica disponível e se o link expira.</li>
+        <li>Fidelidade: o arquivo precisa bater com a tela, inclusive arredondamentos e data de referência.</li>
+      </ul>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="exportacao" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#seguranca">Próxima seção: Segurança e auditoria</a>
+      </div>
+    </section>
+
+    <!-- SEGURANÇA -->
+    <section id="seguranca" class="sec" aria-labelledby="t-seguranca">
+      <h2 id="t-seguranca">Segurança, permissões e auditoria no frontend</h2>
+      <div class="prose">
+        <p>No backoffice, o backend decide quem vê o quê; o frontend só reflete essa decisão e evita vazar dados pelo navegador. Esconder um botão nunca é controle de acesso.</p>
+      </div>
+
+      <h3>Autenticação e sessão</h3>
+      <ul class="bul prose">
+        <li>Login por SSO corporativo (provavelmente OIDC). Pergunte qual provedor e se a plataforma entra num portal de backoffice existente.</li>
+        <li>Tempo de inatividade e expiração de sessão, e o que acontece com uma exportação em andamento quando a sessão expira.</li>
+        <li>Reautenticação para ações sensíveis, como exportar em massa, se a política exigir.</li>
+      </ul>
+
+      <h3>Autorização</h3>
+      <ul class="points prose">
+        <li><p class="ph">O backend é a fonte da verdade</p><p>O front recebe as permissões do usuário (por exemplo, num endpoint de perfil) e decide o que exibir. Toda chamada continua sendo validada no servidor.</p></li>
+        <li><p class="ph">Granularidade a definir</p><p>Por tela, por bloco (produto), por campo (saldo, CPF), por ação (exportar) e por carteira de clientes.</p></li>
+        <li><p class="ph">Carteira de clientes é o caso mais comum de regra por atributo <span class="tag-sint">Síntese</span></p><p>Um assessor só vê os clientes da própria carteira, enquanto Compliance vê todos. Isso não cabe em papéis simples e muda o contrato da API de busca de clientes.</p></li>
+      </ul>
+
+      <h3>Mascaramento</h3>
+      <ul class="bul prose">
+        <li>Feito no backend, por perfil. O front exibe o que recebe.</li>
+        <li>Se existir a ação de “revelar” um dado mascarado, ela deve ser uma chamada ao backend, registrada em auditoria, e não um toggle local.</li>
+      </ul>
+
+      <h3>Auditoria</h3>
+      <ul class="bul prose">
+        <li>O registro de acesso deve nascer no backend, a cada consulta de dados de cliente.</li>
+        <li>O front pode precisar enviar contexto: motivo do acesso, número de protocolo ou de chamado.</li>
+        <li>Pergunte quem consome esses registros (Compliance, Segurança) e por quanto tempo eles são guardados.</li>
+      </ul>
+
+      <h3>Dados no navegador</h3>
+      <ul class="bul prose">
+        <li>A OWASP orienta verificar se dados sensíveis ficam desnecessariamente no armazenamento do navegador e se são apagados após logout ou expiração da sessão (<a class="src" href="https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/11-Client-side_Testing/12-Testing_Browser_Storage">OWASP WSTG, Testing Browser Storage</a>).</li>
+        <li>Na prática <span class="tag-sint">Síntese</span>: não persistir o cache de queries em localStorage ou IndexedDB, limpar o cache em memória no logout e pedir ao backend <code>Cache-Control: no-store</code> nas respostas com dados de cliente.</li>
+        <li><strong>Ferramentas de observabilidade também vazam.</strong> Error tracking e session replay podem capturar CPF, nomes e saldos que aparecem na tela ou nos payloads. Configure mascaramento ou desligue o replay nessas telas.</li>
+        <li>Sem dados de cliente na URL, em <code>console.log</code> ou em mensagens de erro exibidas ao usuário.</li>
+      </ul>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="seguranca" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#qualidade">Próxima seção: Qualidade e entrega</a>
+      </div>
+    </section>
+
+    <!-- QUALIDADE -->
+    <section id="qualidade" class="sec" aria-labelledby="t-qualidade">
+      <h2 id="t-qualidade">Qualidade e entrega</h2>
+      <div class="prose">
+        <p>O maior risco de qualidade numa tela de consolidação é o dado estar errado sem ninguém perceber. Os testes devem cobrir contratos e estados, não só a renderização.</p>
+      </div>
+
+      <h3>Testes</h3>
+      <ul class="points prose">
+        <li><p class="ph">Unitários</p><p>Para formatação de moeda, percentuais e datas, e para utilitários de mascaramento. São baratos e pegam os erros mais comuns.</p></li>
+        <li><p class="ph">Componentes com API simulada</p><p>Cobrindo todos os estados da <a href="#frontend">tabela de estados de tela</a>: vazio, parcial, desatualizado, erro e sem permissão.</p></li>
+        <li><p class="ph">Testes de contrato</p><p>No Pact, o consumidor da API escreve suas expectativas em testes, que geram um contrato compartilhado com o provedor para evitar mudanças que quebram a integração (<a class="src" href="https://unpkg.com/@pact-foundation/pact@17.0.1/README.md">Pact JS</a>). Vale mais no cenário B, com várias APIs e vários times provedores.</p></li>
+        <li><p class="ph">E2E dos fluxos críticos</p><p>Buscar cliente, ver a posição consolidada, filtrar o extrato, exportar.</p></li>
+        <li><p class="ph">Acessibilidade</p><p>Verificação automatizada no CI e teste manual de teclado nas tabelas e filtros.</p></li>
+        <li><p class="ph">Volume</p><p>Um cliente com anos de movimentações e todos os produtos, para medir tempo de carga e de exportação.</p></li>
+      </ul>
+
+      <h3>Dados de teste</h3>
+      <ul class="bul prose">
+        <li>Ambientes de desenvolvimento e homologação não devem usar dados reais de clientes. Pergunte se existe massa de dados sintética ou mascarada.</li>
+        <li>Peça clientes de teste que cubram os casos difíceis: todos os produtos, nenhum produto, posição zerada, valores negativos, fundo com cota atrasada, conta encerrada.</li>
+      </ul>
+
+      <h3>Observabilidade</h3>
+      <ul class="bul prose">
+        <li>Métricas técnicas sugeridas: tempo até a visão consolidada aparecer, taxa de erro por fonte de dados, tempo e taxa de falha das exportações.</li>
+        <li>Error tracking e RUM configurados para não capturar dados de cliente (ver <a href="#seguranca">Segurança</a>).</li>
+      </ul>
+
+      <h3>Rollout</h3>
+      <ul class="bul prose">
+        <li>Backoffice facilita um rollout gradual: feature flag por usuário ou por área e piloto com poucos operadores antes de abrir para todos. O relatório anterior detalha as práticas de flags do GitHub e de implantação em etapas da Amazon.</li>
+        <li>Se existe uma ferramenta atual que faz parte disso, defina o período de convivência e o critério para desligá-la.</li>
+      </ul>
+
+      <h3>Métricas de sucesso</h3>
+      <div class="interp">
+        <h4>Para uma ferramenta interna, a métrica mais útil é de tempo e esforço do operador <span class="tag-sint">Síntese</span></h4>
+        <p>A validar com produto.</p>
+        <ul>
+          <li>Tempo médio para responder uma dúvida sobre a carteira de um cliente.</li>
+          <li>Quantidade de sistemas que o operador precisa abrir por atendimento.</li>
+          <li>Usuários ativos por semana e exportações concluídas sem erro.</li>
+          <li>Chamados de suporte relacionados a divergência de dados.</li>
+        </ul>
+      </div>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="qualidade" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#perguntas">Próxima seção: Perguntas</a>
+      </div>
+    </section>
+
+    <!-- PERGUNTAS -->
+    <section id="perguntas" class="sec" aria-labelledby="t-perguntas">
+      <h2 id="t-perguntas">Perguntas para o refinamento</h2>
+      <p class="intro">Comece pelas 10 prioritárias: sem elas não dá para estimar nem fatiar. As tabelas por tema têm uma coluna de resposta para preencher durante a reunião. Tudo fica salvo neste navegador, e a exportação em Markdown junta as prioritárias, as respostas e o checklist de saída.</p>
+
+      <div class="toolbar">
+        <button class="btn primary notes-copy" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
+          Copiar anotações em Markdown
+        </button>
+        <button class="btn notes-download" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+          Baixar .md
+        </button>
+        <button class="btn" type="button" id="notes-reset">Limpar anotações</button>
+      </div>
+
+      <div class="check-group">
+        <h4><span class="gname">As 10 prioritárias</span><span class="count"></span></h4>
+        <ul class="check-list" id="prio-list">
+            <li><label><input type="checkbox" data-id="p01"><span class="txt">Quem são os usuários (áreas e perfis) e qual o principal caso de uso de cada um?</span></label></li>
+            <li><label><input type="checkbox" data-id="p02"><span class="txt">Que problema a plataforma resolve hoje? O que o operador faz atualmente e quantos sistemas abre?</span></label></li>
+            <li><label><input type="checkbox" data-id="p03"><span class="txt">Quais produtos de investimento entram na primeira entrega?</span></label></li>
+            <li><label><input type="checkbox" data-id="p04"><span class="txt">A integração será por BFF dedicado ou por várias APIs? Quem é o dono?</span></label></li>
+            <li><label><input type="checkbox" data-id="p05"><span class="txt">As APIs existentes suportam um funcionário consultando dados de outro cliente (autorização de backoffice)?</span></label></li>
+            <li><label><input type="checkbox" data-id="p06"><span class="txt">Qual é a data de referência de cada produto, e quem calcula totais e rentabilidade?</span></label></li>
+            <li><label><input type="checkbox" data-id="p07"><span class="txt">Exportação: quais formatos, que volume, síncrona ou assíncrona, gerada onde?</span></label></li>
+            <li><label><input type="checkbox" data-id="p08"><span class="txt">Quem define as regras de acesso, mascaramento e auditoria (Compliance, Segurança, DPO), e quando teremos essas definições?</span></label></li>
+            <li><label><input type="checkbox" data-id="p09"><span class="txt">Existe portal de backoffice, design system e componentes de tabela e exportação para reaproveitar?</span></label></li>
+            <li><label><input type="checkbox" data-id="p10"><span class="txt">Qual é o escopo do MVP, o prazo e o critério de sucesso?</span></label></li>
+        </ul>
+      </div>
+
+      <h3>Perguntas por tema</h3>
+      <div class="toolbar" style="margin:.2rem 0 0">
+        <p class="total-line" aria-live="polite" style="flex:1;min-width:12rem"><strong id="ans-total">0 de 58</strong> perguntas respondidas</p>
+        <button class="btn" type="button" id="themes-toggle" aria-pressed="false">Abrir todos os temas</button>
+      </div>
+      <div class="themes">
+        <details class="theme">
+          <summary><span class="sname">Negócio e objetivo</span><span class="qcount">0 de 5</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="table-wrap">
+            <table class="stack qtable">
+              <thead><tr><th scope="col">Pergunta</th><th scope="col">Por que importa</th><th scope="col">Resposta</th></tr></thead>
+              <tbody>
+                <tr><td>Que processo a plataforma substitui ou melhora?</td><td>Define escopo e a métrica de sucesso</td><td><textarea class="ans" data-id="q01-01" rows="2" aria-label="Resposta: Que processo a plataforma substitui ou melhora?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Existe ferramenta atual (planilha, sistema legado) que faz parte disso?</td><td>Paridade de funcionalidades e período de convivência</td><td><textarea class="ans" data-id="q01-02" rows="2" aria-label="Resposta: Existe ferramenta atual (planilha, sistema legado) que faz parte disso?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Há data fixa (regulatória, evento, contrato)?</td><td>Define o tamanho da primeira fatia</td><td><textarea class="ans" data-id="q01-03" rows="2" aria-label="Resposta: Há data fixa (regulatória, evento, contrato)?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Como vamos medir sucesso?</td><td>Instrumentação precisa entrar desde o início</td><td><textarea class="ans" data-id="q01-04" rows="2" aria-label="Resposta: Como vamos medir sucesso?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>O que está explicitamente fora do escopo?</td><td>Registra os não-objetivos e evita crescimento silencioso</td><td><textarea class="ans" data-id="q01-05" rows="2" aria-label="Resposta: O que está explicitamente fora do escopo?" placeholder="Anotar resposta"></textarea></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="theme">
+          <summary><span class="sname">Usuários, perfis e permissões</span><span class="qcount">0 de 5</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="table-wrap">
+            <table class="stack qtable">
+              <thead><tr><th scope="col">Pergunta</th><th scope="col">Por que importa</th><th scope="col">Resposta</th></tr></thead>
+              <tbody>
+                <tr><td>Quais áreas usam e quantas pessoas por área?</td><td>Perfis de acesso e volume de uso</td><td><textarea class="ans" data-id="q02-01" rows="2" aria-label="Resposta: Quais áreas usam e quantas pessoas por área?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>O que cada perfil precisa ver e fazer?</td><td>Monta a matriz de permissões por tela, bloco, campo e ação</td><td><textarea class="ans" data-id="q02-02" rows="2" aria-label="Resposta: O que cada perfil precisa ver e fazer?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Há restrição por carteira (assessor só vê seus clientes)?</td><td>Regra por atributo muda o contrato da busca de clientes</td><td><textarea class="ans" data-id="q02-03" rows="2" aria-label="Resposta: Há restrição por carteira (assessor só vê seus clientes)?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Quem concede e revoga acessos?</td><td>Pode exigir uma tela de administração</td><td><textarea class="ans" data-id="q02-04" rows="2" aria-label="Resposta: Quem concede e revoga acessos?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Terceiros ou parceiros externos vão acessar?</td><td>Aumenta exigências de segurança e auditoria</td><td><textarea class="ans" data-id="q02-05" rows="2" aria-label="Resposta: Terceiros ou parceiros externos vão acessar?" placeholder="Anotar resposta"></textarea></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="theme">
+          <summary><span class="sname">Escopo de dados e produtos</span><span class="qcount">0 de 6</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="table-wrap">
+            <table class="stack qtable">
+              <thead><tr><th scope="col">Pergunta</th><th scope="col">Por que importa</th><th scope="col">Resposta</th></tr></thead>
+              <tbody>
+                <tr><td>Quais produtos entram no MVP e quais depois?</td><td>Define as fatias de entrega</td><td><textarea class="ans" data-id="q03-01" rows="2" aria-label="Resposta: Quais produtos entram no MVP e quais depois?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Quais informações por produto (posição, extrato, proventos, rentabilidade, IR)?</td><td>Define as telas e os blocos</td><td><textarea class="ans" data-id="q03-02" rows="2" aria-label="Resposta: Quais informações por produto (posição, extrato, proventos, rentabilidade, IR)?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Haverá consulta de posição em data passada?</td><td>Exige API histórica e muda o modelo de filtros</td><td><textarea class="ans" data-id="q03-03" rows="2" aria-label="Resposta: Haverá consulta de posição em data passada?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Saldo bruto e líquido? Quem calcula IR e IOF estimados?</td><td>Evita cálculo financeiro no front</td><td><textarea class="ans" data-id="q03-04" rows="2" aria-label="Resposta: Saldo bruto e líquido? Quem calcula IR e IOF estimados?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Pessoa física, jurídica, contas conjuntas?</td><td>Muda o modelo de dados e a busca</td><td><textarea class="ans" data-id="q03-05" rows="2" aria-label="Resposta: Pessoa física, jurídica, contas conjuntas?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Perfil de suitability aparece na tela?</td><td>Traz regras da CVM 30 para a exibição</td><td><textarea class="ans" data-id="q03-06" rows="2" aria-label="Resposta: Perfil de suitability aparece na tela?" placeholder="Anotar resposta"></textarea></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="theme">
+          <summary><span class="sname">Fontes de dados e temporalidade</span><span class="qcount">0 de 5</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="table-wrap">
+            <table class="stack qtable">
+              <thead><tr><th scope="col">Pergunta</th><th scope="col">Por que importa</th><th scope="col">Resposta</th></tr></thead>
+              <tbody>
+                <tr><td>Qual sistema é a origem de cada produto?</td><td>Mapa de dependências e de times envolvidos</td><td><textarea class="ans" data-id="q04-01" rows="2" aria-label="Resposta: Qual sistema é a origem de cada produto?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Qual a data de referência e a frequência de atualização de cada fonte?</td><td>Define a exibição da data e o tempo de cache</td><td><textarea class="ans" data-id="q04-02" rows="2" aria-label="Resposta: Qual a data de referência e a frequência de atualização de cada fonte?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Quem responde por divergência entre o total e os sistemas de origem?</td><td>Evita que o front vire culpado por dado errado</td><td><textarea class="ans" data-id="q04-03" rows="2" aria-label="Resposta: Quem responde por divergência entre o total e os sistemas de origem?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>O que a tela faz se uma fonte estiver fora?</td><td>Define o estado de dado parcial</td><td><textarea class="ans" data-id="q04-04" rows="2" aria-label="Resposta: O que a tela faz se uma fonte estiver fora?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Há dados da B3 ou de outros terceiros?</td><td>Latência, licenças e janelas de atualização</td><td><textarea class="ans" data-id="q04-05" rows="2" aria-label="Resposta: Há dados da B3 ou de outros terceiros?" placeholder="Anotar resposta"></textarea></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="theme">
+          <summary><span class="sname">Integração e contratos de API</span><span class="qcount">0 de 7</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="table-wrap">
+            <table class="stack qtable">
+              <thead><tr><th scope="col">Pergunta</th><th scope="col">Por que importa</th><th scope="col">Resposta</th></tr></thead>
+              <tbody>
+                <tr><td>BFF dedicado, várias APIs, gateway ou GraphQL?</td><td>Muda a arquitetura e a estimativa do front</td><td><textarea class="ans" data-id="q05-01" rows="2" aria-label="Resposta: BFF dedicado, várias APIs, gateway ou GraphQL?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Quem é dono do BFF e quem o implementa?</td><td>Dependência entre times e prioridade na fila</td><td><textarea class="ans" data-id="q05-02" rows="2" aria-label="Resposta: Quem é dono do BFF e quem o implementa?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>As APIs já existem? Há OpenAPI e ambiente de homologação?</td><td>Permite começar o front com mocks em paralelo</td><td><textarea class="ans" data-id="q05-03" rows="2" aria-label="Resposta: As APIs já existem? Há OpenAPI e ambiente de homologação?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Em que formato chegam valores monetários, percentuais e datas?</td><td>Precisão numérica e fuso horário</td><td><textarea class="ans" data-id="q05-04" rows="2" aria-label="Resposta: Em que formato chegam valores monetários, percentuais e datas?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Paginação, ordenação e filtros ficam no servidor?</td><td>Tabelas grandes e fidelidade da exportação</td><td><textarea class="ans" data-id="q05-05" rows="2" aria-label="Resposta: Paginação, ordenação e filtros ficam no servidor?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Qual a latência esperada e o timeout de cada API?</td><td>UX de carregamento e política de retry</td><td><textarea class="ans" data-id="q05-06" rows="2" aria-label="Resposta: Qual a latência esperada e o timeout de cada API?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Os erros seguem um formato padrão?</td><td>Tratamento único de erro no front</td><td><textarea class="ans" data-id="q05-07" rows="2" aria-label="Resposta: Os erros seguem um formato padrão?" placeholder="Anotar resposta"></textarea></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="theme">
+          <summary><span class="sname">UX, design system e telas</span><span class="qcount">0 de 6</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="table-wrap">
+            <table class="stack qtable">
+              <thead><tr><th scope="col">Pergunta</th><th scope="col">Por que importa</th><th scope="col">Resposta</th></tr></thead>
+              <tbody>
+                <tr><td>Já existe design (Figma) ou o fluxo será definido agora?</td><td>Alinhamento com design antes de estimar</td><td><textarea class="ans" data-id="q06-01" rows="2" aria-label="Resposta: Já existe design (Figma) ou o fluxo será definido agora?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Como o operador encontra o cliente (CPF, conta, nome)?</td><td>Busca com dado pessoal; regras de mascaramento</td><td><textarea class="ans" data-id="q06-02" rows="2" aria-label="Resposta: Como o operador encontra o cliente (CPF, conta, nome)?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Existe portal de backoffice que hospeda módulos?</td><td>Roteamento, autenticação e versões já definidos</td><td><textarea class="ans" data-id="q06-03" rows="2" aria-label="Resposta: Existe portal de backoffice que hospeda módulos?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>O design system tem tabela, filtros e exportação?</td><td>Reuso reduz muito o esforço</td><td><textarea class="ans" data-id="q06-04" rows="2" aria-label="Resposta: O design system tem tabela, filtros e exportação?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Quais navegadores e resoluções corporativas suportar?</td><td>Layout e testes</td><td><textarea class="ans" data-id="q06-05" rows="2" aria-label="Resposta: Quais navegadores e resoluções corporativas suportar?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Qual o requisito de acessibilidade (ex.: WCAG AA)?</td><td>Vira critério de aceite</td><td><textarea class="ans" data-id="q06-06" rows="2" aria-label="Resposta: Qual o requisito de acessibilidade (ex.: WCAG AA)?" placeholder="Anotar resposta"></textarea></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="theme">
+          <summary><span class="sname">Exportação de relatórios</span><span class="qcount">0 de 6</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="table-wrap">
+            <table class="stack qtable">
+              <thead><tr><th scope="col">Pergunta</th><th scope="col">Por que importa</th><th scope="col">Resposta</th></tr></thead>
+              <tbody>
+                <tr><td>Quais formatos (CSV, XLSX, PDF) e quem consome?</td><td>Biblioteca, layout e regras de escape</td><td><textarea class="ans" data-id="q07-01" rows="2" aria-label="Resposta: Quais formatos (CSV, XLSX, PDF) e quem consome?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Qual volume máximo e período máximo?</td><td>Decide entre exportação síncrona e assíncrona</td><td><textarea class="ans" data-id="q07-02" rows="2" aria-label="Resposta: Qual volume máximo e período máximo?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>A geração é no servidor ou no navegador?</td><td>Fidelidade, auditoria e peso do bundle</td><td><textarea class="ans" data-id="q07-03" rows="2" aria-label="Resposta: A geração é no servidor ou no navegador?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Quais colunas saem por perfil? Dados pessoais vão mascarados?</td><td>LGPD e sigilo</td><td><textarea class="ans" data-id="q07-04" rows="2" aria-label="Resposta: Quais colunas saem por perfil? Dados pessoais vão mascarados?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Precisa de marca d'água, registro e expiração do link?</td><td>Rastreabilidade e retenção</td><td><textarea class="ans" data-id="q07-05" rows="2" aria-label="Resposta: Precisa de marca d&#x27;água, registro e expiração do link?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>O arquivo precisa bater com a tela?</td><td>Mesmas regras de arredondamento e data</td><td><textarea class="ans" data-id="q07-06" rows="2" aria-label="Resposta: O arquivo precisa bater com a tela?" placeholder="Anotar resposta"></textarea></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="theme">
+          <summary><span class="sname">Segurança, LGPD e auditoria</span><span class="qcount">0 de 6</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="table-wrap">
+            <table class="stack qtable">
+              <thead><tr><th scope="col">Pergunta</th><th scope="col">Por que importa</th><th scope="col">Resposta</th></tr></thead>
+              <tbody>
+                <tr><td>Quem define as regras e até quando?</td><td>Sem isso, a feature trava no fim</td><td><textarea class="ans" data-id="q08-01" rows="2" aria-label="Resposta: Quem define as regras e até quando?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>É obrigatório informar motivo ou protocolo antes de abrir um cliente?</td><td>Muda o fluxo de entrada</td><td><textarea class="ans" data-id="q08-02" rows="2" aria-label="Resposta: É obrigatório informar motivo ou protocolo antes de abrir um cliente?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>A auditoria de acesso fica no backend? O front envia contexto?</td><td>Divide responsabilidades</td><td><textarea class="ans" data-id="q08-03" rows="2" aria-label="Resposta: A auditoria de acesso fica no backend? O front envia contexto?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Qual a política de sessão e reautenticação?</td><td>Comportamento em expiração e em ações sensíveis</td><td><textarea class="ans" data-id="q08-04" rows="2" aria-label="Resposta: Qual a política de sessão e reautenticação?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Há restrições para analytics, error tracking e session replay?</td><td>Evita vazamento por ferramentas</td><td><textarea class="ans" data-id="q08-05" rows="2" aria-label="Resposta: Há restrições para analytics, error tracking e session replay?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Precisa de revisão de segurança ou pentest antes do go-live?</td><td>Entra no cronograma</td><td><textarea class="ans" data-id="q08-06" rows="2" aria-label="Resposta: Precisa de revisão de segurança ou pentest antes do go-live?" placeholder="Anotar resposta"></textarea></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="theme">
+          <summary><span class="sname">Requisitos não funcionais</span><span class="qcount">0 de 4</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="table-wrap">
+            <table class="stack qtable">
+              <thead><tr><th scope="col">Pergunta</th><th scope="col">Por que importa</th><th scope="col">Resposta</th></tr></thead>
+              <tbody>
+                <tr><td>Quantos usuários simultâneos e consultas por dia?</td><td>Dimensionamento e cache</td><td><textarea class="ans" data-id="q09-01" rows="2" aria-label="Resposta: Quantos usuários simultâneos e consultas por dia?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Em quanto tempo a visão consolidada deve aparecer?</td><td>Meta de performance verificável</td><td><textarea class="ans" data-id="q09-02" rows="2" aria-label="Resposta: Em quanto tempo a visão consolidada deve aparecer?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Qual o tamanho do maior cliente (ativos, movimentações)?</td><td>Paginação, virtualização e testes de volume</td><td><textarea class="ans" data-id="q09-03" rows="2" aria-label="Resposta: Qual o tamanho do maior cliente (ativos, movimentações)?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Uso em horário comercial ou 24x7? Há janelas de indisponibilidade?</td><td>Mensagens e estados de manutenção</td><td><textarea class="ans" data-id="q09-04" rows="2" aria-label="Resposta: Uso em horário comercial ou 24x7? Há janelas de indisponibilidade?" placeholder="Anotar resposta"></textarea></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="theme">
+          <summary><span class="sname">Testes, ambientes e suporte</span><span class="qcount">0 de 5</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="table-wrap">
+            <table class="stack qtable">
+              <thead><tr><th scope="col">Pergunta</th><th scope="col">Por que importa</th><th scope="col">Resposta</th></tr></thead>
+              <tbody>
+                <tr><td>Existe massa de dados sintética por produto em homologação?</td><td>Testes sem dados reais de clientes</td><td><textarea class="ans" data-id="q10-01" rows="2" aria-label="Resposta: Existe massa de dados sintética por produto em homologação?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Os times provedores aceitam testes de contrato?</td><td>Detecta quebras de API antes da produção</td><td><textarea class="ans" data-id="q10-02" rows="2" aria-label="Resposta: Os times provedores aceitam testes de contrato?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Quem faz QA e quem homologa com o negócio?</td><td>Planejamento das últimas semanas</td><td><textarea class="ans" data-id="q10-03" rows="2" aria-label="Resposta: Quem faz QA e quem homologa com o negócio?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Quais ferramentas de observabilidade já existem?</td><td>Evita escolher stack nova</td><td><textarea class="ans" data-id="q10-04" rows="2" aria-label="Resposta: Quais ferramentas de observabilidade já existem?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Quem atende incidentes e como o usuário reporta divergência de dado?</td><td>Suporte e plantão desde o primeiro dia</td><td><textarea class="ans" data-id="q10-05" rows="2" aria-label="Resposta: Quem atende incidentes e como o usuário reporta divergência de dado?" placeholder="Anotar resposta"></textarea></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="theme">
+          <summary><span class="sname">Rollout</span><span class="qcount">0 de 3</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="table-wrap">
+            <table class="stack qtable">
+              <thead><tr><th scope="col">Pergunta</th><th scope="col">Por que importa</th><th scope="col">Resposta</th></tr></thead>
+              <tbody>
+                <tr><td>Piloto com quais usuários e por quanto tempo?</td><td>Valida dado e UX com risco baixo</td><td><textarea class="ans" data-id="q11-01" rows="2" aria-label="Resposta: Piloto com quais usuários e por quanto tempo?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Há infraestrutura de feature flags?</td><td>Entrega gradual e desligamento rápido</td><td><textarea class="ans" data-id="q11-02" rows="2" aria-label="Resposta: Há infraestrutura de feature flags?" placeholder="Anotar resposta"></textarea></td></tr>
+                <tr><td>Qual o plano para a ferramenta antiga, se houver?</td><td>Critério de desligamento</td><td><textarea class="ans" data-id="q11-03" rows="2" aria-label="Resposta: Qual o plano para a ferramenta antiga, se houver?" placeholder="Anotar resposta"></textarea></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="perguntas" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#alertas">Próxima seção: Sinais de alerta e riscos</a>
+      </div>
+    </section>
+
+    <!-- ALERTAS -->
+    <section id="alertas" class="sec" aria-labelledby="t-alertas">
+      <h2 id="t-alertas">Sinais de alerta e riscos</h2>
+      <div class="prose"><p>Se alguma destas frases aparecer na reunião, vale parar e propor um caminho antes de seguir. A lista é síntese de experiência de engenharia, não de uma fonte específica.</p></div>
+      <div class="table-wrap">
+        <table class="stack">
+          <thead><tr><th scope="col">Se ouvir</th><th scope="col">Por que preocupa</th><th scope="col">O que propor</th></tr></thead>
+          <tbody>
+            <tr><td class="say">“O front soma os valores”</td><td>Arredondamento e regras de cálculo divergem do oficial</td><td>Totais e rentabilidade calculados no backend</td></tr>
+            <tr><td class="say">“Vamos usar as APIs do app do cliente”</td><td>Elas autorizam o próprio cliente, não um funcionário</td><td>Revisar autorização e auditoria antes de reaproveitar</td></tr>
+            <tr><td class="say">“As regras de acesso a gente vê depois”</td><td>Mascaramento e permissões mudam telas e contratos no fim</td><td>Matriz de permissões mínima antes do MVP</td></tr>
+            <tr><td class="say">“Exporta tudo, sem limite”</td><td>Risco de vazamento e de timeout</td><td>Limites, registro de exportação e geração assíncrona</td></tr>
+            <tr><td class="say">“Usa dado de produção em homologação”</td><td>Viola LGPD e sigilo</td><td>Massa de dados sintética ou mascarada</td></tr>
+            <tr><td class="say">“Todos os produtos já no MVP”</td><td>Escopo inflado e muitas dependências simultâneas</td><td>Fatiar por produto ou por perfil de usuário</td></tr>
+            <tr><td class="say">“Não sabemos de onde vem esse dado”</td><td>Dependência oculta que atrasa tudo</td><td>Spike com prazo curto para mapear a fonte</td></tr>
+            <tr><td class="say">“É igual ao app do cliente”</td><td>Backoffice precisa de busca, densidade de dados e auditoria</td><td>Fluxos próprios validados com os operadores</td></tr>
+            <tr><td class="say">“Ainda não tem design, mas estima aí”</td><td>Estimativa vira compromisso sem base</td><td>Estimativa em faixa, com premissas escritas</td></tr>
+            <tr><td class="say">“O BFF alguém faz”</td><td>Sem dono, o front vira orquestrador por padrão</td><td>Dono e prazo do BFF definidos na reunião</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Riscos estruturais deste tipo de projeto</h3>
+      <ul class="points prose">
+        <li><p class="ph">Dependência de muitos times</p><p>Cada produto tem um sistema e um time de origem. A data de entrega do front fica refém da API mais lenta.</p></li>
+        <li><p class="ph">Divergência de dados</p><p>O usuário compara a plataforma com o sistema de origem e encontra diferença de centavos ou de datas. Sem dono claro, a culpa cai no front.</p></li>
+        <li><p class="ph">Compliance no fim</p><p>Regras de acesso definidas tarde geram retrabalho em telas, contratos e exportação.</p></li>
+        <li><p class="ph">Cliente grande</p><p>Um cliente com muitos ativos e anos de extrato pode tornar a tela lenta. Teste de volume cedo evita surpresa.</p></li>
+      </ul>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="alertas" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#pauta">Próxima seção: Pauta e checklist de saída</a>
+      </div>
+    </section>
+
+    <!-- PAUTA -->
+    <section id="pauta" class="sec" aria-labelledby="t-pauta">
+      <h2 id="t-pauta">Pauta sugerida e checklist de saída</h2>
+      <div class="prose"><p>Uma reunião de cerca de 85 minutos cobre o essencial. Se o tempo for curto, divida em duas: negócio e dados primeiro, integração e segurança depois.</p></div>
+
+      <h3>Pauta</h3>
+      <div class="timer" role="group" aria-label="Cronômetro da reunião">
+        <div class="clock"><span id="clock">00:00</span> <small>de 85:00</small></div>
+        <div class="btns">
+          <button class="btn primary" type="button" id="timer-toggle">Iniciar cronômetro</button>
+          <button class="btn" type="button" id="timer-reset">Zerar</button>
+        </div>
+        <p class="timer-now" id="timer-now">A barra de cada item mostra em que momento da reunião ele acontece. Com o cronômetro ligado, o item atual fica destacado.</p>
+      </div>
+      <ol class="agenda" id="agenda">
+        <li data-min="10" style="--s:0;--m:10"><span class="ag-t">Contexto e problema</span><span class="ag-min">10 min</span><p class="ag-d">O que o operador faz hoje e o que vai mudar.</p><span class="ag-bar" aria-hidden="true"><span></span></span></li>
+        <li data-min="10" style="--s:10;--m:10"><span class="ag-t">Usuários e casos de uso</span><span class="ag-min">10 min</span><p class="ag-d">Áreas, perfis e o fluxo principal de cada um.</p><span class="ag-bar" aria-hidden="true"><span></span></span></li>
+        <li data-min="15" style="--s:20;--m:15"><span class="ag-t">Escopo de dados e produtos do MVP</span><span class="ag-min">15 min</span><p class="ag-d">Produtos, informações por produto, datas de referência.</p><span class="ag-bar" aria-hidden="true"><span></span></span></li>
+        <li data-min="15" style="--s:35;--m:15"><span class="ag-t">Integração</span><span class="ag-min">15 min</span><p class="ag-d">BFF ou várias APIs, donos, contratos, formato de valores e datas.</p><span class="ag-bar" aria-hidden="true"><span></span></span></li>
+        <li data-min="10" style="--s:50;--m:10"><span class="ag-t">Exportação</span><span class="ag-min">10 min</span><p class="ag-d">Formatos, volume, onde gera, limites.</p><span class="ag-bar" aria-hidden="true"><span></span></span></li>
+        <li data-min="10" style="--s:60;--m:10"><span class="ag-t">Segurança, LGPD e auditoria</span><span class="ag-min">10 min</span><p class="ag-d">Quem decide as regras e quando.</p><span class="ag-bar" aria-hidden="true"><span></span></span></li>
+        <li data-min="10" style="--s:70;--m:10"><span class="ag-t">Mini pre-mortem</span><span class="ag-min">10 min</span><p class="ag-d">“a plataforma falhou daqui a seis meses; por quê?”. Cada pessoa escreve em silêncio, o grupo vota nos três riscos principais.</p><span class="ag-bar" aria-hidden="true"><span></span></span></li>
+        <li data-min="5" style="--s:80;--m:5"><span class="ag-t">Próximos passos</span><span class="ag-min">5 min</span><p class="ag-d">Donos e datas das perguntas que ficaram abertas.</p><span class="ag-bar" aria-hidden="true"><span></span></span></li>
+      </ol>
+
+      <h3>O que precisa sair definido</h3>
+      <div class="check-group" style="margin-top:.4rem">
+        <h4><span class="gname">Checklist de saída</span><span class="count"></span></h4>
+        <ul class="check-list" id="exit-list">
+            <li><label><input type="checkbox" data-id="s01"><span class="txt">Perfis de usuário e caso de uso principal de cada um</span></label></li>
+            <li><label><input type="checkbox" data-id="s02"><span class="txt">Produtos e informações que entram no MVP</span></label></li>
+            <li><label><input type="checkbox" data-id="s03"><span class="txt">Decisão sobre BFF ou várias APIs, ou o dono e o prazo dessa decisão</span></label></li>
+            <li><label><input type="checkbox" data-id="s04"><span class="txt">Lista de fontes e APIs, com dono e status (existe ou a construir)</span></label></li>
+            <li><label><input type="checkbox" data-id="s05"><span class="txt">Formato acordado para valores monetários, percentuais e datas</span></label></li>
+            <li><label><input type="checkbox" data-id="s06"><span class="txt">Escopo da exportação no MVP</span></label></li>
+            <li><label><input type="checkbox" data-id="s07"><span class="txt">Responsáveis pelas regras de acesso, mascaramento e auditoria, com prazo</span></label></li>
+            <li><label><input type="checkbox" data-id="s08"><span class="txt">Situação do design: pronto, em andamento ou data prevista</span></label></li>
+            <li><label><input type="checkbox" data-id="s09"><span class="txt">Primeira fatia definida, com critério de aceite</span></label></li>
+            <li><label><input type="checkbox" data-id="s10"><span class="txt">Spikes necessários, com prazo (ex.: performance da tabela de extrato, geração de XLSX)</span></label></li>
+            <li><label><input type="checkbox" data-id="s11"><span class="txt">Perguntas abertas com dono e data</span></label></li>
+        </ul>
+      </div>
+      <div class="toolbar">
+        <button class="btn primary notes-copy" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
+          Copiar anotações em Markdown
+        </button>
+        <button class="btn notes-download" type="button">Baixar .md</button>
+      </div>
+
+      <div class="interp after">
+        <h4>Depois da reunião</h4>
+        <p>Registre as respostas num mini design doc (template no relatório anterior) e transforme em ADR as decisões caras de reverter, como BFF ou várias APIs e exportação no servidor ou no navegador.</p>
+      </div>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="pauta" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#fontes">Próxima seção: Fontes</a>
+      </div>
+    </section>
+
+    <!-- FONTES -->
+    <section id="fontes" class="sec" aria-labelledby="t-fontes">
+      <h2 id="t-fontes">Fontes consultadas</h2>
+      <p class="intro">Todas abrem em nova aba. Normas marcadas como reprodução foram lidas fora dos sites oficiais (ver <a href="#lacunas">Lacunas</a>).</p>
+      <div class="search">
+        <label for="fonte-busca">Buscar fonte</label>
+        <input id="fonte-busca" type="search" placeholder="Organização, tema ou ano: LGPD, BFF, exportação" autocomplete="off">
+      </div>
+      <p class="count-line" id="fonte-count" aria-live="polite">18 fontes</p>
+      <div class="table-wrap">
+        <table class="stack" id="tabela-fontes">
+          <thead><tr><th scope="col">Organização</th><th scope="col">Documento</th><th scope="col">Ano</th></tr></thead>
+          <tbody>
+            <tr data-kw="área do investidor posição consolidação"><td>B3</td><td><a class="src" href="https://b3.com.br/pt_br/noticias/b3-lanca-nova-area-logada-do-investidor.htm">B3 lança nova área logada do investidor</a><span class="host">b3.com.br</span></td><td>2021</td></tr>
+            <tr data-kw="APIs posição movimentação integração"><td>B3</td><td><a class="src" href="https://b3.com.br/pt_br/produtos-e-servicos/central-depositaria/canal-com-investidores/integracoes-da-area-do-investidor-apis/">Integrações da Área do Investidor (APIs)</a><span class="host">b3.com.br</span></td><td>Sem data</td></tr>
+            <tr data-kw="sigilo bancário lei complementar"><td>Presidência da República</td><td><a class="src" href="https://planalto.gov.br/ccivil_03/leis/lcp/lcp105.htm">Lei Complementar 105/2001, sigilo bancário</a><span class="host">planalto.gov.br</span></td><td>2001, com alterações até 2025</td></tr>
+            <tr data-kw="LGPD dados pessoais privacidade"><td>Legisweb (reprodução)</td><td><a class="src" href="https://www.legisweb.com.br/legislacao/?id=413132">Texto do art. 46 da LGPD citado em norma estadual</a><span class="host">www.legisweb.com.br</span></td><td>2021</td></tr>
+            <tr data-kw="cibersegurança segurança cibernética CMN BCB"><td>Banco Central do Brasil</td><td><a class="src" href="https://normativos.bcb.gov.br/Votos/CMN/202588/Voto_do_CMN_88_2025.pdf">Voto 88/2025 do CMN, que altera a Res. CMN 4.893</a><span class="host">normativos.bcb.gov.br</span></td><td>2025</td></tr>
+            <tr data-kw="cibersegurança segurança cibernética CMN"><td>Okai (reprodução)</td><td><a class="src" href="https://okai.com.br/documento/2021-02-26/resolucao-cmn-n-4-893">Res. CMN 4.893/2021 consolidada</a><span class="host">okai.com.br</span></td><td>2021, alterada em 2025</td></tr>
+            <tr data-kw="cibersegurança prazo adequação"><td>Monitor Mercantil</td><td><a class="src" href="https://monitormercantil.com.br/instituicoes-financeiras-devem-se-adaptar-a-novas-exigencias-de-seguranca-cibernetica/">Prazo de adequação à Res. CMN 5.274/2025</a><span class="host">monitormercantil.com.br</span></td><td>2026</td></tr>
+            <tr data-kw="cibersegurança BCB 538 corretoras DTVM"><td>Demarest Advogados</td><td><a class="src" href="https://www.demarest.com.br/?p=165566">Boletim sobre Res. BCB 538 e CMN 5.274</a><span class="host">www.demarest.com.br</span></td><td>2025</td></tr>
+            <tr data-kw="suitability perfil de risco CVM"><td>CVM (reprodução em PDF)</td><td><a class="src" href="https://cdn.toroinvestimentos.com.br/corretora/documents/Resolução-CVM-30.pdf">Resolução CVM 30/2021, suitability</a><span class="host">cdn.toroinvestimentos.com.br</span></td><td>2021, alterada em 2022</td></tr>
+            <tr data-kw="BFF integração arquitetura"><td>Microsoft</td><td><a class="src" href="https://learn.microsoft.com/en-us/azure/architecture/patterns/backends-for-frontends">Backends for Frontends pattern</a><span class="host">learn.microsoft.com</span></td><td>2025</td></tr>
+            <tr data-kw="gateway agregação integração"><td>Microsoft</td><td><a class="src" href="https://learn.microsoft.com/en-us/azure/architecture/patterns/gateway-aggregation">Gateway Aggregation pattern</a><span class="host">learn.microsoft.com</span></td><td>Sem data confirmada</td></tr>
+            <tr data-kw="exportação assíncrona 202 status"><td>Microsoft</td><td><a class="src" href="https://learn.microsoft.com/azure/architecture/patterns/async-request-reply">Asynchronous Request-Reply pattern</a><span class="host">learn.microsoft.com</span></td><td>Sem data confirmada</td></tr>
+            <tr data-kw="tabela acessibilidade aria-sort"><td>W3C</td><td><a class="src" href="https://w3.org/WAI/ARIA/apg/patterns/table">ARIA Authoring Practices: Table Pattern</a><span class="host">w3.org</span></td><td>Documento vivo</td></tr>
+            <tr data-kw="grid acessibilidade teclado"><td>W3C</td><td><a class="src" href="https://www.w3.org/WAI/ARIA/apg/patterns/grid">ARIA Authoring Practices: Grid Pattern</a><span class="host">www.w3.org</span></td><td>Documento vivo</td></tr>
+            <tr data-kw="moeda formatação números Intl pt-BR"><td>MDN</td><td><a class="src" href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Intl/NumberFormat">Intl.NumberFormat</a><span class="host">developer.mozilla.org</span></td><td>Documento vivo</td></tr>
+            <tr data-kw="CSV injeção exportação planilha"><td>OWASP</td><td><a class="src" href="https://owasp.org/www-community/attacks/CSV_Injection">CSV Injection</a><span class="host">owasp.org</span></td><td>Documento vivo</td></tr>
+            <tr data-kw="armazenamento navegador localStorage sessão"><td>OWASP</td><td><a class="src" href="https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/11-Client-side_Testing/12-Testing_Browser_Storage">WSTG: Testing Browser Storage</a><span class="host">owasp.org</span></td><td>Documento vivo</td></tr>
+            <tr data-kw="testes de contrato Pact"><td>Pact Foundation</td><td><a class="src" href="https://unpkg.com/@pact-foundation/pact@17.0.1/README.md">Pact JS README</a><span class="host">unpkg.com</span></td><td>Versão 17.0.1, ano não confirmado</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="empty" id="fonte-vazio" hidden>Nenhuma fonte com esse termo. Tente o nome de uma organização ou um tema, como “LGPD”, “BFF” ou “CSV”.</p>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="fontes" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#lacunas">Próxima seção: Lacunas</a>
+      </div>
+    </section>
+
+    <!-- LACUNAS -->
+    <section id="lacunas" class="sec" aria-labelledby="t-lacunas">
+      <h2 id="t-lacunas">Lacunas</h2>
+      <ul class="gaps prose">
+        <li><span class="gh">Engenharia do banco</span><p>Não encontrei informação pública e primária sobre stack de frontend, design system ou portal de backoffice do banco. Os resultados da busca eram projetos pessoais de estudo, sem ligação com o banco. Essas perguntas estão na seção de perguntas.</p></li>
+        <li><span class="gh">Normas lidas em reproduções</span><p>O texto da LGPD, a Res. CMN 4.893 consolidada e a Res. CVM 30 foram lidos em reproduções (Legisweb, Okai, PDF de corretora), não nos sites oficiais. Antes de citar em documento formal, confira em planalto.gov.br, bcb.gov.br e cvm.gov.br.</p></li>
+        <li><span class="gh">Entidade regulada</span><p>Não confirmei qual empresa do grupo opera os investimentos: o banco ou uma distribuidora. Isso define se a norma de cibersegurança aplicável é a Res. CMN 4.893 ou a Res. BCB 85.</p></li>
+        <li><span class="gh">Domínio</span><p>O glossário e as armadilhas de dados são conhecimento geral de mercado. As regras de cálculo do banco (curva ou mercado, bruto ou líquido) precisam vir do time de produto.</p></li>
+        <li><span class="gh">Síntese sem fonte primária</span><p>Recomendações de React, detalhes de CSV no Excel em pt-BR, sinais de alerta e métricas de sucesso vêm de prática de engenharia, não de documentos citados.</p></li>
+        <li><span class="gh">Escopo da pesquisa</span><p>Foram cerca de 18 fontes, menos que no relatório anterior. O foco ficou em regulação, integração e exportação, os pontos que mais afetam a estimativa do frontend.</p></li>
+      </ul>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="lacunas" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#inicio">Voltar ao início</a>
+      </div>
+
+      <footer class="site">
+        <p>Página montada a partir do documento “Refinamento: plataforma de consolidação do investidor (backoffice, frontend)”, de 06/10/2026. Este conteúdo não é parecer jurídico. Progresso, respostas e marcações ficam salvos apenas neste navegador.</p>
+      </footer>
+    </section>
+
+  </main>
+</div>
+
+<a class="btn to-top" href="#inicio" aria-label="Voltar ao topo">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+  Topo
+</a>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+  var store = {
+    get: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+
+  /* Texto de busca das fontes (antes de adicionar avisos de nova aba) */
+  $$('#tabela-fontes tbody tr').forEach(function (r) {
+    r.setAttribute('data-q', (r.textContent + ' ' + (r.getAttribute('data-kw') || '')).replace(/\s+/g, ' '));
+  });
+
+  /* Links externos: nova aba + aviso para leitores de tela */
+  $$('a[href^="http"]').forEach(function (a) {
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    var s = document.createElement('span');
+    s.className = 'sr-only';
+    s.textContent = ' (abre em nova aba)';
+    a.appendChild(s);
+  });
+
+  /* Aviso rápido */
+  var toastEl = $('#toast'), toastTimer;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2400);
+  }
+
+  /* Copiar e baixar */
+  function copy(text, msg) {
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '0';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+      toast(ok ? msg : 'Não foi possível copiar. Use “Baixar .md”.');
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { toast(msg); }, fallback);
+    } else { fallback(); }
+  }
+  function download(text, name) {
+    try {
+      var blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+      toast('Download iniciado');
+    } catch (e) {
+      toast('Não foi possível baixar. Use “Copiar anotações em Markdown”.');
+    }
+  }
+
+  /* Tema (compartilhado com o guia anterior, se estiver no mesmo site) */
+  var root = document.documentElement;
+  var themeLabels = { auto: 'Tema automático', light: 'Tema claro', dark: 'Tema escuro' };
+  var theme = store.get('rt-theme', 'auto');
+  function applyTheme() {
+    if (theme === 'light' || theme === 'dark') root.setAttribute('data-theme', theme);
+    else root.removeAttribute('data-theme');
+    $$('[data-theme-toggle]').forEach(function (b) {
+      var l = $('.label', b);
+      if (l) l.textContent = themeLabels[theme];
+      b.setAttribute('aria-label', 'Alternar tema. Atual: ' + themeLabels[theme].toLowerCase());
+    });
+  }
+  $$('[data-theme-toggle]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      theme = theme === 'auto' ? 'light' : theme === 'light' ? 'dark' : 'auto';
+      store.set('rt-theme', theme);
+      applyTheme();
+      toast(themeLabels[theme]);
+    });
+  });
+  applyTheme();
+
+  /* Menu lateral em telas menores */
+  var sidebar = $('#sidebar'), scrim = $('.scrim'), menuBtn = $('#menu-btn'), closeBtn = $('#drawer-close');
+  var desktop = window.matchMedia('(min-width: 1024px)');
+  function isOpen() { return sidebar.classList.contains('open'); }
+  function openNav() {
+    sidebar.classList.add('open');
+    scrim.classList.add('show');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    menuBtn.setAttribute('aria-label', 'Fechar menu de seções');
+    document.body.classList.add('lock');
+    var cur = $('.toc a[aria-current="true"]', sidebar) || $('.toc a', sidebar);
+    setTimeout(function () { cur.focus(); }, 50);
+  }
+  function closeNav(returnFocus) {
+    if (!isOpen()) return;
+    sidebar.classList.remove('open');
+    scrim.classList.remove('show');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.setAttribute('aria-label', 'Abrir menu de seções');
+    document.body.classList.remove('lock');
+    if (returnFocus !== false) menuBtn.focus();
+  }
+  menuBtn.addEventListener('click', function () { isOpen() ? closeNav() : openNav(); });
+  closeBtn.addEventListener('click', function () { closeNav(); });
+  scrim.addEventListener('click', function () { closeNav(); });
+  document.addEventListener('keydown', function (e) {
+    if (!isOpen() || desktop.matches) return;
+    if (e.key === 'Escape') { closeNav(); return; }
+    if (e.key === 'Tab') {
+      var f = $$('a[href], button:not([disabled])', sidebar);
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  $$('.toc a, .brand').forEach(function (a) {
+    a.addEventListener('click', function () { if (!desktop.matches) closeNav(false); });
+  });
+  var onMq = function () { closeNav(false); };
+  if (desktop.addEventListener) desktop.addEventListener('change', onMq); else if (desktop.addListener) desktop.addListener(onMq);
+
+  /* Seção atual no menu */
+  var sections = $$('main section.sec');
+  var tocLinks = {};
+  $$('.toc a').forEach(function (a) { tocLinks[a.getAttribute('href').slice(1)] = a; });
+  var topTitle = $('#topbar-section');
+  function setCurrent(id) {
+    Object.keys(tocLinks).forEach(function (k) {
+      if (k === id) tocLinks[k].setAttribute('aria-current', 'true');
+      else tocLinks[k].removeAttribute('aria-current');
+    });
+    if (tocLinks[id]) topTitle.textContent = $('.t', tocLinks[id]).textContent;
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) setCurrent(en.target.id); });
+    }, { rootMargin: '-30% 0px -65% 0px' });
+    sections.forEach(function (s) { io.observe(s); });
+  }
+  setCurrent(location.hash && tocLinks[location.hash.slice(1)] ? location.hash.slice(1) : 'inicio');
+
+  /* Progresso de leitura e botão de topo */
+  var bar = $('.progress span'), toTop = $('.to-top'), ticking = false;
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var y = window.pageYOffset || h.scrollTop;
+    bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, y / max) : 0) + ')';
+    toTop.classList.toggle('show', y > 900);
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* Seções estudadas */
+  var doneBtns = $$('.done-btn');
+  var done = store.get('ci-done', []);
+  function renderDone() {
+    doneBtns.forEach(function (b) {
+      var on = done.indexOf(b.getAttribute('data-section')) !== -1;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      $('.label', b).textContent = on ? 'Seção estudada' : 'Marcar como estudada';
+    });
+    Object.keys(tocLinks).forEach(function (id) {
+      var on = done.indexOf(id) !== -1;
+      tocLinks[id].parentNode.classList.toggle('done', on);
+      $('.st', tocLinks[id]).textContent = on ? ', estudada' : '';
+    });
+    $('#study-count').textContent = done.length + ' de ' + doneBtns.length;
+    $('#study-meter').style.width = (done.length / doneBtns.length * 100) + '%';
+  }
+  doneBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var id = b.getAttribute('data-section'), i = done.indexOf(id);
+      if (i === -1) done.push(id); else done.splice(i, 1);
+      store.set('ci-done', done);
+      renderDone();
+    });
+  });
+  $('#study-reset').addEventListener('click', function () {
+    done = [];
+    store.set('ci-done', done);
+    renderDone();
+    toast('Progresso recomeçado');
+  });
+  renderDone();
+
+  /* Tabelas viram cartões no celular: rótulo de cada célula */
+  $$('table.stack').forEach(function (t) {
+    var heads = $$('thead th', t).map(function (th) { return th.textContent.trim(); });
+    $$('tbody tr', t).forEach(function (tr) {
+      $$('td', tr).forEach(function (td, i) { td.setAttribute('data-label', heads[i] || ''); });
+    });
+  });
+
+  /* Demonstração ao vivo */
+  try { $('#demo-float').textContent = String(0.1 + 0.2); } catch (e) {}
+  try { $('#demo-date').textContent = new Date('2026-10-05').toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }); } catch (e) { $('#demo-date').textContent = 'Fuso não suportado neste navegador'; }
+  try { $('#demo-brl').textContent = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(1234.56); } catch (e) {}
+  try { $('#demo-pct').textContent = new Intl.NumberFormat('pt-BR', { style: 'percent', minimumFractionDigits: 2 }).format(-0.0125); } catch (e) {}
+
+  /* Checklists: prioritárias e saída */
+  var checks = $$('.check-list input[type="checkbox"]');
+  var checkState = store.get('ci-check', {});
+  function updateCheckCounts() {
+    $$('.check-group').forEach(function (g) {
+      var all = $$('input[type="checkbox"]', g);
+      if (!all.length) return;
+      var n = all.filter(function (i) { return i.checked; }).length;
+      $('.count', g).textContent = n + ' de ' + all.length;
+    });
+  }
+  checks.forEach(function (c) {
+    c.checked = !!checkState[c.getAttribute('data-id')];
+    c.addEventListener('change', function () {
+      checkState[c.getAttribute('data-id')] = c.checked;
+      store.set('ci-check', checkState);
+      updateCheckCounts();
+    });
+  });
+  updateCheckCounts();
+
+  /* Respostas por tema */
+  var answers = store.get('ci-answers', {});
+  var areas = $$('textarea.ans');
+  var themes = $$('details.theme');
+  function fit(t) {
+    if (window.CSS && CSS.supports && CSS.supports('field-sizing', 'content')) return;
+    t.style.height = 'auto';
+    t.style.height = Math.min(t.scrollHeight + 2, 288) + 'px';
+  }
+  function updateAnswerCounts() {
+    var total = 0, filled = 0;
+    themes.forEach(function (d) {
+      var ts = $$('textarea.ans', d);
+      var n = ts.filter(function (t) { return t.value.trim(); }).length;
+      total += ts.length; filled += n;
+      $('.qcount', d).textContent = n + ' de ' + ts.length;
+      d.classList.toggle('complete', n === ts.length);
+    });
+    $('#ans-total').textContent = filled + ' de ' + total;
+  }
+  var saveTimer;
+  areas.forEach(function (t) {
+    var id = t.getAttribute('data-id');
+    if (answers[id]) t.value = answers[id];
+    t.closest('tr').classList.toggle('answered', !!t.value.trim());
+    t.addEventListener('input', function () {
+      answers[id] = t.value;
+      if (!t.value.trim()) delete answers[id];
+      t.closest('tr').classList.toggle('answered', !!t.value.trim());
+      fit(t);
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(function () { store.set('ci-answers', answers); }, 250);
+      updateAnswerCounts();
+    });
+  });
+  themes.forEach(function (d) {
+    d.addEventListener('toggle', function () { if (d.open) $$('textarea.ans', d).forEach(fit); });
+  });
+  updateAnswerCounts();
+
+  var themesBtn = $('#themes-toggle');
+  themesBtn.addEventListener('click', function () {
+    var openAll = themesBtn.getAttribute('aria-pressed') !== 'true';
+    themes.forEach(function (d) { d.open = openAll; });
+    themesBtn.setAttribute('aria-pressed', openAll ? 'true' : 'false');
+    themesBtn.textContent = openAll ? 'Fechar todos os temas' : 'Abrir todos os temas';
+  });
+
+  /* Exportar anotações em Markdown */
+  function plain(el) {
+    var c = el.cloneNode(true);
+    $$('.sr-only', c).forEach(function (n) { n.remove(); });
+    return c.textContent.replace(/\s+/g, ' ').trim();
+  }
+  function buildNotes() {
+    var md = '# Refinamento: plataforma de consolidação do investidor\n\n';
+    md += 'Anotações exportadas em ' + new Date().toLocaleString('pt-BR') + '\n\n';
+    md += '## As 10 prioritárias\n\n';
+    $$('#prio-list li').forEach(function (li) {
+      md += '- [' + ($('input', li).checked ? 'x' : ' ') + '] ' + plain($('.txt', li)) + '\n';
+    });
+    md += '\n## Respostas por tema\n';
+    themes.forEach(function (d) {
+      md += '\n### ' + $('.sname', d).textContent + '\n\n';
+      $$('tbody tr', d).forEach(function (tr) {
+        var q = plain(tr.cells[0]);
+        var a = $('textarea', tr).value.trim();
+        md += '- **' + q + '**\n  ' + (a ? a.replace(/\n/g, '\n  ') : '_Sem resposta_') + '\n';
+      });
+    });
+    md += '\n## O que precisa sair definido\n\n';
+    $$('#exit-list li').forEach(function (li) {
+      md += '- [' + ($('input', li).checked ? 'x' : ' ') + '] ' + plain($('.txt', li)) + '\n';
+    });
+    return md;
+  }
+  $$('.notes-copy').forEach(function (b) { b.addEventListener('click', function () { copy(buildNotes(), 'Anotações copiadas em Markdown'); }); });
+  $$('.notes-download').forEach(function (b) { b.addEventListener('click', function () { download(buildNotes(), 'refinamento-consolidacao-investidor-anotacoes.md'); }); });
+  $('#notes-reset').addEventListener('click', function () {
+    if (!window.confirm('Limpar todas as respostas e marcações desta página? Esta ação não pode ser desfeita.')) return;
+    answers = {}; checkState = {};
+    store.set('ci-answers', answers);
+    store.set('ci-check', checkState);
+    areas.forEach(function (t) { t.value = ''; t.closest('tr').classList.remove('answered'); fit(t); });
+    checks.forEach(function (c) { c.checked = false; });
+    updateAnswerCounts();
+    updateCheckCounts();
+    toast('Anotações limpas');
+  });
+
+  /* Cronômetro da pauta */
+  var agenda = $$('#agenda li');
+  var starts = [], acc = 0;
+  agenda.forEach(function (li) { starts.push(acc); acc += Number(li.getAttribute('data-min')); });
+  var totalMin = acc, base = 0, t0 = 0, running = false, iv = null;
+  var clock = $('#clock'), nowEl = $('#timer-now'), toggleBtn = $('#timer-toggle');
+  var idleText = nowEl.textContent;
+  function elapsed() { return base + (running ? (Date.now() - t0) / 1000 : 0); }
+  function fmt(sec) {
+    sec = Math.floor(sec);
+    var m = Math.floor(sec / 60), s = sec % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }
+  var lastCur = -2;
+  function renderTimer() {
+    var e = elapsed(), m = e / 60, cur = -1;
+    clock.textContent = fmt(e);
+    agenda.forEach(function (li, i) {
+      var end = starts[i] + Number(li.getAttribute('data-min'));
+      if (e > 0 && m >= starts[i] && m < end) cur = i;
+      li.classList.toggle('past', e > 0 && m >= end);
+      if (i === cur) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+    });
+    if (e === 0) nowEl.textContent = idleText;
+    else if (cur >= 0) {
+      var left = (starts[cur] + Number(agenda[cur].getAttribute('data-min'))) * 60 - e;
+      nowEl.textContent = 'Agora: ' + $('.ag-t', agenda[cur]).textContent + '. Faltam ' + fmt(left) + ' para o próximo item.';
+    } else nowEl.textContent = 'Tempo da pauta encerrado (' + totalMin + ' min).';
+    if (cur !== lastCur && running && cur >= 0) toast('Agora: ' + $('.ag-t', agenda[cur]).textContent);
+    lastCur = cur;
+  }
+  toggleBtn.addEventListener('click', function () {
+    if (running) {
+      base = elapsed(); running = false; clearInterval(iv);
+      toggleBtn.textContent = 'Continuar';
+    } else {
+      t0 = Date.now(); running = true;
+      iv = setInterval(renderTimer, 1000);
+      toggleBtn.textContent = 'Pausar';
+    }
+    renderTimer();
+  });
+  $('#timer-reset').addEventListener('click', function () {
+    running = false; base = 0; clearInterval(iv); lastCur = -2;
+    toggleBtn.textContent = 'Iniciar cronômetro';
+    renderTimer();
+  });
+
+  /* Busca nas fontes */
+  var sInput = $('#fonte-busca'), sRows = $$('#tabela-fontes tbody tr'), sCount = $('#fonte-count'), sEmpty = $('#fonte-vazio');
+  var norm = function (s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); };
+  $('#hero-fontes').textContent = sRows.length;
+  sCount.textContent = sRows.length + ' fontes';
+  sInput.addEventListener('input', function () {
+    var q = norm(sInput.value.trim()), n = 0;
+    sRows.forEach(function (r) {
+      var show = !q || norm(r.getAttribute('data-q') || '').indexOf(q) !== -1;
+      r.hidden = !show;
+      if (show) n++;
+    });
+    sCount.textContent = q ? (n + (n === 1 ? ' fonte encontrada' : ' fontes encontradas')) : (n + ' fontes');
+    sEmpty.hidden = n !== 0;
+    $('#tabela-fontes').closest('.table-wrap').hidden = n === 0;
+  });
+})();
+</script>
+</body>
+</html>
