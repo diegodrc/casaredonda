@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Refinamento técnico em grandes empresas | Guia de estudo</title>
+<meta name="description" content="Guia de estudo navegável sobre refinamento técnico em grandes empresas de tecnologia: design docs, RFCs, ADRs, técnicas, checklist de frontend, anti-padrões e template de mini design doc, com links para as fontes.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9D%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+<script>
+  try { var t = JSON.parse(localStorage.getItem('rt-theme') || '"auto"'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
+<style>
+:root{
+  --paper:#F5F7FA; --paper-blur:rgba(245,247,250,.9); --surface:#FFFFFF; --hover:#EAEFF6;
+  --ink:#18202E; --ink-soft:#4B5566; --rule:#DCE1E8; --rule-strong:#B6BFCC;
+  --link:#1B4DD6; --focus:#1B4DD6;
+  --mark:#FFE27A; --note:#FFF8D9; --note-rule:#D9B21E;
+  --src:#EEF3FF; --src-rule:#AFC2F3;
+  --alta:#17713F; --alta-bg:#E2F3E9;
+  --media:#8F5400; --media-bg:#FCEFD8;
+  --baixa:#AE3326; --baixa-bg:#FBE5E2;
+  --lacuna:#535D6C; --lacuna-bg:#ECEFF3;
+  --code-bg:#1C2433; --code-ink:#E8EDF4; --code-soft:#A7B2C3;
+  --font-ui:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-read:"Literata",Georgia,"Times New Roman",serif;
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --topbar:58px;
+  --ext:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6'/%3E%3Cpath d='M20 4 10 14'/%3E%3Cpath d='M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E");
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#131A25; --paper-blur:rgba(19,26,37,.9); --surface:#1A2230; --hover:#232D3D;
+    --ink:#E7EBF1; --ink-soft:#A8B2C1; --rule:#2C3646; --rule-strong:#4A5568;
+    --link:#93B2FF; --focus:#93B2FF;
+    --mark:#5E4F12; --note:#2A2614; --note-rule:#B8962A;
+    --src:#1B2742; --src-rule:#3D5390;
+    --alta:#62D49A; --alta-bg:#15301F;
+    --media:#F2B661; --media-bg:#36270F;
+    --baixa:#FF9183; --baixa-bg:#3A1C19;
+    --lacuna:#B6BFCB; --lacuna-bg:#262F3C;
+    --code-bg:#0F1520;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131A25; --paper-blur:rgba(19,26,37,.9); --surface:#1A2230; --hover:#232D3D;
+  --ink:#E7EBF1; --ink-soft:#A8B2C1; --rule:#2C3646; --rule-strong:#4A5568;
+  --link:#93B2FF; --focus:#93B2FF;
+  --mark:#5E4F12; --note:#2A2614; --note-rule:#B8962A;
+  --src:#1B2742; --src-rule:#3D5390;
+  --alta:#62D49A; --alta-bg:#15301F;
+  --media:#F2B661; --media-bg:#36270F;
+  --baixa:#FF9183; --baixa-bg:#3A1C19;
+  --lacuna:#B6BFCB; --lacuna-bg:#262F3C;
+  --code-bg:#0F1520;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ui);font-size:1rem;line-height:1.55;overflow-wrap:break-word}
+body.lock{overflow:hidden}
+svg{flex:none}
+a{color:var(--link);text-underline-offset:.18em}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:1rem;top:-200px;z-index:100;background:var(--ink);color:var(--paper);padding:.7rem 1rem;border-radius:8px;font-weight:700}
+.skip:focus{top:1rem}
+
+/* Barra de progresso de leitura */
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:70;pointer-events:none}
+.progress span{display:block;height:100%;background:var(--link);transform-origin:0 50%;transform:scaleX(0)}
+
+/* Topo (telas menores) */
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:.6rem;height:var(--topbar);padding:0 .75rem;background:var(--paper-blur);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.topbar-title{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}
+.topbar-title .tb-small{font-size:.75rem;color:var(--ink-soft)}
+.topbar-title #topbar-section{font-weight:700;font-size:.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{appearance:none;-webkit-appearance:none;border:1px solid var(--rule);background:var(--surface);color:var(--ink);width:44px;height:44px;border-radius:12px;display:inline-grid;place-items:center;cursor:pointer;padding:0}
+.icon-btn:hover{background:var(--hover)}
+
+/* Navegação lateral / gaveta */
+.sidebar{position:fixed;top:0;bottom:0;left:0;z-index:50;width:min(86vw,330px);background:var(--surface);border-right:1px solid var(--rule);overflow-y:auto;overscroll-behavior:contain;padding:1rem 1rem 2rem;display:flex;flex-direction:column;gap:1rem;transform:translateX(-104%);visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s}
+.sidebar.open{transform:none;visibility:visible;transition:transform .25s ease,visibility 0s}
+.scrim{position:fixed;inset:0;z-index:45;background:rgba(8,12,20,.5);opacity:0;pointer-events:none;transition:opacity .2s ease}
+.scrim.show{opacity:1;pointer-events:auto}
+.side-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+.brand{display:block;text-decoration:none;color:var(--ink);font-weight:700;font-size:1.1rem;line-height:1.25;padding:.25rem .2rem}
+.brand span{display:block;font-weight:400;font-size:.88rem;color:var(--ink-soft);margin-top:.15rem}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.toc a{display:flex;align-items:center;gap:.65rem;min-height:42px;padding:.45rem .6rem;border-radius:9px;text-decoration:none;color:var(--ink-soft);font-size:.96rem;line-height:1.3}
+.toc a:hover{background:var(--hover);color:var(--ink)}
+.toc a[aria-current="true"]{background:var(--src);color:var(--ink);font-weight:700}
+.tick{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--rule-strong);display:grid;place-items:center;flex:none;transition:background-color .15s,border-color .15s}
+.toc li.done .tick{background:var(--alta);border-color:var(--alta)}
+.toc li.done .tick::after{content:"";width:9px;height:5px;border-left:2px solid var(--surface);border-bottom:2px solid var(--surface);transform:translateY(-1px) rotate(-45deg)}
+.study{border:1px solid var(--rule);border-radius:12px;padding:.85rem .9rem;display:flex;flex-direction:column;gap:.55rem}
+.study-row{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;font-size:.92rem}
+.meter{height:6px;border-radius:99px;background:var(--rule);overflow:hidden}
+.meter span{display:block;height:100%;width:0;background:var(--alta);transition:width .25s ease}
+.link-btn{appearance:none;background:none;border:0;padding:.2rem 0;font:inherit;font-size:.88rem;color:var(--link);text-decoration:underline;text-underline-offset:.18em;cursor:pointer;align-self:flex-start}
+.side-bottom{margin-top:auto}
+
+/* Layout principal */
+main{padding:1.25rem 1.1rem 5rem;max-width:920px;margin:0 auto}
+@media (min-width:1024px){
+  .topbar,.scrim,.drawer-close{display:none!important}
+  .shell{display:grid;grid-template-columns:300px minmax(0,1fr)}
+  .sidebar{position:sticky;top:0;height:100vh;width:auto;transform:none;visibility:visible;z-index:auto;transition:none}
+  main{padding:3rem 3rem 6rem;width:100%}
+}
+
+/* Tipografia */
+h1,h2,h3,h4{font-family:var(--font-ui);color:var(--ink);line-height:1.15;text-wrap:balance}
+h1{font-size:clamp(2.05rem,6vw,3.5rem);letter-spacing:-.025em;margin:.2em 0 .25em;font-weight:700}
+h2{font-size:clamp(1.55rem,3.8vw,2.2rem);letter-spacing:-.015em;margin:0 0 .7em;display:flex;align-items:baseline;gap:.55rem}
+h2 .num{color:var(--ink-soft);font-weight:400;min-width:1ch}
+h3{font-size:clamp(1.15rem,2.4vw,1.3rem);margin:2.2rem 0 .7rem}
+h4{font-size:1.02rem;margin:1.4rem 0 .45rem}
+.prose p,.prose li,.read{font-family:var(--font-read);font-size:1.04rem;line-height:1.72}
+.prose p{max-width:68ch}
+.prose li{max-width:68ch;margin:.35rem 0}
+strong{font-weight:700}
+.prose strong{font-weight:600}
+.muted{color:var(--ink-soft)}
+
+/* Links de fonte: âncora destacada, como um comentário de revisão */
+a.src{color:var(--link);text-decoration:none;font-weight:600;background-image:linear-gradient(var(--mark),var(--mark));background-repeat:no-repeat;background-size:100% .36em;background-position:0 94%;border-radius:2px;padding:0 .06em;transition:background-size .15s ease}
+a.src:hover{background-size:100% 100%}
+.ui a.src,table a.src,.check-list a.src{font-weight:700}
+main a[href^="http"]::after{content:"";display:inline-block;width:.7em;height:.7em;margin-left:.2em;vertical-align:-.02em;background-color:currentColor;-webkit-mask:var(--ext) no-repeat center/contain;mask:var(--ext) no-repeat center/contain}
+
+/* Seções */
+.sec{padding:3rem 0 1rem;border-top:1px solid var(--rule);scroll-margin-top:calc(var(--topbar) + 6px)}
+.sec.hero{border-top:0;padding-top:1rem}
+@media (min-width:1024px){.sec{scroll-margin-top:12px}.sec.hero{padding-top:0}}
+.intro{color:var(--ink-soft);font-size:1rem;max-width:65ch;margin:-.2rem 0 1.2rem}
+
+/* Hero */
+.subtitle{font-family:var(--font-read);font-style:italic;font-size:clamp(1.08rem,2.6vw,1.35rem);color:var(--ink-soft);margin:0 0 1.6rem;max-width:42ch;line-height:1.45}
+.docmeta{margin:0 0 2rem;border:1px solid var(--rule);border-radius:14px;background:var(--surface);display:grid;grid-template-columns:1fr;overflow:hidden}
+.docmeta > div{display:grid;grid-template-columns:7.6rem minmax(0,1fr);gap:.8rem;align-items:baseline;padding:.75rem 1rem;border-top:1px solid var(--rule)}
+.docmeta > div:first-child{border-top:0}
+.docmeta dt{font-size:.88rem;color:var(--ink-soft)}
+.docmeta dd{margin:0;font-weight:700}
+.docmeta .legend{display:flex;flex-wrap:wrap;gap:.35rem}
+.status{display:inline-flex;align-items:center;gap:.4rem}
+.status::before{content:"";width:.6rem;height:.6rem;border-radius:50%;background:var(--alta)}
+@media (min-width:720px){
+  .docmeta{grid-template-columns:1fr 1fr}
+  .docmeta > div:nth-child(2){border-top:0}
+  .docmeta > div:nth-child(odd){border-right:1px solid var(--rule)}
+  .docmeta > div{grid-template-columns:8.5rem minmax(0,1fr)}
+}
+.lead{font-family:var(--font-read);font-size:clamp(1.12rem,2.5vw,1.38rem);line-height:1.62;max-width:60ch;margin:0 0 2.5rem}
+.tldr{display:flex;flex-direction:column;gap:0;margin:0 0 1.5rem;border-top:2px solid var(--ink)}
+.tldr article{padding:1.1rem 0;border-bottom:1px solid var(--rule)}
+.tldr h3{margin:0 0 .4rem;font-size:1.12rem}
+.tldr p{margin:0;font-family:var(--font-read);font-size:1.02rem;line-height:1.7;max-width:68ch}
+@media (min-width:760px){
+  .tldr article{display:grid;grid-template-columns:11rem minmax(0,1fr);gap:1.5rem}
+  .tldr h3{margin:0;padding-top:.2rem}
+}
+.howto{font-size:.95rem;color:var(--ink-soft);max-width:65ch}
+
+/* Badges de confiança */
+.conf{display:inline-flex;align-items:center;gap:.35em;font-family:var(--font-ui);font-size:.8rem;font-weight:700;line-height:1.2;padding:.22em .6em;border-radius:99px;border:1px solid currentColor;white-space:nowrap;vertical-align:.08em}
+.conf::before{content:"";width:.5em;height:.5em;border-radius:50%;background:currentColor}
+.conf.alta{color:var(--alta);background:var(--alta-bg)}
+.conf.media{color:var(--media);background:var(--media-bg)}
+.conf.baixa{color:var(--baixa);background:var(--baixa-bg)}
+.conf.lacuna{color:var(--lacuna);background:var(--lacuna-bg)}
+.conf-note{display:block;font-size:.84rem;color:var(--ink-soft);font-weight:400;margin-top:.35rem;line-height:1.4}
+.tag-sint{display:inline-block;font-size:.76rem;font-weight:700;padding:.1em .5em;border-radius:5px;background:var(--note);color:var(--ink);border:1px solid var(--note-rule);margin-left:.3rem;vertical-align:.1em;white-space:nowrap}
+
+/* Pontos do resumo */
+.points{list-style:none;padding:0;margin:1rem 0 0}
+.points > li{padding:.15rem 0 .15rem 1.1rem;border-left:3px solid var(--rule);margin:0 0 1.4rem}
+.points .ph{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:0 0 .3rem;font-family:var(--font-ui);font-weight:700;font-size:1.07rem;line-height:1.3}
+.points p{margin:0}
+
+/* Callout de interpretação (síntese, não fonte) */
+.interp{margin:1.8rem 0;padding:1rem 1.15rem;background:var(--note);border-left:4px solid var(--note-rule);border-radius:0 12px 12px 0}
+.interp h4{margin:0 0 .35rem;font-size:.98rem}
+.interp p{margin:0;font-family:var(--font-read);line-height:1.7;max-width:68ch}
+
+/* Detalhes expansíveis */
+.claims{display:flex;flex-direction:column;gap:.6rem}
+details.claim{border:1px solid var(--rule);border-radius:12px;background:var(--surface)}
+details.claim > summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:52px;padding:.7rem 1rem;font-weight:700;border-radius:12px}
+details.claim > summary::-webkit-details-marker{display:none}
+details.claim > summary:hover{background:var(--hover)}
+details.claim > summary .chev{width:22px;height:22px;transition:transform .2s ease;color:var(--ink-soft)}
+details.claim[open] > summary .chev{transform:rotate(180deg)}
+details.claim[open] > summary{border-bottom:1px solid var(--rule);border-radius:12px 12px 0 0}
+.claim-body{padding:.9rem 1.1rem 1.1rem}
+.claim-body p,.claim-body li{font-family:var(--font-read);line-height:1.7;max-width:68ch}
+.claim-body p{margin:.4rem 0 .8rem}
+.claim-body ul,.claim-body ol{padding-left:1.3rem;margin:.4rem 0 .9rem}
+.claim-body .read-more{font-family:var(--font-ui);font-size:.95rem;margin:.6rem 0 0}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin:.6rem 0;font-family:var(--font-ui)}
+.flow .node{padding:.35rem .7rem;border:1px solid var(--rule-strong);border-radius:8px;background:var(--paper);font-size:.92rem;font-weight:700}
+.flow .arr{color:var(--ink-soft)}
+
+/* Para aprofundar */
+.deeper{margin:1.6rem 0;padding:1rem 1.15rem;background:var(--src);border:1px solid var(--src-rule);border-radius:12px}
+.deeper h4{margin:0 0 .5rem;font-size:.98rem}
+.deeper ul{margin:0;padding-left:1.15rem}
+.deeper li{margin:.35rem 0;line-height:1.45}
+.deeper .yr{color:var(--ink-soft);font-size:.88rem}
+
+/* Tabelas */
+.table-wrap{margin:1.2rem 0;border:1px solid var(--rule);border-radius:14px;background:var(--surface);overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:.95rem;line-height:1.5}
+th,td{text-align:left;vertical-align:top;padding:.8rem .9rem;border-bottom:1px solid var(--rule)}
+thead th{font-size:.84rem;color:var(--ink-soft);background:var(--paper);font-weight:700;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+tbody td:first-child{font-weight:700;min-width:9rem}
+td .sub{display:block;font-weight:400;font-size:.86rem;color:var(--ink-soft);margin-top:.2rem}
+td .host{display:block;font-size:.84rem;color:var(--ink-soft);margin-top:.15rem;word-break:break-all}
+@media (min-width:720px){ table.stack{min-width:680px} }
+@media (max-width:719px){
+  table.stack,table.stack tbody,table.stack tr,table.stack td{display:block;width:100%}
+  table.stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  table.stack tr{padding:1rem 1rem .8rem;border-bottom:1px solid var(--rule)}
+  table.stack tbody tr:last-child{border-bottom:0}
+  table.stack td{border:0;padding:.3rem 0;min-width:0}
+  table.stack td::before{content:attr(data-label);display:block;font-size:.76rem;font-weight:700;color:var(--ink-soft);margin-bottom:.1rem}
+  table.stack td:first-child{font-size:1.06rem;padding-top:0}
+  table.stack td:first-child::before{display:none}
+}
+
+/* Controles */
+.btn{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:.45rem;min-height:44px;padding:.55rem 1rem;border-radius:10px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink);font:inherit;font-size:.94rem;font-weight:700;cursor:pointer;text-decoration:none;line-height:1.2}
+.btn:hover{background:var(--hover)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.btn.primary:hover{opacity:.92;background:var(--ink)}
+.toolbar{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:1rem 0}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin:.8rem 0 .4rem}
+.chip{appearance:none;-webkit-appearance:none;min-height:40px;padding:.4rem .9rem;border-radius:99px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink);font:inherit;font-size:.92rem;font-weight:700;cursor:pointer}
+.chip:hover{background:var(--hover)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.count-line{font-size:.88rem;color:var(--ink-soft);margin:.3rem 0 0}
+
+/* Checklist */
+.tabs{display:flex;gap:.25rem;border-bottom:1px solid var(--rule);margin:1rem 0 0;overflow-x:auto}
+.tab{appearance:none;-webkit-appearance:none;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;padding:.8rem 1rem;min-height:48px;font:inherit;font-weight:700;color:var(--ink-soft);cursor:pointer;white-space:nowrap;display:inline-flex;gap:.5rem;align-items:center}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--link)}
+.tab-count{font-weight:400;font-size:.85rem;padding:.05rem .45rem;border-radius:99px;background:var(--hover);color:var(--ink-soft)}
+.panel{padding-top:.4rem}
+.check-group{margin:1.6rem 0 0}
+.check-group > h4{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin:0 0 .55rem}
+.check-group .count{font-size:.86rem;font-weight:400;color:var(--ink-soft);white-space:nowrap}
+.group-note{font-size:.9rem;color:var(--ink-soft);margin:-.3rem 0 .6rem}
+.check-list{list-style:none;margin:0;padding:0;border:1px solid var(--rule);border-radius:12px;background:var(--surface);overflow:hidden}
+.check-list li + li{border-top:1px solid var(--rule)}
+.check-list label{display:grid;grid-template-columns:1.35rem minmax(0,1fr);gap:.75rem;padding:.8rem 1rem;cursor:pointer;line-height:1.5}
+.check-list label:hover{background:var(--hover)}
+.check-list input{width:1.2rem;height:1.2rem;margin:.18rem 0 0;accent-color:var(--alta);cursor:pointer}
+.check-list input:checked + .txt{color:var(--ink-soft)}
+.vitals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin:.2rem 0 .8rem}
+.vitals div{border:1px solid var(--rule);border-radius:10px;background:var(--surface);padding:.6rem .7rem}
+.vitals dt{font-size:.8rem;color:var(--ink-soft)}
+.vitals dd{margin:.1rem 0 0;font-weight:700;font-size:1.15rem;white-space:nowrap}
+
+/* Template */
+.code{margin:1.2rem 0;background:var(--code-bg);color:var(--code-ink);border-radius:14px;overflow:hidden}
+.code-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.6rem;padding:.6rem .7rem .6rem 1rem;border-bottom:1px solid rgba(255,255,255,.12)}
+.code-name{font-family:var(--font-mono);font-size:.85rem;color:var(--code-soft)}
+.code-actions{display:flex;flex-wrap:wrap;gap:.4rem}
+.btn.on-dark{background:transparent;color:var(--code-ink);border-color:rgba(255,255,255,.3)}
+.btn.on-dark:hover{background:rgba(255,255,255,.08)}
+.code pre{margin:0;padding:1rem 1.1rem 1.2rem;max-height:72vh;overflow:auto;font-family:var(--font-mono);font-size:.85rem;line-height:1.65;white-space:pre-wrap;word-break:break-word;tab-size:2}
+.code pre:focus-visible{outline-offset:-3px}
+.steps{list-style:none;counter-reset:passo;margin:1rem 0 0;padding:0}
+.steps li{counter-increment:passo;position:relative;padding:0 0 1.3rem 3rem;font-family:var(--font-read);line-height:1.7;max-width:70ch}
+.steps li::before{content:counter(passo);position:absolute;left:0;top:-.05rem;width:2.1rem;height:2.1rem;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--paper);font-family:var(--font-ui);font-weight:700;font-size:.95rem}
+.steps li:not(:last-child)::after{content:"";position:absolute;left:1.02rem;top:2.25rem;bottom:.2rem;width:2px;background:var(--rule)}
+
+/* Fontes */
+.search{display:flex;flex-direction:column;gap:.35rem;margin:1rem 0 .4rem;max-width:520px}
+.search label{font-weight:700;font-size:.92rem}
+.search input{font:inherit;min-height:46px;padding:.6rem .9rem;border-radius:10px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink);width:100%}
+.search input::placeholder{color:var(--ink-soft);opacity:1}
+.age{display:inline-block;margin-top:.2rem;font-size:.84rem;font-weight:700;color:var(--media)}
+.empty{padding:1rem;border:1px dashed var(--rule-strong);border-radius:12px;color:var(--ink-soft)}
+
+/* Rodapé de seção */
+.sec-foot{display:flex;flex-wrap:wrap;gap:.75rem 1.25rem;align-items:center;justify-content:space-between;margin-top:2.4rem;padding-top:1.1rem;border-top:1px dashed var(--rule)}
+.done-btn .ico{width:18px;height:18px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center}
+.done-btn[aria-pressed="true"]{background:var(--alta-bg);border-color:var(--alta);color:var(--alta)}
+.done-btn[aria-pressed="true"] .ico{background:var(--alta);border-color:var(--alta)}
+.done-btn[aria-pressed="true"] .ico::after{content:"";width:9px;height:5px;border-left:2px solid var(--alta-bg);border-bottom:2px solid var(--alta-bg);transform:translateY(-1px) rotate(-45deg)}
+.next{font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;min-height:44px}
+.next:hover{text-decoration:underline}
+
+/* Lacunas e ressalvas */
+.gaps{list-style:none;padding:0;margin:1rem 0 0}
+.gaps > li{padding:1rem 0;border-bottom:1px solid var(--rule)}
+.gaps > li:first-child{padding-top:.2rem}
+.gaps .gh{display:block;font-family:var(--font-ui);font-weight:700;font-size:1.03rem;margin-bottom:.25rem}
+.gaps p{margin:0}
+
+footer.site{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--rule);color:var(--ink-soft);font-size:.9rem;max-width:70ch}
+
+/* Voltar ao topo e aviso */
+.to-top{position:fixed;right:1rem;bottom:1rem;z-index:30;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .2s ease,transform .2s ease;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.to-top.show{opacity:1;transform:none;pointer-events:auto}
+.toast{position:fixed;left:50%;bottom:1.2rem;z-index:80;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:var(--ink);color:var(--paper);padding:.7rem 1.1rem;border-radius:10px;font-weight:700;font-size:.94rem;max-width:calc(100vw - 2rem);text-align:center;transition:opacity .2s ease,transform .2s ease}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+@media (max-width:420px){
+  main{padding-left:.9rem;padding-right:.9rem}
+  .docmeta > div{grid-template-columns:1fr;gap:.15rem}
+  .vitals dd{font-size:1rem}
+}
+@media print{
+  .topbar,.sidebar,.scrim,.progress,.to-top,.toast,.sec-foot,.toolbar,.chips,.search,.tabs,.code-actions{display:none!important}
+  .shell{display:block}
+  main{max-width:none;padding:0}
+  [role="tabpanel"]{display:block!important}
+  details.claim{border:0}
+  .code pre{max-height:none}
+  body{background:#fff;color:#000}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="progress" aria-hidden="true"><span></span></div>
+
+<header class="topbar">
+  <button class="icon-btn" id="menu-btn" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Abrir menu de seções">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+  </button>
+  <div class="topbar-title">
+    <span class="tb-small">Refinamento técnico</span>
+    <span id="topbar-section">Visão geral</span>
+  </div>
+  <button class="icon-btn" type="button" data-theme-toggle aria-label="Alternar tema">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>
+  </button>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" id="sidebar" aria-label="Seções do guia">
+    <div class="side-top">
+      <a class="brand" href="#inicio">Refinamento técnico em grandes empresas<span>Guia de estudo navegável</span></a>
+      <button class="icon-btn drawer-close" id="drawer-close" type="button" aria-label="Fechar menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <ul class="toc">
+      <li><a href="#inicio"><span class="tick" aria-hidden="true"></span><span class="t">Visão geral</span><span class="sr-only st"></span></a></li>
+      <li><a href="#resumo"><span class="tick" aria-hidden="true"></span><span class="t">1. Resumo executivo</span><span class="sr-only st"></span></a></li>
+      <li><a href="#empresas"><span class="tick" aria-hidden="true"></span><span class="t">2. Como as empresas fazem</span><span class="sr-only st"></span></a></li>
+      <li><a href="#tecnicas"><span class="tick" aria-hidden="true"></span><span class="t">3. Técnicas</span><span class="sr-only st"></span></a></li>
+      <li><a href="#checklist"><span class="tick" aria-hidden="true"></span><span class="t">4. Checklist</span><span class="sr-only st"></span></a></li>
+      <li><a href="#antipadroes"><span class="tick" aria-hidden="true"></span><span class="t">5. Anti-padrões</span><span class="sr-only st"></span></a></li>
+      <li><a href="#template"><span class="tick" aria-hidden="true"></span><span class="t">6. Template</span><span class="sr-only st"></span></a></li>
+      <li><a href="#fontes"><span class="tick" aria-hidden="true"></span><span class="t">7. Fontes</span><span class="sr-only st"></span></a></li>
+      <li><a href="#lacunas"><span class="tick" aria-hidden="true"></span><span class="t">8. Lacunas</span><span class="sr-only st"></span></a></li>
+      <li><a href="#ressalvas"><span class="tick" aria-hidden="true"></span><span class="t">Ressalvas</span><span class="sr-only st"></span></a></li>
+    </ul>
+    <div class="study" aria-live="polite">
+      <div class="study-row"><strong>Seções estudadas</strong><span id="study-count">0 de 10</span></div>
+      <div class="meter" aria-hidden="true"><span id="study-meter"></span></div>
+      <button class="link-btn" id="study-reset" type="button">Recomeçar progresso</button>
+    </div>
+    <div class="side-bottom">
+      <button class="btn" type="button" data-theme-toggle>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>
+        <span class="label">Tema automático</span>
+      </button>
+    </div>
+  </nav>
+  <div class="scrim" aria-hidden="true"></div>
+
+  <main id="conteudo" tabindex="-1">
+
+    <!-- VISÃO GERAL -->
+    <section id="inicio" class="sec hero" aria-labelledby="t-inicio">
+      <h1 id="t-inicio">Refinamento técnico em grandes empresas de tecnologia</h1>
+      <p class="subtitle">Práticas, técnicas e um template aplicável a demandas de frontend</p>
+
+      <dl class="docmeta">
+        <div><dt>Status</dt><dd><span class="status">Estudo compilado</span></dd></div>
+        <div><dt>Fontes com link</dt><dd><a href="#fontes"><span id="hero-fontes">27</span> fontes consultadas</a></dd></div>
+        <div><dt>Formato sugerido</dt><dd><a href="#template">Mini design doc de 1 a 3 páginas</a></dd></div>
+        <div><dt>Confiança da evidência</dt><dd class="legend"><span class="conf alta">Alta</span><span class="conf media">Média</span><span class="conf baixa">Baixa</span><span class="conf lacuna">Lacuna</span></dd></div>
+      </dl>
+
+      <p class="lead">O padrão que aparece com mais consistência é este: grandes empresas não “refinam” só com reunião e ticket. Para trabalho ambíguo ou com dependências, elas produzem um documento escrito e curto, focado em trade-offs (design doc/RFC), revisado de forma assíncrona e proporcional ao risco. Esse documento é complementado por ADRs para registrar decisões e por um plano explícito de rollout com feature flags e rollback.</p>
+
+      <h2 id="t-tldr">TL;DR</h2>
+      <div class="tldr">
+        <article>
+          <h3>Processo</h3>
+          <p><a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a> (design docs), <a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a> (DUCK → RFC → processo de planejamento em camadas) e <a class="src" href="https://engineering.atspotify.com/2020/04/when-should-i-write-an-architecture-decision-record">Spotify</a> (RFC → ADR) convergem num artefato escrito, curto, centrado em objetivos/não-objetivos, alternativas e preocupações transversais. A revisão começa entre pares próximos e vai para revisores seniores conforme o impacto. O esforço é proporcional à ambiguidade: mudança simples não precisa de documento.</p>
+        </article>
+        <article>
+          <h3>O que levantar</h3>
+          <p>Os templates públicos (<a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>, <a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber mobile</a>, <a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Monzo</a>, <a class="src" href="https://github.com/reactjs/rfcs">React RFCs</a>) repetem os mesmos itens: escopo e não-objetivos, contratos de API e interações de rede, dependências, segurança/privacidade, acessibilidade, analytics/métricas, testes, rollout e suporte ao cliente. No frontend somam-se <a class="src" href="https://web.dev/articles/vitals">Core Web Vitals</a> (LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1 no p75), design system e acessibilidade “shift-left” (<a class="src" href="https://github.blog/engineering/user-experience/designs-journey-towards-accessibility/">GitHub</a>).</p>
+        </article>
+        <article>
+          <h3>Para a sua demanda</h3>
+          <p>Escreva um “mini design doc” de 1 a 3 páginas (formato que o <a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a> recomenda para incrementos). Inclua uma seção de alternativas, um plano de feature flag e rollout em etapas (<a class="src" href="https://github.blog/engineering/infrastructure/ship-code-faster-safer-feature-flags/">GitHub</a>, <a class="src" href="https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments">Amazon</a>) e um pre-mortem no formato do <a class="src" href="https://www.atlassian.com/team-playbook/plays/pre-mortem">Atlassian Team Playbook</a>, cuja play prevê 60 minutos de execução, com 10 minutos de escrita silenciosa e três votos por pessoa. Registre em <a class="src" href="https://engineering.atspotify.com/2020/04/when-should-i-write-an-architecture-decision-record">ADR</a> as decisões que forem caras de reverter, como gestão de estado e novos componentes.</p>
+        </article>
+      </div>
+      <p class="howto">Use o menu para navegar pelas seções e marque cada uma como estudada ao terminar. Os links destacados em amarelo abrem a fonte original em nova aba.</p>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="inicio" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#resumo">Próxima seção: Resumo executivo</a>
+      </div>
+    </section>
+
+    <!-- 1. RESUMO -->
+    <section id="resumo" class="sec" aria-labelledby="t-resumo">
+      <h2 id="t-resumo"><span class="num">1</span>Resumo executivo</h2>
+      <ul class="points prose">
+        <li>
+          <p class="ph">Convergência forte <span class="conf alta">Alta</span></p>
+          <p><a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>, <a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a>, <a class="src" href="https://engineering.atspotify.com/2020/04/when-should-i-write-an-architecture-decision-record">Spotify</a>, <a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Sourcegraph, HashiCorp, Monzo</a> e os projetos <a class="src" href="https://github.com/reactjs/rfcs">React</a> usam algum documento escrito antes de implementar. As empresas mudam o nome, mas o núcleo é o mesmo: contexto, objetivos/não-objetivos, design proposto, alternativas consideradas e preocupações transversais.</p>
+        </li>
+        <li>
+          <p class="ph">Proporcionalidade é regra explícita</p>
+          <p>O <a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a> diz que design doc é overhead e só compensa quando há ambiguidade de problema ou de solução. A <a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a> passou a usar templates leves para mudanças de escopo de time e pesados para mudanças organizacionais.</p>
+        </li>
+        <li>
+          <p class="ph">Decisão ≠ proposta</p>
+          <p>A <a class="src" href="https://engineering.atspotify.com/2020/04/when-should-i-write-an-architecture-decision-record">Spotify</a> e a <a class="src" href="https://www.thoughtworks.com/en-us/radar/techniques/lightweight-architecture-decision-records">Thoughtworks</a> separam a discussão (RFC/design doc) do registro da decisão (ADR, guardado junto ao código).</p>
+        </li>
+        <li>
+          <p class="ph">Rollout faz parte do refinamento</p>
+          <p><a class="src" href="https://github.blog/engineering/infrastructure/ship-code-faster-safer-feature-flags/">GitHub</a> e <a class="src" href="https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments">Amazon</a> tratam feature flags, implantação em etapas e rollback como requisitos de design, não como detalhe de deploy.</p>
+        </li>
+        <li>
+          <p class="ph">Frontend</p>
+          <p>O diferencial está em acessibilidade desde o design (<a class="src" href="https://primer.style/accessibility/foundations/accessibility-at-github/">GitHub/Primer</a>), uso e contribuição ao design system (<a class="src" href="https://atlassian.design/contribution">Atlassian</a>, <a class="src" href="https://polaris.shopify.com/contributing">Shopify Polaris</a>), métricas de campo (<a class="src" href="https://web.dev/articles/vitals">Core Web Vitals</a>) e migração incremental com fronteiras rígidas entre código antigo e novo (<a class="src" href="https://slack.engineering/rebuilding-slack-on-the-desktop/">Slack</a>).</p>
+        </li>
+        <li>
+          <p class="ph">Divergência relevante</p>
+          <p>Gergely Orosz (<a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Pragmatic Engineer, 2022, atualizado em 2024</a>) afirma que o Facebook/Meta é conhecido por ter “a menor ênfase em documentação de toda a Big Tech”. Ela compensa com ferramentas e engenheiros de longa permanência, e quem relata isso desaconselha imitar o modelo.</p>
+        </li>
+        <li>
+          <p class="ph">Lacunas</p>
+          <p>Não encontrei fontes primárias de big tech sobre event storming, técnicas de estimativa ou “spike” com esse nome. Para esses temas, a evidência é indireta (protótipos citados por Google, Slack e Spotify). Detalhes em <a href="#lacunas">Lacunas</a>.</p>
+        </li>
+      </ul>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="resumo" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#empresas">Próxima seção: Como as empresas fazem</a>
+      </div>
+    </section>
+
+    <!-- 2. EMPRESAS -->
+    <section id="empresas" class="sec" aria-labelledby="t-empresas">
+      <h2 id="t-empresas"><span class="num">2</span>Como as empresas fazem refinamento técnico</h2>
+
+      <h3>Síntese comparativa</h3>
+      <div class="table-wrap">
+        <table class="stack">
+          <thead><tr><th scope="col">Empresa / fonte</th><th scope="col">Artefato</th><th scope="col">Quem participa / quando</th><th scope="col">Particularidade</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a><span class="sub">Malte Ubl, “Design Docs at Google”</span></td>
+              <td>Design doc informal, em geral num Google Doc</td>
+              <td>Autor(es) escrevem antes de codar. Iteração rápida com colegas próximos, depois revisão mais ampla (lista do time ou reunião formal com engenheiros seniores)</td>
+              <td>Documento de 10 a 20 páginas para projetos grandes, “mini design doc” de 1 a 3 páginas para incrementos. Privacidade e segurança têm revisões dedicadas</td>
+            </tr>
+            <tr>
+              <td><a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a><span class="sub">via Pragmatic Engineer</span></td>
+              <td>DUCK (c. 2012-13) → RFC → Engineering Planning Process em camadas</td>
+              <td>Começou com uma lista de e-mail para todos. Depois listas segmentadas (backend, web, mobile), campos de “approver” e revisões semanais formais para mudanças críticas</td>
+              <td>Templates distintos para serviços e mobile, usados até cerca de 2019 segundo o Pragmatic Engineer. Ferramenta pesquisável integrada a Phabricator/JIRA</td>
+            </tr>
+            <tr>
+              <td><a class="src" href="https://engineering.atspotify.com/2020/04/when-should-i-write-an-architecture-decision-record">Spotify</a><span class="sub">“When Should I Write an ADR”, 2020</span></td>
+              <td>RFC para mudanças grandes; ADR para registrar a decisão</td>
+              <td>Decisões saem de RFCs ou de reuniões de engenharia (ex.: reunião quinzenal de web engineering)</td>
+              <td>ADR também para “backfill” de decisões não documentadas, identificadas durante code review</td>
+            </tr>
+            <tr>
+              <td><a class="src" href="https://www.thoughtworks.com/en-us/radar/techniques/lightweight-architecture-decision-records">Thoughtworks</a><span class="sub">Radar</span></td>
+              <td>Lightweight ADR no controle de versão</td>
+              <td>O time, junto ao código</td>
+              <td>“Adopt” desde 2018. No <a class="src" href="https://www.thoughtworks.com/content/dam/thoughtworks/documents/radar/2025/04/tr_technology_radar_vol_32_en.pdf">Radar vol. 32 (2025)</a>, o advice process aparece como modelo descentralizado</td>
+            </tr>
+            <tr>
+              <td><a class="src" href="https://martinfowler.com/articles/scaling-architecture-conversationally.html">Martin Fowler / Andrew Harmel-Law</a><span class="sub">2021</span></td>
+              <td>Advice Process + ADRs + fórum consultivo</td>
+              <td>Qualquer pessoa pode decidir, desde que busque conselho de quem é afetado e de quem tem expertise</td>
+              <td>Troca aprovação centralizada por conversa registrada</td>
+            </tr>
+            <tr>
+              <td><a class="src" href="https://www.atlassian.com/team-playbook/plays/pre-mortem">Atlassian</a><span class="sub">Team Playbook</span></td>
+              <td>Plays: <a class="src" href="https://www.atlassian.com/team-playbook/plays/pre-mortem">Pre-mortem</a>, <a class="src" href="https://www.atlassian.com/team-playbook/plays/daci">DACI</a>, <a class="src" href="https://www.atlassian.com/team-playbook/examples/project-management-activities">Trade-off Sliders</a>, feature kick-off</td>
+              <td>Time multidisciplinar (devs, testers, designers, stakeholders) antes do desenvolvimento</td>
+              <td>Versão condensada do pre-mortem pode rodar no sprint planning</td>
+            </tr>
+            <tr>
+              <td><a class="src" href="https://github.blog/engineering/infrastructure/ship-code-faster-safer-feature-flags/">GitHub</a></td>
+              <td>Feature flags + design reviews com perguntas de acessibilidade</td>
+              <td>Engenharia e design; liderança revisa designs</td>
+              <td>CI com duas builds (todas as flags ligadas / desligadas)</td>
+            </tr>
+            <tr>
+              <td><a class="src" href="https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments">Amazon</a><span class="sub">Builders' Library</span></td>
+              <td>Pipeline e técnica de two-phase deployment pensados no design da mudança</td>
+              <td>Times de serviço; revisão por especialistas em segurança operacional nos casos de risco</td>
+              <td>Deploy em ondas, bake time, rollback automático por alarme</td>
+            </tr>
+            <tr>
+              <td><a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Meta</a><span class="sub">segundo o Pragmatic Engineer</span></td>
+              <td>Pouca documentação formal</td>
+              <td>—</td>
+              <td>Compensa com ferramentas; não recomendado como modelo</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>O que as fontes afirmam</h3>
+      <div class="claims">
+        <details class="claim">
+          <summary>Google: para que serve um design doc<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="claim-body">
+            <p>O design doc registra a estratégia de implementação em alto nível e as decisões-chave, com ênfase nos trade-offs considerados. Suas funções declaradas incluem identificar problemas de design cedo, quando mudar ainda é barato; construir consenso; garantir as preocupações transversais; escalar o conhecimento de engenheiros seniores; e formar memória organizacional.</p>
+            <p>O ciclo de vida tem quatro fases:</p>
+            <ol>
+              <li>Criação e iteração rápida</li>
+              <li>Revisão (talvez em várias rodadas)</li>
+              <li>Implementação e iteração, atualizando o doc quando a realidade diverge</li>
+              <li>Manutenção e aprendizado</li>
+            </ol>
+            <p class="read-more">Ler a fonte: <a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Design Docs at Google</a></p>
+          </div>
+        </details>
+        <details class="claim">
+          <summary>Google: quando não escrever<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="claim-body">
+            <p>Se o documento é apenas um “manual de implementação”, sem trade-offs nem alternativas, teria sido melhor escrever o código direto. O autor propõe cinco perguntas, entre elas:</p>
+            <ul>
+              <li>Há incerteza sobre o design?</li>
+              <li>Vale envolver engenheiros seniores?</li>
+              <li>O design é ambíguo ou contencioso?</li>
+              <li>O time costuma esquecer privacidade, segurança e logging?</li>
+            </ul>
+            <p>Se três ou mais respostas forem “sim”, o design doc provavelmente vale a pena. O estudo cita quatro das cinco perguntas; a lista completa está na fonte.</p>
+            <p class="read-more">Ler a fonte: <a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Design Docs at Google</a></p>
+          </div>
+        </details>
+        <details class="claim">
+          <summary>Uber: por que o processo precisou mudar<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="claim-body">
+            <p>A crise do processo, que segundo Gergely Orosz escalou “de dezenas de engenheiros para alguns milhares”, teve três causas declaradas:</p>
+            <ul>
+              <li><strong>Ruído:</strong> centenas de RFCs por semana sobrecarregando os seniores.</li>
+              <li><strong>Ambiguidade</strong> sobre o que exigia RFC.</li>
+              <li><strong>Baixa “descobribilidade”:</strong> docs espalhados em Drive e wikis.</li>
+            </ul>
+            <p>A resposta foi ferramenta central, templates leves e pesados e uma classificação de criticidade.</p>
+            <p class="read-more">Ler as fontes: <a class="src" href="https://blog.pragmaticengineer.com/scaling-engineering-teams-via-writing-things-down-rfcs/">Scaling Engineering Teams via RFCs</a> e <a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Engineering Planning with RFCs, Design Documents and ADRs</a> (parcialmente pago)</p>
+          </div>
+        </details>
+        <details class="claim">
+          <summary>Spotify: quando escrever um ADR<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="claim-body">
+            <p>Um ADR deve ser escrito sempre que se toma uma decisão de impacto significativo, e cabe a cada time definir o que é “significativo”. O fluxo mental proposto:</p>
+            <div class="flow" role="group" aria-label="Problema sem solução abençoada e mudança grande leva a RFC, que leva a ADR">
+              <span class="node">Problema sem solução “abençoada” e mudança grande</span><span class="arr" aria-hidden="true">→</span><span class="node">RFC</span><span class="arr" aria-hidden="true">→</span><span class="node">ADR</span>
+            </div>
+            <div class="flow" role="group" aria-label="Mudança pequena leva direto a ADR">
+              <span class="node">Mudança pequena</span><span class="arr" aria-hidden="true">→</span><span class="node">ADR direto</span>
+            </div>
+            <p class="read-more">Ler a fonte: <a class="src" href="https://engineering.atspotify.com/2020/04/when-should-i-write-an-architecture-decision-record">When Should I Write an Architecture Decision Record</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="interp">
+        <h4>Interpretação</h4>
+        <p>Os modelos diferem mais no nível de cerimônia do que no conteúdo. Times pequenos se viram bem com revisão assíncrona por comentários. A escala exige triagem por criticidade (Uber) ou fóruns consultivos (Harmel-Law). Para uma única tela em React, o equivalente correto é o “mini design doc” do Google, revisado de forma assíncrona por 1 ou 2 pares, pelo designer e por quem é dono das APIs consumidas.</p>
+      </div>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="empresas" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#tecnicas">Próxima seção: Técnicas</a>
+      </div>
+    </section>
+
+    <!-- 3. TÉCNICAS -->
+    <section id="tecnicas" class="sec" aria-labelledby="t-tecnicas">
+      <h2 id="t-tecnicas"><span class="num">3</span>Técnicas e quando usar cada uma</h2>
+      <p class="intro">A coluna “O que a fonte diz” traz o que as empresas afirmam. A coluna “Quando faz sentido” é síntese. Filtre pela confiança da evidência.</p>
+
+      <div class="chips" id="tec-filtros" role="group" aria-label="Filtrar técnicas por confiança">
+        <button class="chip" type="button" data-filter="todas" aria-pressed="true">Todas</button>
+        <button class="chip" type="button" data-filter="alta" aria-pressed="false">Confiança alta</button>
+        <button class="chip" type="button" data-filter="media" aria-pressed="false">Confiança média</button>
+        <button class="chip" type="button" data-filter="lacuna" aria-pressed="false">Lacunas</button>
+      </div>
+      <p class="count-line" id="tec-count" aria-live="polite">12 técnicas</p>
+
+      <div class="table-wrap">
+        <table class="stack" id="tabela-tecnicas">
+          <thead><tr><th scope="col">Técnica</th><th scope="col">O que a fonte diz</th><th scope="col">Quando faz sentido (síntese)</th><th scope="col">Confiança</th></tr></thead>
+          <tbody>
+            <tr data-conf="alta">
+              <td>Design doc / RFC</td>
+              <td><a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>, <a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a>, <a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Sourcegraph, HashiCorp, Monzo</a>, <a class="src" href="https://github.com/reactjs/rfcs">React</a>: escrever antes de codar, com alternativas e trade-offs</td>
+              <td>Problema ou solução ambíguos, múltiplas dependências, impacto entre times. Para mudança trivial, não escreva (Uber, Google)</td>
+              <td><span class="conf alta">Alta</span></td>
+            </tr>
+            <tr data-conf="media">
+              <td>Mini design doc (1 a 3 páginas)</td>
+              <td><a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>: útil para melhorias incrementais e subtarefas em projetos ágeis; mesmas etapas, texto mais enxuto</td>
+              <td>Nova tela/feature de frontend com alguma decisão não óbvia (estado, cache, paginação, componente novo)</td>
+              <td><span class="conf media">Média</span><span class="conf-note">Uma fonte sólida</span></td>
+            </tr>
+            <tr data-conf="alta">
+              <td>ADR</td>
+              <td><a class="src" href="https://engineering.atspotify.com/2020/04/when-should-i-write-an-architecture-decision-record">Spotify</a>, <a class="src" href="https://www.thoughtworks.com/en-us/radar/techniques/lightweight-architecture-decision-records">Thoughtworks</a> (Adopt; guardar em controle de versão), <a class="src" href="https://martinfowler.com/articles/scaling-architecture-conversationally.html">Harmel-Law</a> (parte do Advice Process)</td>
+              <td>Decisões caras de reverter: biblioteca de estado, padrão de data fetching, criação de componente compartilhado. Também para documentar decisões passadas (“backfill”)</td>
+              <td><span class="conf alta">Alta</span></td>
+            </tr>
+            <tr data-conf="media">
+              <td>Protótipo / PoC<span class="sub">equivalente funcional de spike</span></td>
+              <td><a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>: “eu testei e funciona” é um dos melhores argumentos para um design, e protótipos podem ser linkados no doc. <a class="src" href="https://engineering.atspotify.com/2020/04/when-should-i-write-an-architecture-decision-record">Spotify</a>: decisão de web tomada após “um pequeno experimento”. <a class="src" href="https://slack.engineering/rebuilding-slack-on-the-desktop/">Slack</a>: versão “modern-only” usada internamente “por boa parte do último ano” antes do lançamento aos clientes (Slack Engineering, 2019)</td>
+              <td>Incerteza técnica real (performance de uma lista grande, viabilidade de uma API). Limite o tempo e anexe o resultado ao doc</td>
+              <td><span class="conf media">Média</span><span class="conf-note">O termo “spike” não aparece nessas fontes</span></td>
+            </tr>
+            <tr data-conf="media">
+              <td>Pre-mortem</td>
+              <td><a class="src" href="https://www.atlassian.com/team-playbook/plays/pre-mortem">Atlassian</a>: imaginar que o projeto falhou; 10 minutos de escrita silenciosa, 3 votos por pessoa, compromisso com ações; versão condensada no sprint planning. Play de feature kick-off inclui um mini pre-mortem</td>
+              <td>Antes de iniciar a implementação, com dev, QA, design e produto. Bom para expor riscos de integração e de UX</td>
+              <td><span class="conf media">Média</span><span class="conf-note">Fonte única, mas primária e detalhada</span></td>
+            </tr>
+            <tr data-conf="media">
+              <td>DACI</td>
+              <td><a class="src" href="https://www.atlassian.com/team-playbook/plays/daci">Atlassian</a>: Driver, Approver (uma pessoa), Contributors, Informed</td>
+              <td>Quando a decisão empaca entre stakeholders (ex.: produto x design x engenharia sobre escopo)</td>
+              <td><span class="conf media">Média</span></td>
+            </tr>
+            <tr data-conf="media">
+              <td>Trade-off sliders</td>
+              <td><a class="src" href="https://www.atlassian.com/team-playbook/examples/project-management-activities">Atlassian</a>: define o que otimizar a todo custo e onde há flexibilidade</td>
+              <td>Alinhar prazo x escopo x qualidade antes de quebrar a demanda</td>
+              <td><span class="conf media">Média</span></td>
+            </tr>
+            <tr data-conf="media">
+              <td>Advice Process</td>
+              <td><a class="src" href="https://martinfowler.com/articles/scaling-architecture-conversationally.html">Harmel-Law</a>: qualquer um decide, desde que consulte afetados e especialistas; conselho não é vinculante, mas é registrado</td>
+              <td>Orgs com times autônomos em que a aprovação central virou gargalo</td>
+              <td><span class="conf media">Média</span></td>
+            </tr>
+            <tr data-conf="media">
+              <td>Draft PR para validar direção</td>
+              <td><a class="src" href="https://shopify.engineering/great-code-reviews">Shopify</a>: PRs “WIP”/Draft para feedback inicial sobre algoritmo, design e API antes do polimento</td>
+              <td>Complementa o design doc quando a dúvida é localizada e fica mais clara em código</td>
+              <td><span class="conf media">Média</span></td>
+            </tr>
+            <tr data-conf="alta">
+              <td>Fatiamento incremental / vertical</td>
+              <td><a class="src" href="https://github.blog/engineering/infrastructure/ship-code-faster-safer-feature-flags/">GitHub</a>: feature flags permitem trabalhar em lotes pequenos, sem branches longas. <a class="src" href="https://slack.engineering/rebuilding-slack-on-the-desktop/">Slack</a>: substituição módulo a módulo (o seletor de emoji, lançado mais de dois anos antes do novo app, foi a primeira peça “moderna”)</td>
+              <td>Sempre que a entrega possa ir para produção desligada e crescer por partes</td>
+              <td><span class="conf alta">Alta</span></td>
+            </tr>
+            <tr data-conf="media">
+              <td>Two-phase deployment</td>
+              <td><a class="src" href="https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments">Amazon</a>: dividir a mudança em “preparar” (ler o formato antigo e o novo) e “ativar” (escrever o novo), para garantir rollback seguro</td>
+              <td>Quando o frontend depende de mudança de contrato/formato no backend: o front deve tolerar as duas versões antes da ativação</td>
+              <td><span class="conf media">Média</span></td>
+            </tr>
+            <tr data-conf="lacuna">
+              <td>Event storming / estimativa</td>
+              <td>Não encontrei fontes primárias das empresas listadas</td>
+              <td>—</td>
+              <td><span class="conf lacuna">Lacuna</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="tecnicas" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#checklist">Próxima seção: Checklist</a>
+      </div>
+    </section>
+
+    <!-- 4. CHECKLIST -->
+    <section id="checklist" class="sec" aria-labelledby="t-checklist">
+      <h2 id="t-checklist"><span class="num">4</span>Checklist consolidado do que levantar</h2>
+      <p class="intro">Marque os itens durante o refinamento. As marcações ficam salvas neste navegador. Use “Copiar como Markdown” para colar o checklist num ticket ou no design doc. Itens com a etiqueta Síntese não vêm de fonte específica.</p>
+
+      <div class="toolbar">
+        <button class="btn primary" type="button" id="check-copy">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
+          Copiar como Markdown
+        </button>
+        <button class="btn" type="button" id="check-reset">Limpar marcações</button>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Tipo de checklist">
+        <button class="tab" type="button" role="tab" id="tab-geral" aria-controls="panel-geral" aria-selected="true"><span class="tab-name">Geral</span><span class="tab-count">0/22</span></button>
+        <button class="tab" type="button" role="tab" id="tab-front" aria-controls="panel-front" aria-selected="false"><span class="tab-name">Frontend</span><span class="tab-count">0/16</span></button>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-geral" aria-labelledby="tab-geral" tabindex="0">
+        <p class="group-note" style="margin-top:1rem">Vale para qualquer demanda.</p>
+
+        <div class="check-group">
+          <h4><span class="gname">Problema e escopo</span><span class="count"></span></h4>
+          <ul class="check-list">
+            <li><label><input type="checkbox" data-id="g01"><span class="txt">Contexto em fatos objetivos, sem virar documento de requisitos (<a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="g02"><span class="txt">Objetivos <strong>e não-objetivos</strong>: coisas que poderiam razoavelmente ser objetivos, mas foram excluídas de propósito (<a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>, <a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Monzo</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="g03"><span class="txt">Por que resolver agora e não depois (<a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Monzo</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="g04"><span class="txt">Critérios de aceite e “definição de sucesso” (<a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Sourcegraph</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="g05"><span class="txt">O que ainda não sabemos (<a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Monzo</a>)</span></label></li>
+          </ul>
+        </div>
+
+        <div class="check-group">
+          <h4><span class="gname">Design e alternativas</span><span class="count"></span></h4>
+          <ul class="check-list">
+            <li><label><input type="checkbox" data-id="g06"><span class="txt">Diagrama de contexto do sistema: onde a tela/feature se encaixa (<a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="g07"><span class="txt">Alternativas consideradas e por que foram descartadas; a HashiCorp chama isso de “abandoned ideas” (<a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>, <a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">HashiCorp</a>, <a class="src" href="https://github.com/reactjs/rfcs">React</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="g08"><span class="txt">Drawbacks declarados com honestidade. O <a class="src" href="https://github.com/reactjs/rfcs">React</a> diz que RFCs que escondem desvantagens tendem a ser mal recebidas</span></label></li>
+          </ul>
+        </div>
+
+        <div class="check-group">
+          <h4><span class="gname">Dependências e contratos</span><span class="count"></span></h4>
+          <ul class="check-list">
+            <li><label><input type="checkbox" data-id="g09"><span class="txt">Dependências de serviços e bibliotecas (<a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a>: “service dependencies”, “library dependencies”)</span></label></li>
+            <li><label><input type="checkbox" data-id="g10"><span class="txt">Interações de rede detalhadas e API por cliente (<a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber mobile</a>, <a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Monzo</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="g11"><span class="txt">Compatibilidade retroativa e rollback quando o contrato muda (<a class="src" href="https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments">Amazon</a>)</span></label></li>
+          </ul>
+        </div>
+
+        <div class="check-group">
+          <h4><span class="gname">Preocupações transversais</span><span class="count"></span></h4>
+          <p class="group-note">O Google recomenda que cada time padronize esta lista.</p>
+          <ul class="check-list">
+            <li><label><input type="checkbox" data-id="g12"><span class="txt">Segurança e privacidade. No <a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>, projetos exigem design doc de privacidade dedicado</span></label></li>
+            <li><label><input type="checkbox" data-id="g13"><span class="txt">Observabilidade e degradação graciosa (<a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Monzo</a>; <a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a>: “metrics &amp; monitoring”)</span></label></li>
+            <li><label><input type="checkbox" data-id="g14"><span class="txt">Questões legais e regionais. Na <a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a>, o checklist de pagamentos ganhou itens regionais/legais e o de dados ganhou GDPR depois de falhas passadas</span></label></li>
+            <li><label><input type="checkbox" data-id="g15"><span class="txt">Impacto em suporte ao cliente (<a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a>)</span></label></li>
+          </ul>
+        </div>
+
+        <div class="check-group">
+          <h4><span class="gname">Entrega</span><span class="count"></span></h4>
+          <ul class="check-list">
+            <li><label><input type="checkbox" data-id="g16"><span class="txt">Estratégia de testes (<a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a>: “testing &amp; rollout”; Uber serviços: testes de carga e performance)</span></label></li>
+            <li><label><input type="checkbox" data-id="g17"><span class="txt">Feature flag: quem vê primeiro (staff ship), como testar as duas variações (<a class="src" href="https://github.blog/engineering/infrastructure/ship-code-faster-safer-feature-flags/">GitHub</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="g18"><span class="txt">Rollout em etapas e critério de rollback (<a class="src" href="https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments">Amazon</a>: ondas, bake time, alarmes)</span></label></li>
+            <li><label><input type="checkbox" data-id="g19"><span class="txt">Analytics e métricas de sucesso (<a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber mobile</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="g20"><span class="txt">Estratégia de adoção e “como ensinamos isso” (<a class="src" href="https://github.com/reactjs/rfcs">React RFCs</a>, <a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">RazorPay Blade</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="g21"><span class="txt">Riscos: obrigatório no template da <a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Monzo</a></span></label></li>
+            <li><label><input type="checkbox" data-id="g22"><span class="txt">Aprovadores e revisores nomeados (<a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a>)</span></label></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-front" aria-labelledby="tab-front" tabindex="0">
+        <div class="check-group">
+          <h4><span class="gname">UI/UX e design system</span><span class="count"></span></h4>
+          <ul class="check-list">
+            <li><label><input type="checkbox" data-id="f01"><span class="txt">UI &amp; UX como primeira seção técnica, como no template mobile da <a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a></span></label></li>
+            <li><label><input type="checkbox" data-id="f02"><span class="txt">Quais componentes do design system serão usados. Algum componente novo precisa de proposta ao time de design system? Na <a class="src" href="https://atlassian.design/contribution">Atlassian</a>, mudanças grandes e componentes novos exigem coordenação sistêmica e podem não ser aceitos; a recomendação é procurar o time antes. A <a class="src" href="https://polaris.shopify.com/contributing">Shopify Polaris</a> pedia proposta para contribuições grandes (verificação parcial; ver <a href="#lacunas">Lacunas</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="f03"><span class="txt">Decisões de design system registradas em “design system decision records” (<a class="src" href="https://www.thoughtworks.com/radar/techniques/design-system-decision-records">Thoughtworks Radar</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="f04"><span class="txt">Estados de tela: vazio, carregando, erro, parcial, sem permissão <span class="tag-sint">Síntese</span></span></label></li>
+          </ul>
+        </div>
+
+        <div class="check-group">
+          <h4><span class="gname">Acessibilidade (shift-left)</span><span class="count"></span></h4>
+          <ul class="check-list">
+            <li><label><input type="checkbox" data-id="f05"><span class="txt">Anotações de acessibilidade no Figma antes do desenvolvimento (<a class="src" href="https://github.blog/engineering/user-experience/design-system-annotations-part-1-how-accessibility-gets-left-out-of-components/">GitHub Annotation Toolkit</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="f06"><span class="txt">Perguntas de acessibilidade no template de design review (<a class="src" href="https://github.blog/engineering/user-experience/designs-journey-towards-accessibility/">GitHub</a>)</span></label></li>
+            <li><label><input type="checkbox" data-id="f07"><span class="txt">Meta de conformidade explícita. O <a class="src" href="https://primer.style/accessibility/foundations/accessibility-at-github/">Primer/GitHub</a> mira WCAG 2.2 AA</span></label></li>
+            <li><label><input type="checkbox" data-id="f08"><span class="txt">Ordem de foco, navegação por teclado, nomes acessíveis e anúncios de leitor de tela para conteúdo dinâmico <span class="tag-sint">Síntese</span> As fontes do GitHub falam em capturar a “intenção de acessibilidade” que o visual não transmite</span></label></li>
+          </ul>
+        </div>
+
+        <div class="check-group">
+          <h4><span class="gname">Estado e dados</span><span class="count"></span></h4>
+          <ul class="check-list">
+            <li><label><input type="checkbox" data-id="f09"><span class="txt">Onde vive o estado: servidor, cache do cliente, URL, local. Que modelo de dados o front assume? O <a class="src" href="https://slack.engineering/rebuilding-slack-on-the-desktop/">Slack</a> exigiu que todo código “moderno” assumisse um modelo de dados carregado sob demanda e incompleto</span></label></li>
+            <li><label><input type="checkbox" data-id="f10"><span class="txt">O front sabe estaticamente de que dados a tela precisa, para buscar cedo? A <a class="src" href="https://engineering.fb.com/2020/05/08/web/facebook-redesign/">Meta</a> usou Relay para isso</span></label></li>
+            <li><label><input type="checkbox" data-id="f11"><span class="txt">Code splitting e o que carregar primeiro. O princípio relatado da <a class="src" href="https://engineering.fb.com/2020/05/08/web/facebook-redesign/">Meta</a> é “o mínimo possível, o mais cedo possível”</span></label></li>
+          </ul>
+        </div>
+
+        <div class="check-group">
+          <h4><span class="gname">Performance</span><span class="count"></span></h4>
+          <dl class="vitals" aria-label="Metas de Core Web Vitals no percentil 75">
+            <div><dt>LCP</dt><dd>≤ 2,5 s</dd></div>
+            <div><dt>INP</dt><dd>≤ 200 ms</dd></div>
+            <div><dt>CLS</dt><dd>≤ 0,1</dd></div>
+          </dl>
+          <ul class="check-list">
+            <li><label><input type="checkbox" data-id="f12"><span class="txt">Orçamento e metas de Core Web Vitals (<a class="src" href="https://web.dev/articles/vitals">web.dev</a>): LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1, medidos no percentil 75 e segmentados por mobile e desktop. O <a class="src" href="https://web.dev/blog/inp-cwv-launch">INP substituiu o FID em 12/03/2024</a></span></label></li>
+            <li><label><input type="checkbox" data-id="f13"><span class="txt">Como medir em laboratório durante o desenvolvimento e em campo (RUM) depois do lançamento (<a class="src" href="https://web.dev/articles/vitals">web.dev</a>)</span></label></li>
+          </ul>
+        </div>
+
+        <div class="check-group">
+          <h4><span class="gname">Migração e convivência com legado</span><span class="count"></span></h4>
+          <ul class="check-list">
+            <li><label><input type="checkbox" data-id="f14"><span class="txt">Se a tela substitui algo existente: fronteiras explícitas entre código antigo e novo. Os exemplos são as regras de “legacy-interop” do <a class="src" href="https://slack.engineering/rebuilding-slack-on-the-desktop/">Slack</a>: código antigo não importa código novo diretamente, e vice-versa</span></label></li>
+            <li><label><input type="checkbox" data-id="f15"><span class="txt">Dogfooding interno antes do lançamento externo (<a class="src" href="https://slack.engineering/rebuilding-slack-on-the-desktop/">Slack</a>, <a class="src" href="https://github.blog/engineering/infrastructure/ship-code-faster-safer-feature-flags/">GitHub “staff ship”</a>)</span></label></li>
+          </ul>
+        </div>
+
+        <div class="check-group">
+          <h4><span class="gname">Compatibilidade, i18n e ownership</span><span class="count"></span></h4>
+          <ul class="check-list">
+            <li><label><input type="checkbox" data-id="f16"><span class="txt">Navegadores e dispositivos suportados, i18n/l10n (textos, formatos, RTL) e dono de cada componente compartilhado <span class="tag-sint">Síntese</span> Não encontrei fonte primária específica que trate esses itens em templates de refinamento de frontend</span></label></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="checklist" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#antipadroes">Próxima seção: Anti-padrões</a>
+      </div>
+    </section>
+
+    <!-- 5. ANTI-PADRÕES -->
+    <section id="antipadroes" class="sec" aria-labelledby="t-antipadroes">
+      <h2 id="t-antipadroes"><span class="num">5</span>Anti-padrões e lições aprendidas</h2>
+
+      <div class="table-wrap">
+        <table class="stack">
+          <thead><tr><th scope="col">Anti-padrão</th><th scope="col">Relato da fonte</th><th scope="col">O que mudou</th><th scope="col">Confiança</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Processo que não escala (ruído)</td>
+              <td><a class="src" href="https://blog.pragmaticengineer.com/scaling-engineering-teams-via-writing-things-down-rfcs/">Uber</a>: centenas de RFCs por semana em listas grandes sobrecarregavam os engenheiros experientes</td>
+              <td>Listas segmentadas por área, ferramenta central e camadas de criticidade</td>
+              <td><span class="conf media">Média</span><span class="conf-note">Relato secundário de ex-engenheiro, detalhado</span></td>
+            </tr>
+            <tr>
+              <td>Ambiguidade sobre quando escrever</td>
+              <td><a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a>: com centenas de times, cada um interpretava de um jeito</td>
+              <td>Critério explícito de criticidade. Para mudanças pequenas, “não se preocupe, faça”</td>
+              <td><span class="conf media">Média</span></td>
+            </tr>
+            <tr>
+              <td>Docs que ninguém encontra</td>
+              <td><a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a>: RFCs espalhados em Google Drive e wikis</td>
+              <td>Repositório pesquisável com aprovadores marcados. A <a class="src" href="https://www.thoughtworks.com/en-us/radar/techniques/lightweight-architecture-decision-records">Thoughtworks</a> recomenda ADRs no controle de versão</td>
+              <td><span class="conf alta">Alta</span></td>
+            </tr>
+            <tr>
+              <td>Design doc como “manual de implementação”</td>
+              <td><a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>: sem trade-offs nem alternativas, melhor escrever o código direto</td>
+              <td>Usar o doc só quando há ambiguidade</td>
+              <td><span class="conf media">Média</span></td>
+            </tr>
+            <tr>
+              <td>Revisão como gargalo</td>
+              <td><a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>: esperar reuniões formais de revisão pode atrasar muito o desenvolvimento. <a class="src" href="https://blog.pragmaticengineer.com/scaling-engineering-teams-via-writing-things-down-rfcs/">Uber</a>: a centralização numa única lista de e-mail ficou inviável com o crescimento</td>
+              <td>Buscar o feedback crucial diretamente, sem bloquear o progresso pela revisão ampla</td>
+              <td><span class="conf alta">Alta</span><span class="conf-note">Google e Uber convergem</span></td>
+            </tr>
+            <tr>
+              <td>Doc que apodrece</td>
+              <td><a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>: as mudanças viram “emendas” em docs separados, como uma constituição</td>
+              <td>Atualizar o doc enquanto o sistema não foi lançado e linkar as emendas no original</td>
+              <td><span class="conf media">Média</span></td>
+            </tr>
+            <tr>
+              <td>Esquecer preocupações transversais</td>
+              <td><a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a> e <a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber</a>: checkpoints foram adicionados depois de erros passados (GDPR, questões regionais em pagamentos)</td>
+              <td>Seções obrigatórias padronizadas por time</td>
+              <td><span class="conf alta">Alta</span></td>
+            </tr>
+            <tr>
+              <td>Acessibilidade só no fim</td>
+              <td><a class="src" href="https://github.blog/engineering/user-experience/design-system-annotations-part-1-how-accessibility-gets-left-out-of-components/">GitHub</a>: acessibilidade ficava de fora dos componentes; revisar só no final sai caro</td>
+              <td>Anotações no Figma, perguntas de acessibilidade nos templates de review, designers de acessibilidade embarcados (“do primeiro esboço ao deploy”). Ver também <a class="src" href="https://github.blog/engineering/user-experience/designs-journey-towards-accessibility/">Design's journey towards accessibility</a> e <a class="src" href="https://github.blog/news-insights/company-news/scaling-accessibility-within-github-and-beyond/">Scaling accessibility</a></td>
+              <td><span class="conf alta">Alta</span><span class="conf-note">Várias fontes do GitHub</span></td>
+            </tr>
+            <tr>
+              <td>Reescrita big-bang</td>
+              <td><a class="src" href="https://slack.engineering/rebuilding-slack-on-the-desktop/">Slack</a>: a sabedoria convencional diz para nunca reescrever do zero</td>
+              <td>Reescrita incremental (“Navio de Teseu”) com lançamentos parciais e regras rígidas de interoperabilidade</td>
+              <td><span class="conf media">Média</span></td>
+            </tr>
+            <tr>
+              <td>Branches longas / big-bang release</td>
+              <td><a class="src" href="https://github.blog/engineering/infrastructure/ship-code-faster-safer-feature-flags/">GitHub</a>: não usa feature branches de longa duração</td>
+              <td>Feature flags e lotes pequenos</td>
+              <td><span class="conf alta">Alta</span><span class="conf-note">GitHub e Amazon convergem</span></td>
+            </tr>
+            <tr>
+              <td>Documentação mínima por cultura</td>
+              <td><a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Meta</a>: menos documentação e testes que a maioria das Big Tech</td>
+              <td>Funciona por fatores históricos e de ferramentas; o autor desaconselha imitar, sobretudo em trabalho remoto e assíncrono</td>
+              <td><span class="conf baixa">Baixa a média</span><span class="conf-note">Relato único</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="interp">
+        <h4>Interpretação</h4>
+        <p>Os anti-padrões relatados não vêm de “refinamento raso” no sentido de pouca reunião. Vêm de falta de critério (quando escrever, quem revisa), falta de lugar (onde o documento vive) e preocupações transversais que dependem da memória das pessoas. A correção recorrente é padronizar seções obrigatórias curtas e tornar o processo proporcional ao risco.</p>
+      </div>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="antipadroes" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#template">Próxima seção: Template</a>
+      </div>
+    </section>
+
+    <!-- 6. TEMPLATE -->
+    <section id="template" class="sec" aria-labelledby="t-template">
+      <h2 id="t-template"><span class="num">6</span>Template sugerido: mini design doc para demanda de frontend</h2>
+      <div class="prose">
+        <p>Baseado em <a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a> (estrutura), <a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Uber mobile</a> (itens de cliente), <a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Monzo</a> (riscos e desconhecidos), <a class="src" href="https://github.com/reactjs/rfcs">React</a>/<a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">RazorPay</a> (adoção) e <a class="src" href="https://github.blog/engineering/infrastructure/ship-code-faster-safer-feature-flags/">GitHub</a> (acessibilidade e flags). Alvo: 1 a 3 páginas.</p>
+      </div>
+
+      <div class="code">
+        <div class="code-bar">
+          <span class="code-name">mini-design-doc-frontend.md</span>
+          <div class="code-actions">
+            <button class="btn on-dark" type="button" id="tpl-copy">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
+              Copiar template
+            </button>
+            <button class="btn on-dark" type="button" id="tpl-download">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+              Baixar .md
+            </button>
+          </div>
+        </div>
+<pre tabindex="0" aria-label="Template do mini design doc"><code id="tpl"># [Nome da feature/tela] — Mini design doc
+Status: rascunho | em revisão | aprovado | implementado
+Autor(es): ___  Revisores/aprovadores: ___ (eng. par, designer, dono da API, QA)
+Links: PRD/ticket, Figma (com anotações de a11y), ADRs relacionados
+
+## 1. Contexto e escopo
+Fatos objetivos: o que existe hoje, por que mudar agora.
+
+## 2. Objetivos e não-objetivos
+- Objetivos (com critério de aceite mensurável)
+- Não-objetivos (coisas que poderiam ser objetivo, mas ficam de fora)
+- Métrica de sucesso (produto) + metas técnicas (LCP/INP/CLS no p75)
+
+## 3. Design proposto
+- Diagrama de contexto: tela ↔ APIs ↔ serviços
+- UI &amp; UX: fluxos, estados (vazio, carregando, erro, parcial, sem permissão)
+- Componentes: do design system / novos (precisa proposta ao time de DS?)
+- Estado e dados: onde vive cada estado; estratégia de fetch/cache;
+  o que buscar cedo e o que carregar sob demanda
+- Contratos de API: endpoints consumidos, campos usados, erros tratados,
+  paginação, compatibilidade se o contrato mudar (prepare → activate)
+
+## 4. Alternativas consideradas
+Opção B/C, trade-offs e por que foram descartadas.
+Resultado de protótipo/spike, se houver (tempo gasto + conclusão).
+
+## 5. Preocupações transversais
+- Acessibilidade: meta WCAG 2.2 AA; foco, teclado, leitores de tela
+- Performance: orçamento de bundle, impacto em CWV, como medir (lab + campo)
+- Segurança/privacidade: dados exibidos, PII, permissões
+- i18n/l10n e compatibilidade de navegadores/dispositivos
+- Observabilidade: logs, erros de front, eventos de analytics
+- Suporte ao cliente: o que muda para quem atende
+
+## 6. Testes
+Unitários, integração com mocks de API, E2E dos fluxos críticos,
+testes de a11y automatizados + verificação manual, ambas as variações da flag.
+
+## 7. Rollout e rollback
+Feature flag (nome, dono, critério de remoção); ordem: interno → % de usuários → todos;
+sinais de alarme e critério objetivo para desligar; plano de limpeza da flag.
+
+## 8. Riscos e desconhecidos
+Saída do pre-mortem (top 3 riscos + ação); perguntas em aberto e dono de cada uma.
+
+## 9. Fatiamento
+Fatias verticais entregáveis atrás da flag, em ordem.
+
+## 10. Decisões registradas
+Links para ADRs (ex.: escolha de lib de estado, novo componente compartilhado).</code></pre>
+      </div>
+
+      <h3>Como rodar o refinamento</h3>
+      <p class="muted" style="margin-top:-.3rem">Sugestão operacional, em ordem.</p>
+      <ol class="steps">
+        <li>O autor escreve o rascunho antes da reunião, num prazo curto.</li>
+        <li>Revisão assíncrona por comentários com par técnico, designer e dono da API (modelo <a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>).</li>
+        <li>Sessão síncrona: pre-mortem no formato do <a class="src" href="https://www.atlassian.com/team-playbook/plays/pre-mortem">Atlassian Team Playbook</a> (a play prevê 60 minutos, com 10 minutos de escrita silenciosa, três votos por pessoa e ao menos uma ação de mitigação por risco priorizado) e fechamento das perguntas em aberto.</li>
+        <li>Decisões caras de reverter viram ADR no repositório (<a class="src" href="https://engineering.atspotify.com/2020/04/when-should-i-write-an-architecture-decision-record">Spotify</a>, <a class="src" href="https://www.thoughtworks.com/en-us/radar/techniques/lightweight-architecture-decision-records">Thoughtworks</a>).</li>
+        <li>Atualize o doc enquanto a feature não for lançada (<a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Google</a>).</li>
+      </ol>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="template" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#fontes">Próxima seção: Fontes</a>
+      </div>
+    </section>
+
+    <!-- 7. FONTES -->
+    <section id="fontes" class="sec" aria-labelledby="t-fontes">
+      <h2 id="t-fontes"><span class="num">7</span>Fontes consultadas</h2>
+      <p class="intro">Todas abrem em nova aba. A marcação “mais de 5 anos” indica fontes antigas, cujos detalhes de processo interno podem ter mudado. Organizações cobertas: Google, Uber, Spotify, Thoughtworks, Atlassian, GitHub, Amazon, Slack, Meta, Shopify e React, além de exemplos de Sourcegraph, HashiCorp, Monzo e RazorPay via Pragmatic Engineer.</p>
+
+      <div class="search">
+        <label for="fonte-busca">Buscar fonte</label>
+        <input id="fonte-busca" type="search" placeholder="Empresa, tema ou ano: ADR, acessibilidade, 2020" autocomplete="off">
+      </div>
+      <p class="count-line" id="fonte-count" aria-live="polite">27 fontes</p>
+
+      <div class="table-wrap">
+        <table class="stack" id="tabela-fontes">
+          <thead><tr><th scope="col">Empresa</th><th scope="col">Título</th><th scope="col">Ano</th></tr></thead>
+          <tbody>
+            <tr data-kw="design doc documento"><td>Google (Malte Ubl)</td><td><a class="src" href="https://www.industrialempathy.com/posts/design-docs-at-google/">Design Docs at Google</a><span class="host">industrialempathy.com</span></td><td>c. 2020<br><span class="age">⚠ mais de 5 anos</span></td></tr>
+            <tr data-kw="RFC planejamento"><td>Uber (via Gergely Orosz)</td><td><a class="src" href="https://newsletter.pragmaticengineer.com/p/rfcs-and-design-docs">Engineering Planning with RFCs, Design Documents and ADRs</a><span class="host">newsletter.pragmaticengineer.com</span></td><td>2022<span class="sub">Parcialmente pago</span></td></tr>
+            <tr data-kw="RFC design doc exemplos"><td>Vários<span class="sub">Google, Uber, Sourcegraph, HashiCorp, Monzo, RazorPay, Meta</span></td><td><a class="src" href="https://blog.pragmaticengineer.com/rfcs-and-design-docs/">Companies Using RFCs or Design Docs and Examples of These</a><span class="host">blog.pragmaticengineer.com</span></td><td>2022<span class="sub">Atualizado em 2024</span></td></tr>
+            <tr data-kw="RFC escala"><td>Uber (Gergely Orosz)</td><td><a class="src" href="https://blog.pragmaticengineer.com/scaling-engineering-teams-via-writing-things-down-rfcs/">Scaling Engineering Teams via RFCs: Writing Things Down</a><span class="host">blog.pragmaticengineer.com</span></td><td>c. 2020<br><span class="age">⚠ mais de 5 anos</span></td></tr>
+            <tr data-kw="ADR decisão"><td>Spotify</td><td><a class="src" href="https://engineering.atspotify.com/2020/04/when-should-i-write-an-architecture-decision-record">When Should I Write an Architecture Decision Record</a><span class="host">engineering.atspotify.com</span></td><td>2020<br><span class="age">⚠ mais de 5 anos</span></td></tr>
+            <tr data-kw="ADR decisão"><td>Thoughtworks</td><td><a class="src" href="https://www.thoughtworks.com/en-us/radar/techniques/lightweight-architecture-decision-records">Lightweight Architecture Decision Records (Radar)</a><span class="host">thoughtworks.com</span></td><td>2018<br><span class="age">⚠ mais de 5 anos</span></td></tr>
+            <tr data-kw="advice process"><td>Thoughtworks</td><td><a class="src" href="https://www.thoughtworks.com/content/dam/thoughtworks/documents/radar/2025/04/tr_technology_radar_vol_32_en.pdf">Technology Radar vol. 32 (PDF)</a><span class="host">thoughtworks.com</span></td><td>2025</td></tr>
+            <tr data-kw="design system decisão"><td>Thoughtworks</td><td><a class="src" href="https://www.thoughtworks.com/radar/techniques/design-system-decision-records">Design system decision records (Radar)</a><span class="host">thoughtworks.com</span></td><td>Ano não confirmado</td></tr>
+            <tr data-kw="advice process ADR arquitetura"><td>Martin Fowler (Andrew Harmel-Law)</td><td><a class="src" href="https://martinfowler.com/articles/scaling-architecture-conversationally.html">Scaling the Practice of Architecture, Conversationally</a><span class="host">martinfowler.com</span></td><td>2021</td></tr>
+            <tr data-kw="pre-mortem riscos"><td>Atlassian</td><td><a class="src" href="https://www.atlassian.com/team-playbook/plays/pre-mortem">Pre-mortem (Team Playbook)</a><span class="host">atlassian.com</span></td><td>Documento vivo</td></tr>
+            <tr data-kw="DACI decisão"><td>Atlassian</td><td><a class="src" href="https://www.atlassian.com/team-playbook/plays/daci">DACI: A Decision-Making Framework</a><span class="host">atlassian.com</span></td><td>Documento vivo</td></tr>
+            <tr data-kw="trade-off prazo escopo qualidade"><td>Atlassian</td><td><a class="src" href="https://www.atlassian.com/team-playbook/examples/project-management-activities">Next-level Project Management Activities (Trade-off Sliders)</a><span class="host">atlassian.com</span></td><td>Documento vivo</td></tr>
+            <tr data-kw="design system componentes contribuição"><td>Atlassian</td><td><a class="src" href="https://atlassian.design/contribution">Contribution (Atlassian Design System)</a><span class="host">atlassian.design</span></td><td>Documento vivo</td></tr>
+            <tr data-kw="feature flags rollout"><td>GitHub</td><td><a class="src" href="https://github.blog/engineering/infrastructure/ship-code-faster-safer-feature-flags/">How we ship code faster and safer with feature flags</a><span class="host">github.blog</span></td><td>2021<br><span class="age">⚠ limítrofe</span></td></tr>
+            <tr data-kw="acessibilidade design review"><td>GitHub</td><td><a class="src" href="https://github.blog/engineering/user-experience/designs-journey-towards-accessibility/">Design's journey towards accessibility</a><span class="host">github.blog</span></td><td>2023</td></tr>
+            <tr data-kw="acessibilidade figma anotações design system"><td>GitHub</td><td><a class="src" href="https://github.blog/engineering/user-experience/design-system-annotations-part-1-how-accessibility-gets-left-out-of-components/">Design system annotations, part 1</a><span class="host">github.blog</span></td><td>2025</td></tr>
+            <tr data-kw="acessibilidade WCAG"><td>GitHub (Primer)</td><td><a class="src" href="https://primer.style/accessibility/foundations/accessibility-at-github/">Accessibility at GitHub</a><span class="host">primer.style</span></td><td>Documento vivo</td></tr>
+            <tr data-kw="acessibilidade"><td>GitHub</td><td><a class="src" href="https://github.blog/news-insights/company-news/scaling-accessibility-within-github-and-beyond/">Scaling accessibility within GitHub and beyond</a><span class="host">github.blog</span></td><td>Ano não confirmado</td></tr>
+            <tr data-kw="deploy rollout rollback"><td>Amazon</td><td><a class="src" href="https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments">Automating safe, hands-off deployments (Clare Liguori)</a><span class="host">aws.amazon.com</span></td><td>2020<br><span class="age">⚠ mais de 5 anos</span></td></tr>
+            <tr data-kw="rollback deploy contrato"><td>Amazon</td><td><a class="src" href="https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments">Ensuring rollback safety during deployments (Sandeep Pokkunuri)</a><span class="host">aws.amazon.com</span></td><td>2019<br><span class="age">⚠ mais de 5 anos</span></td></tr>
+            <tr data-kw="migração reescrita legado"><td>Slack</td><td><a class="src" href="https://slack.engineering/rebuilding-slack-on-the-desktop/">When a rewrite isn't: rebuilding Slack on the desktop</a><span class="host">slack.engineering</span></td><td>2019<br><span class="age">⚠ mais de 5 anos</span></td></tr>
+            <tr data-kw="performance CSS Relay"><td>Meta</td><td><a class="src" href="https://engineering.fb.com/2020/05/08/web/facebook-redesign/">Rebuilding our tech stack for the new Facebook.com</a><span class="host">engineering.fb.com</span></td><td>2020<br><span class="age">⚠ mais de 5 anos</span></td></tr>
+            <tr data-kw="code review PR revisão"><td>Shopify</td><td><a class="src" href="https://shopify.engineering/great-code-reviews">Great Code Reviews—The Superpower Your Team Needs</a><span class="host">shopify.engineering</span></td><td>Ano não confirmado</td></tr>
+            <tr data-kw="design system componentes"><td>Shopify</td><td><a class="src" href="https://polaris.shopify.com/contributing">Polaris – Contributing</a><span class="host">polaris.shopify.com</span></td><td>Verificação parcial</td></tr>
+            <tr data-kw="RFC"><td>React</td><td><a class="src" href="https://github.com/reactjs/rfcs">reactjs/rfcs (processo e template)</a><span class="host">github.com</span></td><td>Documento vivo</td></tr>
+            <tr data-kw="performance core web vitals métricas"><td>Google (web.dev)</td><td><a class="src" href="https://web.dev/articles/vitals">Web Vitals</a><span class="host">web.dev</span></td><td>2020<span class="sub">Atualizado em 2024</span></td></tr>
+            <tr data-kw="performance INP core web vitals"><td>Google (web.dev)</td><td><a class="src" href="https://web.dev/blog/inp-cwv-launch">Interaction to Next Paint is officially a Core Web Vital</a><span class="host">web.dev</span></td><td>2024</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="empty" id="fonte-vazio" hidden>Nenhuma fonte com esse termo. Tente o nome de uma empresa ou um tema, como “ADR”, “acessibilidade” ou “rollback”.</p>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="fontes" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#lacunas">Próxima seção: Lacunas</a>
+      </div>
+    </section>
+
+    <!-- 8. LACUNAS -->
+    <section id="lacunas" class="sec" aria-labelledby="t-lacunas">
+      <h2 id="t-lacunas"><span class="num">8</span>Lacunas</h2>
+      <ul class="gaps prose">
+        <li><span class="gh">Event storming, estimativa e “spike” como termo</span><p>Não encontrei fontes primárias das empresas listadas sobre event storming, estimativa (story points, planning poker) ou “spike” com esse nome. O mais próximo são as menções a protótipos (Google, Slack, Spotify).</p></li>
+        <li><span class="gh">Netflix, Airbnb, Stripe, LinkedIn, Dropbox, Pinterest, Figma, Vercel e Microsoft</span><p>Não consegui confirmar fontes primárias sobre o processo de refinamento técnico dessas empresas. Os resultados sobre Figma e Airbnb eram de terceiros ou vagas de emprego e foram descartados. O orçamento de buscas acabou antes de cobrir Netflix e Stripe.</p></li>
+        <li><span class="gh">i18n, compatibilidade de navegadores e ownership de componentes</span><p>Aparecem no checklist como síntese minha, sem fonte primária específica de refinamento.</p></li>
+        <li><span class="gh">Uber</span><p>O detalhamento vem de um ex-engenheiro (Gergely Orosz), não do blog oficial da Uber, e parte do artigo é paga. Os templates descritos valiam “até cerca de 2019”.</p></li>
+        <li><span class="gh">Shopify Polaris</span><p>A página de contribuição hoje redireciona para shopify.dev, e o Polaris React foi descontinuado em favor de web components. Trate o processo de proposta como exemplo histórico.</p></li>
+        <li><span class="gh">Meta</span><p>O <a class="src" href="https://engineering.fb.com/2020/05/08/web/facebook-redesign/">post oficial</a> de Ashley Watkins e Royi Hagigi (engineering.fb.com, 2020) relata que a versão antiga carregava “mais de 400 KB de CSS comprimido (2 MB descomprimido)”, dos quais só 10% eram usados no primeiro render, e que a nova home baixa menos de 20% desse CSS. A citação, assim como o princípio “o mínimo possível, o mais cedo possível”, é consistente em várias reproduções, mas o original retornou erro 403 na verificação.</p></li>
+        <li><span class="gh">Atualidade</span><p>Várias fontes centrais são de 2019 a 2021, ou seja, mais de 5 anos atrás (marcadas com ⚠ em <a href="#fontes">Fontes</a>). As práticas parecem estáveis (o Radar 2025 reforça ADRs e advice process), mas os detalhes de processo interno podem ter mudado.</p></li>
+      </ul>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="lacunas" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#ressalvas">Próxima seção: Ressalvas</a>
+      </div>
+    </section>
+
+    <!-- RESSALVAS -->
+    <section id="ressalvas" class="sec" aria-labelledby="t-ressalvas">
+      <h2 id="t-ressalvas">Ressalvas</h2>
+      <ul class="gaps prose">
+        <li><span class="gh">Confiança</span><p>É alta onde Google, Uber, Spotify, Thoughtworks e GitHub convergem (documento escrito proporcional, alternativas, preocupações transversais, ADR, flags). É média para técnicas de fonte única (pre-mortem da Atlassian, two-phase deployment da Amazon, mini design doc do Google). É baixa para o modelo da Meta.</p></li>
+        <li><span class="gh">Fonte vs. interpretação</span><p>As tabelas indicam o que cada fonte afirma. As recomendações de uso (“quando faz sentido”), os estados de tela, o fatiamento e o template consolidado são síntese minha a partir dessas fontes.</p></li>
+        <li><span class="gh">Viés de publicação</span><p>Blogs de engenharia mostram práticas que deram certo, e quase nunca mostram a adesão real dentro da empresa. O próprio Google diz que o formato é informal e varia por time.</p></li>
+      </ul>
+
+      <div class="sec-foot">
+        <button class="btn done-btn" type="button" data-section="ressalvas" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="label">Marcar como estudada</span></button>
+        <a class="next" href="#inicio">Voltar ao início</a>
+      </div>
+
+      <footer class="site">
+        <p>Guia montado a partir do estudo “Refinamento técnico em grandes empresas de tecnologia: práticas, técnicas e um template aplicável a demandas de frontend”. O progresso de estudo e as marcações do checklist ficam salvos apenas neste navegador.</p>
+      </footer>
+    </section>
+
+  </main>
+</div>
+
+<a class="btn to-top" href="#inicio" aria-label="Voltar ao topo">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+  Topo
+</a>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+  var store = {
+    get: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Texto de busca das fontes (antes de adicionar avisos de nova aba) */
+  $$('#tabela-fontes tbody tr').forEach(function (r) { r.setAttribute('data-q', (r.textContent + ' ' + (r.getAttribute('data-kw') || '')).replace(/\s+/g, ' ')); });
+
+  /* Links externos: nova aba + aviso para leitores de tela */
+  $$('a[href^="http"]').forEach(function (a) {
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    var s = document.createElement('span');
+    s.className = 'sr-only';
+    s.textContent = ' (abre em nova aba)';
+    a.appendChild(s);
+  });
+
+  /* Aviso rápido */
+  var toastEl = $('#toast'), toastTimer;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2400);
+  }
+
+  /* Copiar para a área de transferência */
+  function copy(text, msg) {
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '0';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+      toast(ok ? msg : 'Não foi possível copiar. Selecione o texto e copie manualmente.');
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { toast(msg); }, fallback);
+    } else { fallback(); }
+  }
+
+  /* Tema */
+  var root = document.documentElement;
+  var themeLabels = { auto: 'Tema automático', light: 'Tema claro', dark: 'Tema escuro' };
+  var theme = store.get('rt-theme', 'auto');
+  function applyTheme() {
+    if (theme === 'light' || theme === 'dark') root.setAttribute('data-theme', theme);
+    else root.removeAttribute('data-theme');
+    $$('[data-theme-toggle]').forEach(function (b) {
+      var l = $('.label', b);
+      if (l) l.textContent = themeLabels[theme];
+      b.setAttribute('aria-label', 'Alternar tema. Atual: ' + themeLabels[theme].toLowerCase());
+    });
+  }
+  $$('[data-theme-toggle]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      theme = theme === 'auto' ? 'light' : theme === 'light' ? 'dark' : 'auto';
+      store.set('rt-theme', theme);
+      applyTheme();
+      toast(themeLabels[theme]);
+    });
+  });
+  applyTheme();
+
+  /* Menu lateral em telas menores */
+  var sidebar = $('#sidebar'), scrim = $('.scrim'), menuBtn = $('#menu-btn'), closeBtn = $('#drawer-close');
+  var desktop = window.matchMedia('(min-width: 1024px)');
+  function isOpen() { return sidebar.classList.contains('open'); }
+  function openNav() {
+    sidebar.classList.add('open');
+    scrim.classList.add('show');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    menuBtn.setAttribute('aria-label', 'Fechar menu de seções');
+    document.body.classList.add('lock');
+    var cur = $('.toc a[aria-current="true"]', sidebar) || $('.toc a', sidebar);
+    setTimeout(function () { cur.focus(); }, 50);
+  }
+  function closeNav(returnFocus) {
+    if (!isOpen()) return;
+    sidebar.classList.remove('open');
+    scrim.classList.remove('show');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.setAttribute('aria-label', 'Abrir menu de seções');
+    document.body.classList.remove('lock');
+    if (returnFocus !== false) menuBtn.focus();
+  }
+  menuBtn.addEventListener('click', function () { isOpen() ? closeNav() : openNav(); });
+  closeBtn.addEventListener('click', function () { closeNav(); });
+  scrim.addEventListener('click', function () { closeNav(); });
+  document.addEventListener('keydown', function (e) {
+    if (!isOpen() || desktop.matches) return;
+    if (e.key === 'Escape') { closeNav(); return; }
+    if (e.key === 'Tab') {
+      var f = $$('a[href], button:not([disabled])', sidebar);
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  $$('.toc a, .brand').forEach(function (a) {
+    a.addEventListener('click', function () { if (!desktop.matches) closeNav(false); });
+  });
+  var onMq = function () { closeNav(false); };
+  if (desktop.addEventListener) desktop.addEventListener('change', onMq); else if (desktop.addListener) desktop.addListener(onMq);
+
+  /* Seção atual no menu */
+  var sections = $$('main section.sec');
+  var tocLinks = {};
+  $$('.toc a').forEach(function (a) { tocLinks[a.getAttribute('href').slice(1)] = a; });
+  var topTitle = $('#topbar-section');
+  function setCurrent(id) {
+    Object.keys(tocLinks).forEach(function (k) {
+      if (k === id) tocLinks[k].setAttribute('aria-current', 'true');
+      else tocLinks[k].removeAttribute('aria-current');
+    });
+    if (tocLinks[id]) topTitle.textContent = $('.t', tocLinks[id]).textContent;
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) setCurrent(en.target.id); });
+    }, { rootMargin: '-30% 0px -65% 0px' });
+    sections.forEach(function (s) { io.observe(s); });
+  }
+  setCurrent(location.hash && tocLinks[location.hash.slice(1)] ? location.hash.slice(1) : 'inicio');
+
+  /* Progresso de leitura e botão de topo */
+  var bar = $('.progress span'), toTop = $('.to-top'), ticking = false;
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var y = window.pageYOffset || h.scrollTop;
+    bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, y / max) : 0) + ')';
+    toTop.classList.toggle('show', y > 900);
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* Seções estudadas */
+  var doneBtns = $$('.done-btn');
+  var done = store.get('rt-done', []);
+  function renderDone() {
+    doneBtns.forEach(function (b) {
+      var on = done.indexOf(b.getAttribute('data-section')) !== -1;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      $('.label', b).textContent = on ? 'Seção estudada' : 'Marcar como estudada';
+    });
+    Object.keys(tocLinks).forEach(function (id) {
+      var on = done.indexOf(id) !== -1;
+      tocLinks[id].parentNode.classList.toggle('done', on);
+      $('.st', tocLinks[id]).textContent = on ? ', estudada' : '';
+    });
+    $('#study-count').textContent = done.length + ' de ' + doneBtns.length;
+    $('#study-meter').style.width = (done.length / doneBtns.length * 100) + '%';
+  }
+  doneBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var id = b.getAttribute('data-section'), i = done.indexOf(id);
+      if (i === -1) done.push(id); else done.splice(i, 1);
+      store.set('rt-done', done);
+      renderDone();
+    });
+  });
+  $('#study-reset').addEventListener('click', function () {
+    done = [];
+    store.set('rt-done', done);
+    renderDone();
+    toast('Progresso recomeçado');
+  });
+  renderDone();
+
+  /* Tabelas viram cartões no celular: rótulo de cada célula */
+  $$('table.stack').forEach(function (t) {
+    var heads = $$('thead th', t).map(function (th) { return th.textContent.trim(); });
+    $$('tbody tr', t).forEach(function (tr) {
+      $$('td', tr).forEach(function (td, i) { td.setAttribute('data-label', heads[i] || ''); });
+    });
+  });
+
+  /* Filtro de técnicas */
+  var chips = $$('#tec-filtros .chip'), techRows = $$('#tabela-tecnicas tbody tr'), techCount = $('#tec-count');
+  chips.forEach(function (c) {
+    c.addEventListener('click', function () {
+      var f = c.getAttribute('data-filter'), n = 0;
+      chips.forEach(function (x) { x.setAttribute('aria-pressed', x === c ? 'true' : 'false'); });
+      techRows.forEach(function (r) {
+        var show = f === 'todas' || r.getAttribute('data-conf') === f;
+        r.hidden = !show;
+        if (show) n++;
+      });
+      techCount.textContent = n + (n === 1 ? ' técnica' : ' técnicas');
+    });
+  });
+
+  /* Abas do checklist */
+  var tabs = $$('.tabs [role="tab"]');
+  function selectTab(t, focus) {
+    tabs.forEach(function (x) {
+      var sel = x === t;
+      x.setAttribute('aria-selected', sel ? 'true' : 'false');
+      x.tabIndex = sel ? 0 : -1;
+      document.getElementById(x.getAttribute('aria-controls')).hidden = !sel;
+    });
+    if (focus) t.focus();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { selectTab(t); });
+    t.addEventListener('keydown', function (e) {
+      var j = null;
+      if (e.key === 'ArrowRight') j = (i + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
+      else if (e.key === 'Home') j = 0;
+      else if (e.key === 'End') j = tabs.length - 1;
+      if (j !== null) { e.preventDefault(); selectTab(tabs[j], true); }
+    });
+  });
+  if (tabs.length) selectTab(tabs[0]);
+
+  /* Checklist: marcações salvas e contagem */
+  var checks = $$('.check-list input[type="checkbox"]');
+  var state = store.get('rt-check', {});
+  function updateCounts() {
+    $$('.check-group').forEach(function (g) {
+      var all = $$('input[type="checkbox"]', g);
+      var n = all.filter(function (i) { return i.checked; }).length;
+      $('.count', g).textContent = n + ' de ' + all.length;
+    });
+    $$('[role="tabpanel"]').forEach(function (p) {
+      var all = $$('input[type="checkbox"]', p);
+      var n = all.filter(function (i) { return i.checked; }).length;
+      var tab = document.getElementById(p.getAttribute('aria-labelledby'));
+      $('.tab-count', tab).textContent = n + '/' + all.length;
+    });
+  }
+  checks.forEach(function (c) {
+    c.checked = !!state[c.getAttribute('data-id')];
+    c.addEventListener('change', function () {
+      state[c.getAttribute('data-id')] = c.checked;
+      store.set('rt-check', state);
+      updateCounts();
+    });
+  });
+  updateCounts();
+
+  function plainText(el) {
+    var c = el.cloneNode(true);
+    $$('.sr-only', c).forEach(function (n) { n.remove(); });
+    $$('.tag-sint', c).forEach(function (n) { n.textContent = '(síntese)'; });
+    return c.textContent.replace(/\s+/g, ' ').trim();
+  }
+  $('#check-copy').addEventListener('click', function () {
+    var md = '# Checklist de refinamento técnico\n';
+    $$('[role="tabpanel"]').forEach(function (p) {
+      var tab = document.getElementById(p.getAttribute('aria-labelledby'));
+      md += '\n## ' + $('.tab-name', tab).textContent + '\n';
+      $$('.check-group', p).forEach(function (g) {
+        md += '\n### ' + $('.gname', g).textContent + '\n';
+        $$('.check-list li', g).forEach(function (li) {
+          var i = $('input', li);
+          md += '- [' + (i.checked ? 'x' : ' ') + '] ' + plainText($('.txt', li)) + '\n';
+        });
+      });
+    });
+    copy(md, 'Checklist copiado em Markdown');
+  });
+  $('#check-reset').addEventListener('click', function () {
+    if (!window.confirm('Limpar todas as marcações do checklist?')) return;
+    state = {};
+    store.set('rt-check', state);
+    checks.forEach(function (c) { c.checked = false; });
+    updateCounts();
+    toast('Marcações limpas');
+  });
+
+  /* Template: copiar e baixar */
+  var tpl = $('#tpl');
+  $('#tpl-copy').addEventListener('click', function () { copy(tpl.textContent, 'Template copiado'); });
+  $('#tpl-download').addEventListener('click', function () {
+    try {
+      var blob = new Blob([tpl.textContent], { type: 'text/markdown;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'mini-design-doc-frontend.md';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+      toast('Download iniciado');
+    } catch (e) {
+      toast('Não foi possível baixar. Use “Copiar template”.');
+    }
+  });
+
+  /* Busca nas fontes */
+  var sInput = $('#fonte-busca'), sRows = $$('#tabela-fontes tbody tr'), sCount = $('#fonte-count'), sEmpty = $('#fonte-vazio');
+  var norm = function (s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); };
+  $('#hero-fontes').textContent = sRows.length;
+  sCount.textContent = sRows.length + ' fontes';
+  sInput.addEventListener('input', function () {
+    var q = norm(sInput.value.trim()), n = 0;
+    sRows.forEach(function (r) {
+      var show = !q || norm(r.getAttribute('data-q') || '').indexOf(q) !== -1;
+      r.hidden = !show;
+      if (show) n++;
+    });
+    sCount.textContent = q ? (n + (n === 1 ? ' fonte encontrada' : ' fontes encontradas')) : (n + ' fontes');
+    sEmpty.hidden = n !== 0;
+    $('#tabela-fontes').closest('.table-wrap').hidden = n === 0;
+  });
+})();
+</script>
+</body>
+</html>
