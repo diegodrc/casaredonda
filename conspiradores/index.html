@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menu | Conspiradores</title>
+<meta name="description" content="Cardápio do Conspiradores — Chef Arthur Guimarães">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Josefin+Sans:wght@300;400;600&family=Allura&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fbfbf9;
+    --ink:#1f1f1f;
+    --muted:#6b6b6b;
+    --cloud:#8a8f98;
+    --line:#2a2a2a;
+    --soft:#ececea;
+    --accent:#5d6b4f;
+    --max:760px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Josefin Sans",system-ui,sans-serif;
+    font-weight:400;
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- Cabeçalho ---------- */
+  header.hero{
+    text-align:center;
+    padding:48px 16px 24px;
+  }
+  .hero-top{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .branch{width:70px;height:120px;flex:none;color:var(--ink)}
+  .branch.right{transform:scaleX(-1)}
+  .cloud-wrap{position:relative;width:min(260px,58vw)}
+  .cloud-wrap svg{width:100%;height:auto;display:block}
+  .cloud-wrap h1{
+    position:absolute;inset:auto 0 22% 0;
+    font-family:"Cormorant Garamond",serif;font-weight:500;
+    font-size:clamp(2.6rem,10vw,3.6rem);letter-spacing:.01em;
+    color:#1b1b1b;
+  }
+  .rule{
+    position:relative;height:2px;background:var(--line);
+    width:min(300px,70vw);margin:-6px auto 0;
+  }
+  .rule::before,.rule::after{
+    content:"";position:absolute;top:-3px;width:8px;height:8px;background:var(--line);
+  }
+  .rule::before{left:0}.rule::after{right:0}
+  .brand{
+    font-family:"Allura",cursive;font-size:2.6rem;line-height:1;
+    margin-top:22px;
+  }
+  .chef{
+    margin-top:6px;font-size:.9rem;color:var(--muted);letter-spacing:.06em;
+  }
+
+  /* ---------- Navegação ---------- */
+  nav.cats{
+    position:sticky;top:0;z-index:10;
+    background:rgba(251,251,249,.94);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--soft);
+  }
+  .cats-inner{
+    max-width:var(--max);margin:0 auto;
+    display:flex;gap:8px;overflow-x:auto;
+    padding:12px 16px;scrollbar-width:none;
+  }
+  .cats-inner::-webkit-scrollbar{display:none}
+  .cats a{
+    flex:none;text-decoration:none;color:var(--ink);
+    font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    padding:8px 14px;border:1px solid var(--soft);border-radius:999px;
+    transition:background .2s,color .2s,border-color .2s;
+  }
+  .cats a.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  .search{
+    max-width:var(--max);margin:0 auto;padding:0 16px 12px;
+  }
+  .search input{
+    width:100%;font:inherit;font-size:.95rem;
+    padding:10px 14px;border:1px solid var(--soft);border-radius:10px;
+    background:#fff;color:var(--ink);outline:none;
+  }
+  .search input:focus{border-color:var(--cloud)}
+
+  /* ---------- Seções ---------- */
+  main{max-width:var(--max);margin:0 auto;padding:8px 16px 40px}
+  section.cat{padding-top:40px;scroll-margin-top:120px}
+  section.cat h2{
+    text-align:center;font-weight:400;
+    font-size:clamp(1.25rem,4.6vw,1.6rem);letter-spacing:.06em;text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  section.cat .sub-rule{
+    position:relative;height:1.5px;background:var(--line);
+    width:min(220px,55vw);margin:0 auto 26px;
+  }
+  section.cat .sub-rule::before,section.cat .sub-rule::after{
+    content:"";position:absolute;top:-2.5px;width:6px;height:6px;background:var(--line);
+  }
+  section.cat .sub-rule::before{left:0}
+  section.cat .sub-rule::after{right:0}
+
+  ul.items{list-style:none}
+  li.item{padding:12px 0}
+  .row{display:flex;align-items:flex-end;gap:10px}
+  .name{
+    font-weight:600;font-size:.86rem;letter-spacing:.16em;text-transform:uppercase;
+  }
+  .leader{flex:1;min-width:24px;border-bottom:1px solid var(--line);transform:translateY(-6px)}
+  .price{flex:none;font-weight:600;font-size:.98rem;white-space:nowrap}
+  .desc{
+    margin-top:4px;font-weight:300;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;
+    color:#3a3a3a;max-width:88%;
+  }
+  .note{
+    margin-top:6px;font-size:.82rem;font-weight:600;letter-spacing:.04em;color:var(--accent);
+  }
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .tag{
+    font-size:.64rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    padding:3px 8px;border-radius:999px;background:#eef1ea;color:var(--accent);
+  }
+  .empty{
+    display:none;text-align:center;color:var(--muted);padding:48px 0;letter-spacing:.04em;
+  }
+
+  /* ---------- Rodapé ---------- */
+  footer{
+    border-top:1px solid var(--soft);
+    text-align:center;padding:32px 16px 48px;
+  }
+  footer .brand{margin-top:0}
+  footer .chef{margin-top:8px;color:var(--ink);font-size:1rem}
+  footer .ig{display:flex;flex-direction:column;gap:4px;margin-top:10px}
+  footer a{color:var(--muted);text-decoration:none;font-size:.9rem}
+  footer a:hover{color:var(--ink)}
+
+  .to-top{
+    position:fixed;right:16px;bottom:16px;z-index:20;
+    width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;
+    background:var(--ink);color:var(--paper);font-size:1.1rem;
+    opacity:0;pointer-events:none;transition:opacity .25s;
+  }
+  .to-top.show{opacity:.9;pointer-events:auto}
+
+  @media (max-width:520px){
+    .branch{width:46px;height:84px}
+    .desc{max-width:100%}
+    .name{font-size:.8rem;letter-spacing:.12em}
+  }
+</style>
+</head>
+<body>
+
+<!-- Raminho desenhado (reutilizado) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="branch" viewBox="0 0 70 120">
+    <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 116 C30 90, 38 60, 52 6"/>
+      <path d="M50 14 C44 10, 42 4, 46 0 C50 4, 52 10, 50 14Z"/>
+      <path d="M48 24 C56 20, 62 16, 64 10 C58 10, 52 16, 48 24Z"/>
+      <path d="M46 30 C38 26, 34 20, 34 14 C40 16, 44 22, 46 30Z"/>
+      <path d="M43 44 C52 42, 60 36, 63 28 C55 29, 47 35, 43 44Z"/>
+      <path d="M41 52 C33 49, 27 42, 26 34 C33 37, 39 44, 41 52Z"/>
+      <path d="M36 68 C46 67, 55 61, 59 52 C50 53, 41 59, 36 68Z"/>
+      <path d="M33 76 C24 74, 17 67, 15 58 C23 61, 30 68, 33 76Z"/>
+      <path d="M28 92 C37 92, 46 87, 50 79 C42 79, 33 84, 28 92Z"/>
+    </g>
+  </symbol>
+</svg>
+
+<header class="hero">
+  <div class="hero-top">
+    <svg class="branch"><use href="#branch"/></svg>
+    <div class="cloud-wrap">
+      <svg viewBox="0 0 260 170" aria-hidden="true">
+        <path fill="var(--cloud)" d="M48 168 C20 168 4 150 4 128 C4 104 24 88 48 90 C50 66 70 50 94 54 C104 24 132 6 164 12 C196 18 214 46 210 76 C234 76 256 96 256 122 C256 148 236 168 210 168 Z"/>
+      </svg>
+      <h1>Menu</h1>
+    </div>
+    <svg class="branch right"><use href="#branch"/></svg>
+  </div>
+  <div class="rule"></div>
+  <div class="brand">Conspiradores</div>
+  <div class="chef">Chef Arthur Guimarães</div>
+</header>
+
+<nav class="cats" aria-label="Categorias">
+  <div class="cats-inner" id="catNav"></div>
+  <div class="search">
+    <input id="q" type="search" placeholder="Buscar no cardápio…" aria-label="Buscar no cardápio" autocomplete="off">
+  </div>
+</nav>
+
+<main id="menu"></main>
+<p class="empty" id="empty">Nenhum item encontrado.</p>
+
+<footer>
+  <div class="brand">Conspiradores</div>
+  <div class="chef">Chef Arthur Guimarães</div>
+  <div class="ig">
+    <a href="https://instagram.com/chef_guimaraes" target="_blank" rel="noopener">@Chef_guimaraes</a>
+    <a href="https://instagram.com/conspiradoresoficial" target="_blank" rel="noopener">@conspiradoresoficial</a>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+const MENU = [
+  { id:"entradas", title:"Entradas e Porções", items:[
+    { n:"Ceviche de Tilápia", p:59.90 },
+    { n:"Ceviche de Banana da Terra", p:59.90 },
+    { n:"Pastel de Queijo Curado", d:"Com molho tártaro · 8 unidades", p:33.90 },
+    { n:"Croqueta de Costela", d:"Com maionese aioli · 6 unidades", p:49.90 },
+    { n:"Batatas Rústicas 300g", d:"Com maionese de páprica defumada", p:35.90 },
+    { n:"Bruschetta de Cogumelos Cremoso", d:"6 unidades", p:42.90 },
+    { n:"Espetinho de Filé Mignon (150g)", d:"Com farofa de alho e molho chimichurri fresco", p:49.90 },
+    { n:"Espetinho de Queijo Coalho", d:"Com caramelo de limão-siciliano e farofa de alho · 2 unidades", p:49.90 },
+    { n:"Filé Mignon a Palito (300g)", d:"Com batatas rústicas (300g), acompanha vinagrete sweet e farofa crocante", p:99.90 },
+    { n:"Fish and Chips", d:"Deliciosa tilápia crocante (300g) com batatas rústicas (300g) e maionese especial", p:78.90 },
+    { n:"Filé ao Molho Gorgonzola", d:"300g de filé grelhado ao molho de gorgonzola, acompanha torradas · 8 unidades", p:99.80 },
+    { n:"Sanduíche de Costela Desfiada", d:"Brioche artesanal, costela cremosa desfiada, queijo prato, picles de pepino e cebola roxa e barbecue artesanal", p:38.90, note:"+ R$ 18,90 adicional de batata (300g)" },
+    { n:"Camafeu", d:"Com molho tártaro · 8 unidades", p:76.90 },
+    { n:"Pastel de Angu", d:"Carne, queijo ou misto · 10 unidades", p:42.90 },
+    { n:"Pastel de Angu Especial", d:"Carne seca c/ requeijão ou alho-poró c/ requeijão · 10 unidades", p:49.90 },
+  ]},
+  { id:"compartilhar", title:"Pratos para Compartilhar", items:[
+    { n:"Feijoada Completa", d:"Acompanha arroz, feijoada, farofa de alho, vinagrete e couve", p:64.90 },
+    { n:"Tropeiro das Gerais", d:"Feijão tropeiro, acompanha arroz, ovo caipira gema mole e vinagrete sweet", p:64.90 },
+    { n:"Costelinha Defumada (300g)", d:"Ao molho barbecue com batatas rústicas (300g)", p:89.90 },
+    { n:"Torresmo Crocante (300g)", d:"Acompanha vinagrete sweet", p:49.90 },
+    { n:"Moqueca de Tilápia", d:"Com arroz de coco", p:99.90 },
+    { n:"Moqueca Vegetariana de Banana da Terra", d:"Com arroz de coco", p:88.90, t:["Vegetariano"] },
+    { n:"Joelho de Porco Caipira Defumado", d:"Acompanha arroz, picles de quiabo, farofa de castanha e demi-glace de porco", p:179.90, t:["Serve até 3 pessoas"] },
+    { n:"Ancho Angus (300g)", d:"Com batatas rústicas (300g), acompanha farofa de castanha", p:99.80 },
+  ]},
+  { id:"saladas", title:"Saladas", items:[
+    { n:"Salada de Folhas com Carpaccio de Manga", d:"Caramelo de limão-siciliano e queijo curado", p:28.90 },
+    { n:"Salada de Folhas com Frango Defumado", d:"Nozes e molho de iogurte natural", p:33.90 },
+  ]},
+  { id:"individuais", title:"Pratos Individuais", items:[
+    { n:"Talharim na Manteiga de Ervas com Camarão", d:"200g", p:89.90 },
+    { n:"Talharim Vegetariano", d:"Com creme de cogumelos e medalhão de berinjela glaceado", p:72.90, t:["Vegetariano"] },
+    { n:"Arroz de Costela Bovina Desfiada", d:"Com picles de cebola", p:72.90 },
+    { n:"Cupim Brasatto", d:"Cupim braseado 150g assado lentamente com arroz cremoso de cogumelo funghi secchi e bacon, molho glaceado e crispies de alho-poró", p:93.90 },
+    { n:"Escalope de Filé Mignon (150g)", d:"Com risoto parmeggiano (parmesão) e molho demi-glace", p:92.00 },
+    { n:"Escalope de Berinjela Glaceado", d:"Com risoto parmeggiano (parmesão)", p:78.90 },
+    { n:"Tilápia à Belle Meunière", d:"Tilápia grelhada com purê de batatas e saladinha de folhas", p:78.90 },
+    { n:"Tilápia Grelhada", d:"Com purê de banana da terra", p:78.90 },
+    { n:"Tilápia com Risoto de Limão-Siciliano", p:78.90 },
+    { n:"Risoto de Banana da Terra e Bacon", p:72.90 },
+    { n:"Risoto de Camarão", p:92.00 },
+  ]},
+  { id:"sobremesas", title:"Sobremesas", items:[
+    { n:"Trio de Brigadeiros", d:"Oreo, brigadeiro branco e brigadeiro 70% cacau", p:33.90 },
+    { n:"Torta de Chocolate Meio Amargo", p:45.90 },
+    { n:"Sorvete de Queijo", d:"Com calda de goiabada quente", p:38.90 },
+    { n:"Brownie de Chocolate", d:"Com caramelo de café e sorvete de creme", p:38.90 },
+  ]},
+  { id:"drinks", title:"Drinks", items:[
+    { n:"Caipirosca de Morango", d:"Vodka Skyy, morango e açúcar", p:35.00 },
+    { n:"Caipirosca de Abacaxi", d:"Vodka Skyy, abacaxi e açúcar", p:24.90 },
+    { n:"Caipirosca de Limão", d:"Vodka Skyy, limão e açúcar", p:32.90 },
+    { n:"Caipirinha Dourada", d:"Cachaça Sagatiba, limão e açúcar", p:27.90 },
+    { n:"Pink Tonic", d:"Gordon's, xarope Monin grenadine, água tônica e morango", p:45.90 },
+    { n:"Gordon's & Tonic", d:"Gordon's, água tônica, limão-siciliano e anis-estrelado", p:35.00 },
+    { n:"Conspiradores — Zero Álcool", d:"Energético de morango, morango, limão, açúcar, geleia de morango, espuma de morango e hortelã", p:33.90, t:["Sem álcool"] },
+    { n:"Conspiradores", d:"Energético de morango, morango, gin, limão, açúcar, geleia de morango, espuma de morango e hortelã", p:45.90 },
+    { n:"Tanqueray Tonic", d:"Tanqueray London Dry Gin, água tônica, limão e alecrim", p:39.90 },
+    { n:"Blonde Sweet", d:"J.W. Blonde, refrigerante de guaraná e xarope de morango", p:39.90 },
+    { n:"Blonde Citrus | Highball", d:"J.W. Blonde, suco de limão-taiti, soda limonada e laranja", p:39.90 },
+    { n:"Johnnie Walker Black Old Fashioned", d:"Johnnie Walker Black Label, Monin de laranja e laranja", p:49.90 },
+    { n:"Fitzgerald", d:"Tanqueray London Dry Gin, suco de limão-siciliano, açúcar, bitter aromático e zest de limão-siciliano", p:40.00 },
+  ]},
+  { id:"nao-alcoolicas", title:"Bebidas Não Alcoólicas", items:[
+    { n:"Água", p:8.00 },
+    { n:"Água com Gás", p:8.00 },
+    { n:"Água Tônica", p:8.90 },
+    { n:"Refrigerante Lata | KS", p:8.90 },
+    { n:"Suco Mitto Integral", p:18.90 },
+    { n:"Suco Natural", p:18.90 },
+    { n:"Energético Red Bull", p:25.00 },
+    { n:"Energético Monster", p:25.00 },
+  ]},
+  { id:"alcoolicas", title:"Bebidas Alcoólicas", items:[
+    { n:"Amstel 600ml", p:18.00 },
+    { n:"Heineken 600ml", p:21.00 },
+    { n:"Heineken Long Neck 330ml", p:15.00 },
+    { n:"Heineken Long Neck Zero 330ml", p:15.00 },
+    { n:"Heineken Long Neck Ultimate 330ml", p:15.00 },
+    { n:"Baden Baden", d:"Cristal, IPA, Witbier, Golden ou Peach", p:24.90 },
+    { n:"Ice", p:25.00 },
+    { n:"Blue Moon", p:19.90 },
+    { n:"Chopp 300ml", p:9.90 },
+    { n:"Chopp 500ml", p:15.00 },
+  ]},
+];
+
+const brl = v => "R$ " + v.toFixed(2).replace(".", ",");
+const norm = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+
+const main = document.getElementById("menu");
+const nav = document.getElementById("catNav");
+
+// Render
+main.innerHTML = MENU.map(cat => `
+  <section class="cat" id="${cat.id}">
+    <h2>${esc(cat.title)}</h2>
+    <div class="sub-rule"></div>
+    <ul class="items">
+      ${cat.items.map(it => `
+        <li class="item" data-search="${esc(norm([it.n, it.d || "", (it.t || []).join(" ")].join(" ")))}">
+          <div class="row">
+            <span class="name">${esc(it.n)}</span>
+            <span class="leader"></span>
+            <span class="price">${brl(it.p)}</span>
+          </div>
+          ${it.d ? `<p class="desc">${esc(it.d)}</p>` : ""}
+          ${it.note ? `<p class="note">${esc(it.note)}</p>` : ""}
+          ${it.t ? `<div class="tags">${it.t.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>` : ""}
+        </li>`).join("")}
+    </ul>
+  </section>`).join("");
+
+nav.innerHTML = MENU.map(c => `<a href="#${c.id}" data-id="${c.id}">${esc(c.title)}</a>`).join("");
+
+// Categoria ativa conforme a rolagem
+const links = [...nav.querySelectorAll("a")];
+function setActive(id){
+  links.forEach(a => {
+    const on = a.dataset.id === id;
+    a.classList.toggle("active", on);
+    if (on) a.scrollIntoView({ behavior:"smooth", inline:"center", block:"nearest" });
+  });
+}
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+}, { rootMargin:"-45% 0px -50% 0px" });
+document.querySelectorAll("section.cat").forEach(s => observer.observe(s));
+
+// Busca
+const q = document.getElementById("q");
+const empty = document.getElementById("empty");
+q.addEventListener("input", () => {
+  const term = norm(q.value.trim());
+  let total = 0;
+  document.querySelectorAll("section.cat").forEach(sec => {
+    let visible = 0;
+    sec.querySelectorAll("li.item").forEach(li => {
+      const show = !term || li.dataset.search.includes(term);
+      li.style.display = show ? "" : "none";
+      if (show) visible++;
+    });
+    sec.style.display = visible ? "" : "none";
+    total += visible;
+  });
+  empty.style.display = total ? "none" : "block";
+});
+
+// Voltar ao topo
+const toTop = document.getElementById("toTop");
+window.addEventListener("scroll", () => {
+  toTop.classList.toggle("show", window.scrollY > 600);
+}, { passive:true });
+toTop.addEventListener("click", () => window.scrollTo({ top:0, behavior:"smooth" }));
+</script>
+</body>
+</html>
