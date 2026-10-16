@@ -1,0 +1,1177 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2f6fde">
+<title>Estruturas de Dados C#</title>
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --surface: #ffffff;
+    --surface-2: #f0f2f5;
+    --text: #1b1e23;
+    --muted: #5f6875;
+    --border: #e1e5ea;
+    --accent: #2f6fde;
+    --accent-soft: #e6eefc;
+    --ok: #1d8348;
+    --ok-soft: #e1f3e8;
+    --bad: #c0392b;
+    --bad-soft: #fbe7e5;
+    --t-ess: #2f6fde; --t-ess-bg: #e6eefc;
+    --t-imp: #8a5a00; --t-imp-bg: #fbf0d9;
+    --t-bom: #5d6b7a; --t-bom-bg: #eceff3;
+    --code-bg: #0f1621;
+    --code-text: #dde5ee;
+    --shadow: 0 1px 2px rgba(0,0,0,.05), 0 2px 8px rgba(0,0,0,.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1117; --surface: #161b22; --surface-2: #1c222b;
+      --text: #e6edf3; --muted: #8d96a1; --border: #2a313c;
+      --accent: #5d9cff; --accent-soft: #19263d;
+      --ok: #3fb950; --ok-soft: #132a1c; --bad: #f47067; --bad-soft: #2d1716;
+      --t-ess: #7fb0ff; --t-ess-bg: #19263d;
+      --t-imp: #e3b341; --t-imp-bg: #2b2412;
+      --t-bom: #a4afbb; --t-bom-bg: #222a33;
+      --code-bg: #0a0e14;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1117; --surface: #161b22; --surface-2: #1c222b;
+    --text: #e6edf3; --muted: #8d96a1; --border: #2a313c;
+    --accent: #5d9cff; --accent-soft: #19263d;
+    --ok: #3fb950; --ok-soft: #132a1c; --bad: #f47067; --bad-soft: #2d1716;
+    --t-ess: #7fb0ff; --t-ess-bg: #19263d;
+    --t-imp: #e3b341; --t-imp-bg: #2b2412;
+    --t-bom: #a4afbb; --t-bom-bg: #222a33;
+    --code-bg: #0a0e14;
+    --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+    overflow-x: hidden;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  a { color: var(--accent); }
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .86em; background: var(--surface-2); border: 1px solid var(--border);
+    padding: 0 .3em; border-radius: 5px; word-break: break-word;
+  }
+
+  /* Header */
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+  }
+  .head-row { display: flex; align-items: center; gap: 12px; max-width: 760px; margin: 0 auto; }
+  .head-row h1 { font-size: 17px; margin: 0; flex: 1; letter-spacing: -.01em; }
+  .head-row h1 span { color: var(--muted); font-weight: 500; }
+  .icon-btn {
+    width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--surface); display: grid; place-items: center; flex: none;
+  }
+  .progress { max-width: 760px; margin: 8px auto 0; display: flex; align-items: center; gap: 10px; }
+  .bar { flex: 1; height: 6px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--ok); border-radius: 99px; transition: width .3s; }
+  .progress small { color: var(--muted); font-size: 13px; white-space: nowrap; }
+
+  main { max-width: 760px; margin: 0 auto; padding: 14px 16px; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Controls */
+  .search {
+    width: 100%; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text); font-size: 16px; outline: none;
+  }
+  .search:focus { border-color: var(--accent); }
+  .chips { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0 4px; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: none; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--border);
+    background: var(--surface); font-size: 14px; color: var(--muted);
+  }
+  .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .intro {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 12px 14px; margin: 10px 0; font-size: 15px; box-shadow: var(--shadow);
+  }
+  .intro p { margin: 0 0 6px; }
+  .intro p:last-child { margin: 0; }
+
+  /* Cards */
+  details.card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    margin: 10px 0; box-shadow: var(--shadow); overflow: hidden;
+  }
+  details.card > summary {
+    list-style: none; display: flex; align-items: center; gap: 12px; padding: 13px 14px;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  details.card > summary::-webkit-details-marker { display: none; }
+  .num {
+    width: 34px; height: 34px; border-radius: 10px; flex: none; display: grid; place-items: center;
+    background: var(--surface-2); font-weight: 700; font-size: 14px; color: var(--muted);
+  }
+  .card.done .num { background: var(--ok); color: #fff; }
+  .s-text { flex: 1; min-width: 0; }
+  .s-title { font-weight: 650; font-size: 16px; line-height: 1.3; }
+  .s-sub { display: flex; gap: 6px; align-items: center; margin-top: 3px; flex-wrap: wrap; }
+  .en { color: var(--muted); font-size: 13px; }
+  .tag { font-size: 11.5px; font-weight: 600; padding: 1px 8px; border-radius: 99px; }
+  .tag.ess { color: var(--t-ess); background: var(--t-ess-bg); }
+  .tag.imp { color: var(--t-imp); background: var(--t-imp-bg); }
+  .tag.bom { color: var(--t-bom); background: var(--t-bom-bg); }
+  .chev { color: var(--muted); transition: transform .2s; flex: none; }
+  details[open] > summary .chev { transform: rotate(90deg); }
+
+  .body { padding: 0 14px 16px; border-top: 1px solid var(--border); }
+  .body .lead { margin: 12px 0 4px; }
+  .body h3 {
+    font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted);
+    margin: 16px 0 6px;
+  }
+  .body ul { margin: 0; padding-left: 20px; }
+  .body li { margin: 5px 0; }
+
+  /* Code */
+  .code-wrap { position: relative; margin: 10px 0 0; }
+  pre {
+    margin: 0; background: var(--code-bg); color: var(--code-text);
+    border-radius: 12px; padding: 14px 14px 14px; overflow-x: auto;
+    font: 12.8px/1.55 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    -webkit-overflow-scrolling: touch; max-width: 100%;
+  }
+  .copy {
+    position: absolute; top: 8px; right: 8px; font-size: 12px; padding: 4px 9px;
+    border-radius: 8px; border: 1px solid rgba(255,255,255,.15);
+    background: rgba(255,255,255,.08); color: #cfd8e3;
+  }
+  .c-kw { color: #ff7b72; }
+  .c-type { color: #79c0ff; }
+  .c-str { color: #a5d6ff; }
+  .c-num { color: #f2cc60; }
+  .c-com { color: #8b949e; font-style: italic; }
+
+  /* Practice */
+  .practice { list-style: none; padding: 0 !important; margin: 0; }
+  .practice li { display: flex; align-items: center; gap: 10px; margin: 2px 0 !important; }
+  .practice label { display: flex; align-items: center; gap: 10px; flex: 1; padding: 6px 0; min-width: 0; }
+  .practice input { width: 20px; height: 20px; accent-color: var(--ok); flex: none; }
+  .practice input:checked + span { color: var(--muted); text-decoration: line-through; }
+  .practice a { font-size: 13px; text-decoration: none; flex: none; padding: 4px 8px; border-radius: 8px; background: var(--accent-soft); }
+
+  .study-btn {
+    width: 100%; margin-top: 16px; padding: 12px; border-radius: 12px;
+    border: 1px solid var(--ok); background: transparent; color: var(--ok); font-weight: 600;
+  }
+  .card.done .study-btn { background: var(--ok-soft); }
+
+  /* Table */
+  .table-scroll { overflow-x: auto; margin-top: 10px; border: 1px solid var(--border); border-radius: 10px; }
+  table { border-collapse: collapse; font-size: 13.5px; min-width: 560px; width: 100%; }
+  th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th { background: var(--surface-2); font-weight: 600; }
+  tr:last-child td { border-bottom: 0; }
+
+  .empty { text-align: center; color: var(--muted); padding: 30px 0; }
+
+  /* Flashcards */
+  .fc-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .fc-top small { color: var(--muted); }
+  .score { display: flex; gap: 8px; font-size: 14px; }
+  .score span { padding: 2px 10px; border-radius: 99px; }
+  .score .r { background: var(--ok-soft); color: var(--ok); }
+  .score .w { background: var(--bad-soft); color: var(--bad); }
+  .flash {
+    perspective: 1200px; height: 300px; margin: 6px 0 14px; -webkit-tap-highlight-color: transparent;
+  }
+  .flash-inner {
+    position: relative; width: 100%; height: 100%; transition: transform .45s;
+    transform-style: preserve-3d; cursor: pointer;
+  }
+  .flash.flipped .flash-inner { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+    padding: 22px; display: flex; flex-direction: column; justify-content: center; box-shadow: var(--shadow);
+    overflow-y: auto;
+  }
+  .face.back { transform: rotateY(180deg); background: var(--accent-soft); }
+  .face .label { font-size: 12px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 10px; }
+  .face .q { font-size: 20px; font-weight: 650; line-height: 1.35; }
+  .face .a { font-size: 17px; line-height: 1.5; }
+  .face .hint { margin-top: auto; padding-top: 14px; color: var(--muted); font-size: 13px; }
+  .fc-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .fc-actions button {
+    padding: 14px; border-radius: 14px; font-weight: 650; border: 1px solid var(--border); background: var(--surface);
+  }
+  .fc-actions .no { color: var(--bad); border-color: var(--bad); }
+  .fc-actions .yes { color: var(--ok); border-color: var(--ok); }
+  .fc-secondary { display: flex; gap: 10px; margin-top: 10px; }
+  .fc-secondary button {
+    flex: 1; padding: 10px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 14px;
+  }
+  .result { text-align: center; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 28px 18px; }
+  .result .big { font-size: 40px; font-weight: 750; }
+  .result p { color: var(--muted); }
+  .result button {
+    display: block; width: 100%; margin-top: 10px; padding: 13px; border-radius: 12px; font-weight: 600;
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  }
+  .result button.alt { background: transparent; color: var(--accent); }
+
+  /* Tips */
+  .tip {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 12px 14px; margin: 10px 0; box-shadow: var(--shadow);
+  }
+  .tip b { display: block; margin-bottom: 3px; }
+  .tip div { color: var(--text); font-size: 15px; }
+
+  /* Bottom nav */
+  nav.tabs {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+  }
+  nav.tabs button {
+    border: 0; background: transparent; padding: 6px 4px; border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 12px; color: var(--muted);
+  }
+  nav.tabs button.on { color: var(--accent); background: var(--accent-soft); }
+  nav.tabs svg { width: 22px; height: 22px; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: calc(90px + env(safe-area-inset-bottom)); transform: translateX(-50%) translateY(20px);
+    background: var(--text); color: var(--bg); padding: 8px 14px; border-radius: 99px; font-size: 14px;
+    opacity: 0; transition: .25s; pointer-events: none; z-index: 20;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-row">
+    <h1>Estruturas de Dados <span>· C#</span></h1>
+    <button class="icon-btn" id="themeBtn" aria-label="Alternar tema">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </div>
+  <div class="progress">
+    <div class="bar"><i id="bar"></i></div>
+    <small id="progressText">0/14 estudados</small>
+  </div>
+</header>
+
+<main>
+  <section class="view active" id="view-guide">
+    <input class="search" id="search" type="search" placeholder="Buscar (ex.: heap, BFS, Dictionary)" autocomplete="off">
+    <div class="chips" id="chips"></div>
+
+    <div class="intro">
+      <p>Estude na ordem: os 7 primeiros tópicos cobrem a maioria das entrevistas de código da Amazon.</p>
+      <p>Na entrevista: apresente a força bruta, diga qual estrutura remove o gargalo, implemente e explique a complexidade de tempo e espaço.</p>
+    </div>
+
+    <details class="card" id="overview">
+      <summary>
+        <div class="num">O</div>
+        <div class="s-text">
+          <div class="s-title">Tabela de complexidade</div>
+          <div class="s-sub"><span class="en">Big-O e o tipo equivalente em C#</span></div>
+        </div>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+      </summary>
+      <div class="body">
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Estrutura</th><th>Tipo C#</th><th>Acesso</th><th>Busca</th><th>Inserção</th><th>Remoção</th></tr></thead>
+            <tbody>
+              <tr><td>Array</td><td><code>T[]</code></td><td>O(1)</td><td>O(n)</td><td>O(n)</td><td>O(n)</td></tr>
+              <tr><td>Array dinâmico</td><td><code>List&lt;T&gt;</code></td><td>O(1)</td><td>O(n)</td><td>O(1) amort. no fim</td><td>O(n)</td></tr>
+              <tr><td>Hash map</td><td><code>Dictionary&lt;K,V&gt;</code></td><td>—</td><td>O(1) médio</td><td>O(1) médio</td><td>O(1) médio</td></tr>
+              <tr><td>Hash set</td><td><code>HashSet&lt;T&gt;</code></td><td>—</td><td>O(1) médio</td><td>O(1) médio</td><td>O(1) médio</td></tr>
+              <tr><td>Lista ligada</td><td><code>LinkedList&lt;T&gt;</code></td><td>O(n)</td><td>O(n)</td><td>O(1) no nó</td><td>O(1) no nó</td></tr>
+              <tr><td>Pilha</td><td><code>Stack&lt;T&gt;</code></td><td>topo O(1)</td><td>O(n)</td><td>O(1)</td><td>O(1)</td></tr>
+              <tr><td>Fila</td><td><code>Queue&lt;T&gt;</code></td><td>início O(1)</td><td>O(n)</td><td>O(1)</td><td>O(1)</td></tr>
+              <tr><td>Heap</td><td><code>PriorityQueue&lt;E,P&gt;</code></td><td>mín O(1)</td><td>O(n)</td><td>O(log n)</td><td>O(log n)</td></tr>
+              <tr><td>BST balanceada</td><td><code>SortedSet&lt;T&gt;</code></td><td>—</td><td>O(log n)</td><td>O(log n)</td><td>O(log n)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+
+    <div id="cards"></div>
+    <div class="empty" id="empty" hidden>Nada encontrado.</div>
+  </section>
+
+  <section class="view" id="view-flash">
+    <div id="flashRoot"></div>
+  </section>
+
+  <section class="view" id="view-tips">
+    <div class="intro"><p>Detalhes da linguagem que custam tempo numa entrevista ao vivo.</p></div>
+    <div id="tips"></div>
+  </section>
+</main>
+
+<nav class="tabs">
+  <button class="on" data-view="guide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>
+    Guia
+  </button>
+  <button data-view="flash">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg>
+    Flashcards
+  </button>
+  <button data-view="tips">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+    Dicas C#
+  </button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- Conteúdo ---------- */
+/* Marcação simples: **negrito** e §código§ */
+const SECTIONS = [
+  {
+    id: "arrays", title: "Arrays e strings", en: "Arrays & strings", tag: "ess",
+    lead: "Memória contígua com acesso O(1) por índice. A maioria dos problemas cai em um de três padrões que transformam O(n²) em O(n).",
+    know: [
+      "**Dois ponteiros**: um em cada ponta (entrada ordenada, palíndromos, soma de pares) ou lento/rápido na mesma direção (remover duplicados in-place).",
+      "**Janela deslizante**: expanda a borda direita e encolha a esquerda enquanto a janela for inválida. Serve para “maior/menor substring com…”.",
+      "**Soma de prefixos**: §prefix[i+1] = prefix[i] + a[i]§, então a soma de qualquer intervalo é §prefix[r+1] - prefix[l]§ em O(1). Com um dicionário resolve “subarray com soma K”."
+    ],
+    csharp: [
+      "Strings são imutáveis: §+=§ dentro de um loop é O(n²). Use §StringBuilder§, ou §char[]§ e depois §new string(arr)§.",
+      "§s.Substring(i, len)§ copia; §s.AsSpan(i, len)§ não copia.",
+      "§Array.Sort(arr)§ é O(n log n); com critério: §Array.Sort(arr, (a, b) => a[0].CompareTo(b[0]))§.",
+      "Para contar letras, use §int[26]§ e §c - 'a'§ em vez de um dicionário."
+    ],
+    codeTitle: "Maior substring sem caracteres repetidos (janela deslizante)",
+    code: `public int LengthOfLongestSubstring(string s)
+{
+    var lastSeen = new Dictionary<char, int>();
+    int best = 0, left = 0;
+    for (int right = 0; right < s.Length; right++)
+    {
+        if (lastSeen.TryGetValue(s[right], out int idx) && idx >= left)
+            left = idx + 1;            // pula o caractere repetido
+        lastSeen[s[right]] = right;
+        best = Math.Max(best, right - left + 1);
+    }
+    return best;                       // O(n) tempo, O(k) espaço
+}`,
+    practice: ["Two Sum II", "Container With Most Water", "3Sum", "Minimum Window Substring", "Product of Array Except Self", "Subarray Sum Equals K"]
+  },
+  {
+    id: "hash", title: "Hash maps e hash sets", en: "Hash maps & sets", tag: "ess",
+    lead: "A resposta padrão para “já vi isso antes?” em O(1) médio. Troca O(n) de espaço extra por velocidade.",
+    know: [
+      "Como funciona: hash code → bucket; colisões tratadas por encadeamento; redimensiona quando o fator de carga cresce. Inserção O(1) amortizada, O(n) no pior caso.",
+      "Padrões: busca do complemento (Two Sum), contagem de frequência, agrupamento por chave (anagramas), índice da última ocorrência.",
+      "Chaves devem ser imutáveis e ter §GetHashCode§/§Equals§ consistentes. Uma §List<int>§ como chave compara por referência e não funciona."
+    ],
+    csharp: [
+      "§dict[key]§ lança §KeyNotFoundException§ se não existir. Leia com §TryGetValue§ ou §GetValueOrDefault(key)§.",
+      "Contagem: §freq[x] = freq.GetValueOrDefault(x) + 1;§",
+      "Chaves compostas: use tupla §(int, int)§ ou §record§; ambos têm igualdade por valor.",
+      "§HashSet<T>.Add§ retorna §false§ se o item já existe, o que já serve como checagem de duplicado.",
+      "A ordem de iteração do §Dictionary§ não é garantida; use §SortedDictionary§ se precisar de chaves ordenadas (O(log n))."
+    ],
+    codeTitle: "Agrupar anagramas",
+    code: `public IList<IList<string>> GroupAnagrams(string[] strs)
+{
+    var groups = new Dictionary<string, List<string>>();
+    foreach (var s in strs)
+    {
+        var chars = s.ToCharArray();
+        Array.Sort(chars);
+        var key = new string(chars);
+        if (!groups.TryGetValue(key, out var list))
+            groups[key] = list = new List<string>();
+        list.Add(s);
+    }
+    return groups.Values.ToList<IList<string>>();
+}`,
+    practice: ["Two Sum", "Group Anagrams", "Top K Frequent Elements", "Longest Consecutive Sequence", "Valid Sudoku"]
+  },
+  {
+    id: "linked", title: "Listas ligadas", en: "Linked lists", tag: "ess",
+    lead: "Nós ligados por ponteiros: inserção/remoção O(1) quando você já tem o nó, O(n) para encontrá-lo. A entrevista testa mais o cuidado com ponteiros do que a estrutura.",
+    know: [
+      "**Inversão** iterativa com três ponteiros: é a base de vários problemas mais difíceis.",
+      "**Ponteiros lento/rápido**: achar o meio, detectar ciclo (Floyd), achar o início do ciclo, achar o k-ésimo a partir do fim.",
+      "**Nó sentinela (dummy head)**: elimina casos especiais quando a cabeça pode mudar (merge, remoção).",
+      "Simplesmente vs duplamente ligada; a duplamente ligada é a usada no LRU cache."
+    ],
+    csharp: [
+      "O LeetCode fornece §ListNode { int val; ListNode next; }§.",
+      "§LinkedList<T>§ é duplamente ligada, com §AddFirst§, §AddLast§ e §Remove(node)§ em O(1)."
+    ],
+    codeTitle: "Inverter lista e detectar ciclo",
+    code: `public ListNode ReverseList(ListNode head)
+{
+    ListNode prev = null, curr = head;
+    while (curr != null)
+    {
+        var next = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}
+
+public bool HasCycle(ListNode head)
+{
+    ListNode slow = head, fast = head;
+    while (fast?.next != null)
+    {
+        slow = slow.next;
+        fast = fast.next.next;
+        if (slow == fast) return true;
+    }
+    return false;
+}`,
+    practice: ["Reverse Linked List", "Merge Two Sorted Lists", "Linked List Cycle II", "Remove Nth Node From End of List", "Reorder List", "Copy List with Random Pointer"]
+  },
+  {
+    id: "stackqueue", title: "Pilhas e filas", en: "Stacks & queues", tag: "ess",
+    lead: "Pilha = último a entrar, primeiro a sair; fila = primeiro a entrar, primeiro a sair. Ambas com push/pop O(1). A pilha resolve aninhamento e “o mais recente”; a fila conduz o BFS.",
+    know: [
+      "**Usos da pilha**: parênteses balanceados, avaliação de expressões, desfazer, DFS iterativo, simular recursão.",
+      "**Pilha monotônica**: mantém os elementos em ordem crescente ou decrescente; cada elemento entra e sai uma vez, então O(n). Resolve “próximo maior/menor elemento” e problemas de histograma.",
+      "**Usos da fila**: BFS por nível, processamento de tarefas, janela deslizante com deque.",
+      "Implementar uma fila com duas pilhas (aquecimento clássico)."
+    ],
+    csharp: [
+      "§Stack<T>§: §Push§, §Pop§, §Peek§, §TryPop§, §TryPeek§, §Count§.",
+      "§Queue<T>§: §Enqueue§, §Dequeue§, §Peek§, §TryDequeue§, §Count§.",
+      "§Pop§/§Dequeue§/§Peek§ em coleção vazia lançam §InvalidOperationException§; confira §Count > 0§ antes.",
+      "Guarde pares como tuplas: §Stack<(int index, int value)>§."
+    ],
+    codeTitle: "Daily Temperatures (pilha monotônica decrescente de índices)",
+    code: `public int[] DailyTemperatures(int[] temps)
+{
+    var result = new int[temps.Length];
+    var stack = new Stack<int>();
+    for (int i = 0; i < temps.Length; i++)
+    {
+        while (stack.Count > 0 && temps[i] > temps[stack.Peek()])
+        {
+            int j = stack.Pop();
+            result[j] = i - j;
+        }
+        stack.Push(i);
+    }
+    return result;
+}`,
+    practice: ["Valid Parentheses", "Min Stack", "Evaluate Reverse Polish Notation", "Daily Temperatures", "Largest Rectangle in Histogram", "Implement Queue using Stacks"]
+  },
+  {
+    id: "trees", title: "Árvores e BSTs", en: "Trees & binary search trees", tag: "ess",
+    lead: "O tema mais comum na Amazon. Quase todo problema de árvore é um DFS em que cada chamada devolve algo para o pai, ou um BFS por nível.",
+    know: [
+      "Percursos: pré-ordem (nó, esq, dir), em ordem (esq, nó, dir — dá a ordem crescente numa BST), pós-ordem (esq, dir, nó), por nível (BFS com fila).",
+      "Versões recursiva e iterativa do DFS (a iterativa usa §Stack§).",
+      "**Propriedade da BST**: esquerda < nó < direita. Busca, inserção e remoção são O(h): O(log n) se balanceada, O(n) se degenerada.",
+      "Altura vs profundidade, árvore balanceada, árvore completa (heaps são completas).",
+      "Padrão recursivo: defina o que a função retorna para uma subárvore, trate o §null§, combine os resultados da esquerda e da direita.",
+      "Espaço: a recursão usa O(h) de pilha de chamadas."
+    ],
+    csharp: [
+      "O LeetCode fornece §TreeNode { int val; TreeNode left, right; }§.",
+      "BST autobalanceada pronta: §SortedSet<T>§ (árvore rubro-negra) com §Min§, §Max§ e §GetViewBetween(lo, hi)§."
+    ],
+    codeTitle: "Profundidade máxima, BFS por nível e validação de BST",
+    code: `public int MaxDepth(TreeNode root) =>
+    root == null ? 0 : 1 + Math.Max(MaxDepth(root.left), MaxDepth(root.right));
+
+public IList<IList<int>> LevelOrder(TreeNode root)
+{
+    var result = new List<IList<int>>();
+    if (root == null) return result;
+    var queue = new Queue<TreeNode>();
+    queue.Enqueue(root);
+    while (queue.Count > 0)
+    {
+        int size = queue.Count;            // nós deste nível
+        var level = new List<int>(size);
+        for (int i = 0; i < size; i++)
+        {
+            var node = queue.Dequeue();
+            level.Add(node.val);
+            if (node.left != null) queue.Enqueue(node.left);
+            if (node.right != null) queue.Enqueue(node.right);
+        }
+        result.Add(level);
+    }
+    return result;
+}
+
+// Passa os limites para baixo
+public bool IsValidBST(TreeNode node, long lo = long.MinValue, long hi = long.MaxValue) =>
+    node == null ||
+    (node.val > lo && node.val < hi &&
+     IsValidBST(node.left, lo, node.val) && IsValidBST(node.right, node.val, hi));`,
+    practice: ["Invert Binary Tree", "Diameter of Binary Tree", "Lowest Common Ancestor of a Binary Tree", "Binary Tree Right Side View", "Validate Binary Search Tree", "Kth Smallest Element in a BST", "Serialize and Deserialize Binary Tree"]
+  },
+  {
+    id: "heaps", title: "Heaps (filas de prioridade)", en: "Heaps / priority queues", tag: "ess",
+    lead: "Árvore binária completa guardada em array, em que cada pai é ≤ aos filhos (min-heap). Dá o menor item em O(1) e inserção/remoção em O(log n).",
+    know: [
+      "**Top-K**: mantenha um min-heap de tamanho K; insira cada item e remova quando passar de K. O(n log K), melhor que ordenar (O(n log n)).",
+      "**Merge de K listas ordenadas**: o heap guarda a cabeça atual de cada lista.",
+      "**Dois heaps**: max-heap para a metade menor e min-heap para a maior dão a mediana contínua.",
+      "Problemas de agendamento: sempre processe o próximo item mais cedo/mais barato.",
+      "Construir um heap a partir de n itens é O(n). No array, os filhos de §i§ são §2i+1§ e §2i+2§."
+    ],
+    csharp: [
+      "§PriorityQueue<TElement, TPriority>§ (.NET 6+) é um **min-heap** pela prioridade: §Enqueue(item, prioridade)§, §Dequeue()§, §Peek()§, §TryDequeue(out item, out prio)§, §Count§.",
+      "Não há max-heap pronto: negue a prioridade ou passe um comparer invertido: §new PriorityQueue<int, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)))§.",
+      "Não tem decrease-key nem remoção arbitrária; no Dijkstra, enfileire duplicados e ignore os obsoletos.",
+      "Enumerar a fila **não** devolve os itens em ordem."
+    ],
+    codeTitle: "K-ésimo maior elemento (min-heap de tamanho k)",
+    code: `public int FindKthLargest(int[] nums, int k)
+{
+    var heap = new PriorityQueue<int, int>();
+    foreach (var n in nums)
+    {
+        heap.Enqueue(n, n);
+        if (heap.Count > k) heap.Dequeue();   // descarta o menor
+    }
+    return heap.Peek();                       // O(n log k)
+}`,
+    practice: ["Kth Largest Element in an Array", "K Closest Points to Origin", "Top K Frequent Words", "Merge k Sorted Lists", "Find Median from Data Stream", "Task Scheduler"]
+  },
+  {
+    id: "graphs", title: "Grafos", en: "Graphs", tag: "ess",
+    lead: "Nós e arestas, dirigidos ou não. A maioria dos problemas vira montar uma lista de adjacência e rodar BFS ou DFS com um conjunto de visitados, em O(V + E).",
+    know: [
+      "Representação: lista de adjacência (padrão, O(V + E) de espaço) vs matriz de adjacência (O(V²), só para grafos densos).",
+      "**BFS**: menor caminho em grafo sem peso; marque como visitado ao enfileirar, não ao desenfileirar.",
+      "**DFS**: componentes conexos, existência de caminho, detecção de ciclo.",
+      "**Detecção de ciclo**: não dirigido → visitados + pai; dirigido → três cores (não visitado, visitando, concluído).",
+      "**Ordenação topológica** (algoritmo de Kahn): conte os graus de entrada, comece pelos nós com 0; se não processar todos, há ciclo. Clássico: pré-requisitos de cursos, ordem de build.",
+      "Reconheça grafos escondidos: palavras que diferem em uma letra, células de grade, contas que compartilham e-mails."
+    ],
+    csharp: [
+      "Monte o grafo como §List<int>[]§ (nós 0..n-1) ou §Dictionary<T, List<T>>§ (chaves arbitrárias).",
+      "DFS recursivo muito profundo pode estourar a pilha; troque por §Stack<T>§ explícita se n chegar a centenas de milhares."
+    ],
+    codeTitle: "Course Schedule (ordenação topológica de Kahn)",
+    code: `public bool CanFinish(int n, int[][] prerequisites)
+{
+    var graph = new List<int>[n];
+    for (int i = 0; i < n; i++) graph[i] = new List<int>();
+    var inDegree = new int[n];
+    foreach (var p in prerequisites)
+    {
+        graph[p[1]].Add(p[0]);   // p[1] vem antes de p[0]
+        inDegree[p[0]]++;
+    }
+
+    var queue = new Queue<int>();
+    for (int i = 0; i < n; i++)
+        if (inDegree[i] == 0) queue.Enqueue(i);
+
+    int done = 0;
+    while (queue.Count > 0)
+    {
+        int node = queue.Dequeue();
+        done++;
+        foreach (var next in graph[node])
+            if (--inDegree[next] == 0) queue.Enqueue(next);
+    }
+    return done == n;            // false = existe ciclo
+}`,
+    practice: ["Clone Graph", "Course Schedule", "Course Schedule II", "Number of Connected Components in an Undirected Graph", "Graph Valid Tree", "Word Ladder", "Alien Dictionary"]
+  },
+  {
+    id: "trie", title: "Tries (árvores de prefixo)", en: "Tries", tag: "imp",
+    lead: "Árvore em que cada aresta é um caractere, então palavras com o mesmo prefixo compartilham o caminho. Inserção e busca custam O(L), o tamanho da palavra, não importa quantas palavras existam.",
+    know: [
+      "Nó = filhos + flag §IsEnd§.",
+      "Operações: inserir, buscar palavra exata, verificar prefixo (starts-with).",
+      "Usos: autocomplete, corretor ortográfico, busca de palavras num tabuleiro (trie + DFS com backtracking), maior prefixo comum.",
+      "O espaço pode ser grande: até 26 filhos por nó."
+    ],
+    csharp: [
+      "Use §Node[26]§ quando a entrada é só minúscula (rápido) ou §Dictionary<char, Node>§ para qualquer caractere (flexível).",
+      "§??=§ cria o filho só se ele não existir: §node = node.Next[c - 'a'] ??= new Node();§"
+    ],
+    codeTitle: "Implementação de Trie",
+    code: `public class Trie
+{
+    private class Node
+    {
+        public Node[] Next = new Node[26];
+        public bool IsEnd;
+    }
+    private readonly Node _root = new();
+
+    public void Insert(string word)
+    {
+        var node = _root;
+        foreach (var c in word)
+            node = node.Next[c - 'a'] ??= new Node();
+        node.IsEnd = true;
+    }
+
+    public bool Search(string word) => Find(word)?.IsEnd == true;
+    public bool StartsWith(string prefix) => Find(prefix) != null;
+
+    private Node Find(string s)
+    {
+        var node = _root;
+        foreach (var c in s)
+        {
+            node = node.Next[c - 'a'];
+            if (node == null) return null;
+        }
+        return node;
+    }
+}`,
+    practice: ["Implement Trie (Prefix Tree)", "Design Add and Search Words Data Structure", "Word Search II", "Search Suggestions System"]
+  },
+  {
+    id: "uf", title: "Union-Find", en: "Disjoint set union", tag: "imp",
+    lead: "Acompanha quais elementos estão no mesmo grupo conforme as arestas chegam. Com compressão de caminho e união por rank, cada operação é praticamente O(1) (Ackermann inversa).",
+    know: [
+      "§Find(x)§ devolve a raiz do grupo; a compressão de caminho aponta cada nó visitado direto para a raiz.",
+      "§Union(a, b)§ pendura a árvore mais baixa na mais alta; retorna §false§ se já estavam juntos, o que detecta ciclo em grafo não dirigido.",
+      "Usos: componentes conexos, conexão redundante, merge de contas, MST de Kruskal.",
+      "Prefira ao DFS quando as arestas chegam uma a uma e você precisa de respostas no caminho."
+    ],
+    csharp: [
+      "Troca de variáveis com tupla: §(ra, rb) = (rb, ra);§",
+      "§Enumerable.Range(0, n).ToArray()§ inicializa cada nó como seu próprio pai."
+    ],
+    codeTitle: "Union-Find com compressão de caminho e união por rank",
+    code: `public class UnionFind
+{
+    private readonly int[] _parent, _rank;
+    public int Components { get; private set; }
+
+    public UnionFind(int n)
+    {
+        _parent = Enumerable.Range(0, n).ToArray();
+        _rank = new int[n];
+        Components = n;
+    }
+
+    public int Find(int x) =>
+        _parent[x] == x ? x : _parent[x] = Find(_parent[x]);
+
+    public bool Union(int a, int b)
+    {
+        int ra = Find(a), rb = Find(b);
+        if (ra == rb) return false;
+        if (_rank[ra] < _rank[rb]) (ra, rb) = (rb, ra);
+        _parent[rb] = ra;
+        if (_rank[ra] == _rank[rb]) _rank[ra]++;
+        Components--;
+        return true;
+    }
+}`,
+    practice: ["Number of Provinces", "Redundant Connection", "Accounts Merge", "Number of Islands II"]
+  },
+  {
+    id: "intervals", title: "Intervalos", en: "Intervals", tag: "imp",
+    lead: "Não é uma estrutura, mas um padrão que aparece o tempo todo: ordene pelo início e percorra uma vez. O(n log n) por causa da ordenação.",
+    know: [
+      "Dois intervalos §[a, b]§ e §[c, d]§ se sobrepõem quando §a <= d && c <= b§.",
+      "Merge: ordene pelo início; estenda o último intervalo mesclado ou comece um novo.",
+      "Salas de reunião: ordene inícios e fins separadamente, ou use um min-heap dos horários de fim; o tamanho máximo do heap é a resposta.",
+      "Pergunte logo se intervalos que se tocam (§[1,2]§ e §[2,3]§) contam como sobreposição."
+    ],
+    csharp: [
+      "§merged[^1]§ acessa o último elemento da lista.",
+      "Ordene arrays de arrays com §Array.Sort(intervals, (x, y) => x[0].CompareTo(y[0]))§."
+    ],
+    codeTitle: "Merge Intervals",
+    code: `public int[][] Merge(int[][] intervals)
+{
+    Array.Sort(intervals, (x, y) => x[0].CompareTo(y[0]));
+    var merged = new List<int[]>();
+    foreach (var cur in intervals)
+    {
+        if (merged.Count > 0 && cur[0] <= merged[^1][1])
+            merged[^1][1] = Math.Max(merged[^1][1], cur[1]);
+        else
+            merged.Add(cur);
+    }
+    return merged.ToArray();
+}`,
+    practice: ["Merge Intervals", "Insert Interval", "Non-overlapping Intervals", "Meeting Rooms II"]
+  },
+  {
+    id: "grids", title: "Grades como grafos", en: "Grids / matrices", tag: "imp",
+    lead: "Cada célula é um nó com até 4 vizinhos. A Amazon pede muito problema de grade (Number of Islands, Rotting Oranges).",
+    know: [
+      "Array de direções para visitar vizinhos; cheque os limites antes de ler a célula.",
+      "DFS para contar/preencher regiões; BFS para menor distância (cada nível = um passo).",
+      "**BFS com várias origens**: enfileire todas as células de partida de uma vez (todas as laranjas podres, todos os portões).",
+      "Marque visitados alterando a grade ou com §bool[,]§; pergunte se pode alterar a entrada.",
+      "Complexidade: O(linhas × colunas)."
+    ],
+    csharp: [
+      "No LeetCode as grades são arrays irregulares (§char[][]§, §grid.Length§, §grid[0].Length§), não §char[,]§.",
+      "Enfileire coordenadas como tuplas: §Queue<(int r, int c)>§."
+    ],
+    codeTitle: "Number of Islands (DFS)",
+    code: `private static readonly (int dr, int dc)[] Dirs = { (1, 0), (-1, 0), (0, 1), (0, -1) };
+
+public int NumIslands(char[][] grid)
+{
+    int rows = grid.Length, cols = grid[0].Length, count = 0;
+    for (int r = 0; r < rows; r++)
+        for (int c = 0; c < cols; c++)
+            if (grid[r][c] == '1') { count++; Sink(grid, r, c); }
+    return count;
+}
+
+private void Sink(char[][] grid, int r, int c)
+{
+    if (r < 0 || c < 0 || r >= grid.Length || c >= grid[0].Length || grid[r][c] != '1')
+        return;
+    grid[r][c] = '0';                      // marca como visitado
+    foreach (var (dr, dc) in Dirs) Sink(grid, r + dr, c + dc);
+}`,
+    practice: ["Number of Islands", "Rotting Oranges", "Pacific Atlantic Water Flow", "Shortest Path in Binary Matrix", "Word Search"]
+  },
+  {
+    id: "weighted", title: "Grafos com peso", en: "Weighted graphs", tag: "bom",
+    lead: "Quando as arestas têm custo, o BFS deixa de achar o menor caminho. Domine o Dijkstra (pesos não negativos); MST tem prioridade menor.",
+    know: [
+      "**Dijkstra**: min-heap de (nó, distância); tire o mais próximo e relaxe suas arestas. O((V + E) log V).",
+      "Ignore entradas obsoletas do heap (§if (d > dist[node]) continue;§), já que §PriorityQueue§ não tem decrease-key.",
+      "**Bellman-Ford**: aceita pesos negativos, O(V × E); também é o truque para “voo mais barato com até K escalas”.",
+      "**MST**: Kruskal (ordena arestas + Union-Find) ou Prim (heap). Conecta todos os nós com custo total mínimo."
+    ],
+    csharp: [
+      "Lista de adjacência com peso: §List<(int to, int w)>[]§.",
+      "§Array.Fill(dist, int.MaxValue)§ inicializa as distâncias; cuidado com overflow ao somar com §int.MaxValue§."
+    ],
+    codeTitle: "Network Delay Time (Dijkstra)",
+    code: `public int NetworkDelayTime(int[][] times, int n, int k)
+{
+    var graph = new List<(int to, int w)>[n + 1];
+    for (int i = 1; i <= n; i++) graph[i] = new();
+    foreach (var t in times) graph[t[0]].Add((t[1], t[2]));
+
+    var dist = new int[n + 1];
+    Array.Fill(dist, int.MaxValue);
+    dist[k] = 0;
+    var pq = new PriorityQueue<int, int>();
+    pq.Enqueue(k, 0);
+
+    while (pq.TryDequeue(out int node, out int d))
+    {
+        if (d > dist[node]) continue;        // entrada obsoleta
+        foreach (var (to, w) in graph[node])
+        {
+            if (d + w < dist[to])
+            {
+                dist[to] = d + w;
+                pq.Enqueue(to, dist[to]);
+            }
+        }
+    }
+    int max = dist.Skip(1).Max();
+    return max == int.MaxValue ? -1 : max;
+}`,
+    practice: ["Network Delay Time", "Path With Minimum Effort", "Cheapest Flights Within K Stops", "Min Cost to Connect All Points"]
+  },
+  {
+    id: "lru", title: "Deque e LRU cache", en: "Deque & LRU cache", tag: "bom",
+    lead: "Duas estruturas com cara de design. O LRU cache é uma das perguntas mais repetidas da Amazon: §Get§ e §Put§ precisam rodar em O(1).",
+    know: [
+      "**Deque** (fila de duas pontas): push/pop nas duas pontas em O(1). O uso principal é o deque monotônico para “máximo da janela deslizante” em O(n).",
+      "**LRU cache**: o dicionário dá busca O(1) e a lista duplamente ligada mantém a ordem de uso (mais recente na frente).",
+      "O dicionário guarda o **nó** da lista, então mover ou remover é O(1).",
+      "Saiba escrever também com sua própria classe §Node§ e cabeça/cauda sentinelas; alguns entrevistadores pedem para não usar a lista pronta."
+    ],
+    csharp: [
+      "Não existe §Deque<T>§ no .NET; use §LinkedList<T>§ (§AddLast§, §RemoveFirst§, §First§, §Last§).",
+      "§LinkedList<T>.AddFirst(valor)§ devolve o §LinkedListNode<T>§ criado; guarde-o no dicionário."
+    ],
+    codeTitle: "LRU Cache",
+    code: `public class LRUCache
+{
+    private readonly int _capacity;
+    private readonly Dictionary<int, LinkedListNode<(int key, int value)>> _map = new();
+    private readonly LinkedList<(int key, int value)> _order = new();
+
+    public LRUCache(int capacity) => _capacity = capacity;
+
+    public int Get(int key)
+    {
+        if (!_map.TryGetValue(key, out var node)) return -1;
+        _order.Remove(node);          // O(1): já temos o nó
+        _order.AddFirst(node);
+        return node.Value.value;
+    }
+
+    public void Put(int key, int value)
+    {
+        if (_map.TryGetValue(key, out var existing))
+            _order.Remove(existing);
+        else if (_map.Count == _capacity)
+        {
+            _map.Remove(_order.Last!.Value.key);   // remove o menos recente
+            _order.RemoveLast();
+        }
+        _map[key] = _order.AddFirst((key, value));
+    }
+}`,
+    practice: ["LRU Cache", "Sliding Window Maximum", "Design Hit Counter", "LFU Cache"]
+  },
+  {
+    id: "segtree", title: "Segment tree e Fenwick tree", en: "Segment / Fenwick tree", tag: "bom",
+    lead: "Raramente cobradas na Amazon; estude só quando o resto estiver firme. Ambas respondem consultas de intervalo (soma, mínimo, máximo) enquanto o array é atualizado, cada operação em O(log n).",
+    know: [
+      "Quando a soma de prefixos não basta: ela dá consulta O(1), mas atualização O(n). Essas árvores deixam as duas em O(log n).",
+      "**Fenwick (Binary Indexed Tree)**: código curto, soma de prefixos com atualização pontual; usa §i & -i§ para pular.",
+      "**Segment tree**: mais geral (mín, máx, qualquer operação associativa) e aceita atualização de intervalo com lazy propagation.",
+      "Normalmente basta saber explicar a ideia e a complexidade."
+    ],
+    csharp: [
+      "Fenwick usa índices a partir de 1 internamente; converta com §i++§ na entrada."
+    ],
+    codeTitle: "Fenwick tree",
+    code: `public class FenwickTree
+{
+    private readonly int[] _tree;
+    public FenwickTree(int n) => _tree = new int[n + 1];
+
+    public void Add(int i, int delta)          // i começa em 0
+    {
+        for (i++; i < _tree.Length; i += i & -i) _tree[i] += delta;
+    }
+
+    public int PrefixSum(int i)                // soma de [0..i]
+    {
+        int sum = 0;
+        for (i++; i > 0; i -= i & -i) sum += _tree[i];
+        return sum;
+    }
+}`,
+    practice: ["Range Sum Query - Mutable", "Count of Smaller Numbers After Self"]
+  }
+];
+
+const FLASHCARDS = [
+  ["Qual o custo de busca em um §Dictionary§?", "O(1) em média; O(n) no pior caso (muitas colisões)."],
+  ["§PriorityQueue§ do .NET é min-heap ou max-heap?", "Min-heap pela prioridade. Para max-heap, negue a prioridade ou use §Comparer<int>.Create((a, b) => b.CompareTo(a))§."],
+  ["Complexidade de Top-K com heap?", "O(n log k), mantendo um min-heap de tamanho k."],
+  ["Quando usar BFS em vez de DFS?", "Para menor caminho em grafo sem peso, ou processar por nível. DFS para componentes, caminhos e ciclos."],
+  ["Qual percurso devolve uma BST em ordem crescente?", "Em ordem (in-order): esquerda, nó, direita."],
+  ["Como detectar ciclo em lista ligada?", "Algoritmo de Floyd: ponteiro lento anda 1, rápido anda 2; se se encontrarem, há ciclo."],
+  ["Como funciona a ordenação topológica de Kahn?", "Conta graus de entrada, enfileira os nós com grau 0, decrementa vizinhos. Se não processar todos os nós, há ciclo."],
+  ["Quais estruturas formam um LRU cache O(1)?", "Dictionary (chave → nó) + lista duplamente ligada (ordem de uso)."],
+  ["Quais otimizações deixam o Union-Find quase O(1)?", "Compressão de caminho no Find e união por rank (ou tamanho)."],
+  ["Como obter a soma de um intervalo [l, r] em O(1)?", "Soma de prefixos: §prefix[r+1] - prefix[l]§."],
+  ["Quando pensar em janela deslizante?", "Subarray ou substring contínua com uma condição. Expande a direita, encolhe a esquerda."],
+  ["Para que serve a pilha monotônica?", "Próximo maior/menor elemento e histograma, em O(n): cada elemento entra e sai uma vez."],
+  ["Complexidade do Dijkstra com heap? Restrição?", "O((V + E) log V). Só funciona com pesos não negativos."],
+  ["Por que §mid = lo + (hi - lo) / 2§?", "Evita overflow de §lo + hi§ quando os valores são grandes."],
+  ["Quanto vale §-7 % 3§ em C#?", "§-1§. Para normalizar: §((x % m) + m) % m§."],
+  ["Quando §[a, b]§ e §[c, d]§ se sobrepõem?", "Quando §a <= d && c <= b§."],
+  ["Custo de inserir/buscar numa Trie?", "O(L), onde L é o tamanho da palavra."],
+  ["Num heap em array, onde ficam os filhos de i?", "Em §2i+1§ e §2i+2§; o pai fica em §(i-1)/2§."],
+  ["Custo de construir um heap com n itens?", "O(n) com heapify (não O(n log n))."],
+  ["Existe §Deque<T>§ no .NET?", "Não. Use §LinkedList<T>§ (§AddFirst§, §AddLast§, §RemoveFirst§, §RemoveLast§)."],
+  ["Como usar chave composta em §Dictionary§?", "Tupla §(int, int)§ ou §record§: ambos têm igualdade por valor."],
+  ["Fenwick tree vs soma de prefixos?", "Prefixos: consulta O(1), atualização O(n). Fenwick: ambas O(log n)."],
+  ["Como detectar ciclo em grafo dirigido com DFS?", "Três estados (não visitado, visitando, concluído). Encontrar um nó “visitando” = ciclo."],
+  ["No BFS, quando marcar o nó como visitado?", "Ao enfileirar, para não enfileirar o mesmo nó várias vezes."]
+];
+
+const TIPS = [
+  ["Overflow", "§int§ estoura em silêncio. Use §long§ para somas e produtos, e §mid = lo + (hi - lo) / 2§ na busca binária."],
+  ["Comparers", "Use §a.CompareTo(b)§ em vez de §a - b§, que pode estourar com valores grandes ou negativos."],
+  ["Divisão inteira", "Trunca em direção a zero: §-7 / 2 == -3§. Ajuste ou use §Math.Floor§ quando houver negativos."],
+  ["Módulo negativo", "§-7 % 3 == -1§. Normalize com §((x % m) + m) % m§."],
+  ["Strings", "São imutáveis; prefira §StringBuilder§. Compare com §==§ (por valor) ou §string.Equals(a, b, StringComparison.Ordinal)§."],
+  ["Aritmética com char", "§c - 'a'§ dá um §int§; §(char)('a' + i)§ volta para char."],
+  ["Índice a partir do fim", "§arr[^1]§ é o último elemento; ranges como §arr[1..^1]§ fazem cópia."],
+  ["Coleções que lançam exceção", "Indexador do §Dictionary§ com chave inexistente; §Stack.Pop§/§Queue.Dequeue§ vazias. Prefira as versões §Try…§."],
+  ["Alterar durante iteração", "Modificar §List§ ou §Dictionary§ dentro de um §foreach§ lança §InvalidOperationException§. Itere sobre uma cópia ou acumule as mudanças."],
+  ["Custo do LINQ", "Ótimo para legibilidade, mas saiba o custo: §OrderBy§ é O(n log n), §Count()§ fora de coleção é O(n), §ToList()§ copia."],
+  ["Tuplas e records", "Têm igualdade por valor: servem como chave de dicionário e para retornar vários valores."],
+  ["Helpers de Array", "§Array.Fill§, §Array.Sort§, §Array.BinarySearch§ e §List<T>.BinarySearch§ economizam código repetitivo."],
+  ["Profundidade de recursão", "A pilha padrão tem cerca de 1 MB; DFS muito profundo pode lançar §StackOverflowException§, que não pode ser capturada. Mencione a alternativa iterativa."]
+];
+
+const TAG_LABEL = { ess: "Essencial", imp: "Importante", bom: "Bom saber" };
+
+/* ---------- Estado (salvo no aparelho) ---------- */
+const KEY = "ds-guide-csharp-v1";
+let state = { studied: {}, practice: {}, theme: null };
+try {
+  const saved = JSON.parse(localStorage.getItem(KEY));
+  if (saved) state = Object.assign(state, saved);
+} catch (e) {}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+/* ---------- Utilidades ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+function md(s) {
+  return esc(s).replace(/§(.+?)§/g, "<code>$1</code>").replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+}
+function norm(s) { return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+
+const KW = new Set(("public private protected internal static readonly class new return if else for foreach while in out var " +
+  "int long bool char string void null true false continue break this get set using ref is object double").split(" "));
+function highlight(code) {
+  const re = /(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*")|('(?:[^'\\\n]|\\.)')|\b(\d+)\b|\b([A-Za-z_][A-Za-z0-9_]*)\b/g;
+  let out = "", last = 0, m;
+  while ((m = re.exec(code))) {
+    out += esc(code.slice(last, m.index));
+    const t = esc(m[0]);
+    if (m[1]) out += `<span class="c-com">${t}</span>`;
+    else if (m[2] || m[3]) out += `<span class="c-str">${t}</span>`;
+    else if (m[4]) out += `<span class="c-num">${t}</span>`;
+    else if (KW.has(m[5])) out += `<span class="c-kw">${t}</span>`;
+    else if (/^[A-Z]/.test(m[5])) out += `<span class="c-type">${t}</span>`;
+    else out += t;
+    last = re.lastIndex;
+  }
+  return out + esc(code.slice(last));
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 1600);
+}
+
+/* ---------- Guia ---------- */
+const chevron = '<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>';
+
+function renderCards() {
+  const root = $("#cards");
+  root.innerHTML = SECTIONS.map((s, i) => `
+    <details class="card${state.studied[s.id] ? " done" : ""}" data-id="${s.id}" data-tag="${s.tag}">
+      <summary>
+        <div class="num">${i + 1}</div>
+        <div class="s-text">
+          <div class="s-title">${esc(s.title)}</div>
+          <div class="s-sub"><span class="tag ${s.tag}">${TAG_LABEL[s.tag]}</span><span class="en">${esc(s.en)}</span></div>
+        </div>
+        ${chevron}
+      </summary>
+      <div class="body">
+        <p class="lead">${md(s.lead)}</p>
+        <h3>O que saber</h3>
+        <ul>${s.know.map(k => `<li>${md(k)}</li>`).join("")}</ul>
+        <h3>Em C#</h3>
+        <ul>${s.csharp.map(k => `<li>${md(k)}</li>`).join("")}</ul>
+        <h3>${esc(s.codeTitle)}</h3>
+        <div class="code-wrap">
+          <button class="copy" data-copy="${s.id}">Copiar</button>
+          <pre><code style="background:none;border:0;padding:0;font-size:inherit;color:inherit">${highlight(s.code)}</code></pre>
+        </div>
+        <h3>Pratique</h3>
+        <ul class="practice">
+          ${s.practice.map((p, j) => {
+            const key = s.id + ":" + j;
+            return `<li><label><input type="checkbox" data-pkey="${key}"${state.practice[key] ? " checked" : ""}><span>${esc(p)}</span></label>
+              <a href="https://leetcode.com/problemset/?search=${encodeURIComponent(p)}" target="_blank" rel="noopener">LeetCode</a></li>`;
+          }).join("")}
+        </ul>
+        <button class="study-btn" data-study="${s.id}">${state.studied[s.id] ? "✓ Estudado" : "Marcar como estudado"}</button>
+      </div>
+    </details>`).join("");
+}
+
+function updateProgress() {
+  const done = SECTIONS.filter(s => state.studied[s.id]).length;
+  $("#bar").style.width = (done / SECTIONS.length * 100) + "%";
+  $("#progressText").textContent = `${done}/${SECTIONS.length} estudados`;
+}
+
+const FILTERS = [
+  ["all", "Todos"], ["ess", "Essencial"], ["imp", "Importante"], ["bom", "Bom saber"], ["todo", "Pendentes"]
+];
+let currentFilter = "all";
+function renderChips() {
+  $("#chips").innerHTML = FILTERS.map(([k, l]) =>
+    `<button class="chip${k === currentFilter ? " on" : ""}" data-filter="${k}">${l}</button>`).join("");
+}
+
+function applyFilter() {
+  const q = norm($("#search").value.trim());
+  let visible = 0;
+  SECTIONS.forEach(s => {
+    const el = $(`.card[data-id="${s.id}"]`);
+    const hay = norm([s.title, s.en, s.lead, ...s.know, ...s.csharp, ...s.practice, s.code].join(" "));
+    const okText = !q || hay.includes(q);
+    const okFilter = currentFilter === "all" ||
+      (currentFilter === "todo" ? !state.studied[s.id] : s.tag === currentFilter);
+    const show = okText && okFilter;
+    el.hidden = !show;
+    if (show) visible++;
+  });
+  $("#overview").hidden = !!q || currentFilter !== "all";
+  $("#empty").hidden = visible > 0;
+}
+
+document.addEventListener("click", e => {
+  const chip = e.target.closest("[data-filter]");
+  if (chip) { currentFilter = chip.dataset.filter; renderChips(); applyFilter(); return; }
+
+  const study = e.target.closest("[data-study]");
+  if (study) {
+    const id = study.dataset.study;
+    state.studied[id] = !state.studied[id];
+    if (!state.studied[id]) delete state.studied[id];
+    save();
+    const card = study.closest(".card");
+    card.classList.toggle("done", !!state.studied[id]);
+    study.textContent = state.studied[id] ? "✓ Estudado" : "Marcar como estudado";
+    updateProgress();
+    if (state.studied[id]) toast("Tópico marcado como estudado");
+    if (currentFilter === "todo") applyFilter();
+    return;
+  }
+
+  const copy = e.target.closest("[data-copy]");
+  if (copy) {
+    const s = SECTIONS.find(x => x.id === copy.dataset.copy);
+    const done = () => { copy.textContent = "Copiado"; setTimeout(() => copy.textContent = "Copiar", 1400); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(s.code).then(done, () => toast("Não foi possível copiar"));
+    } else {
+      const ta = document.createElement("textarea");
+      ta.value = s.code; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (err) { toast("Não foi possível copiar"); }
+      ta.remove();
+    }
+    return;
+  }
+
+  const tab = e.target.closest("nav.tabs button");
+  if (tab) {
+    document.querySelectorAll("nav.tabs button").forEach(b => b.classList.toggle("on", b === tab));
+    document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === "view-" + tab.dataset.view));
+    window.scrollTo({ top: 0 });
+  }
+});
+
+document.addEventListener("change", e => {
+  const box = e.target.closest("[data-pkey]");
+  if (box) {
+    if (box.checked) state.practice[box.dataset.pkey] = true;
+    else delete state.practice[box.dataset.pkey];
+    save();
+  }
+});
+
+$("#search").addEventListener("input", applyFilter);
+
+/* ---------- Flashcards ---------- */
+let deck = [], pos = 0, right = 0, wrong = 0, missed = [];
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function startDeck(indices) {
+  deck = shuffle(indices.slice()); pos = 0; right = 0; wrong = 0; missed = [];
+  renderFlash();
+}
+function renderFlash() {
+  const root = $("#flashRoot");
+  if (pos >= deck.length) {
+    const pct = deck.length ? Math.round(right / deck.length * 100) : 0;
+    root.innerHTML = `
+      <div class="result">
+        <div class="big">${pct}%</div>
+        <p>${right} de ${deck.length} respondidas corretamente.</p>
+        ${missed.length ? `<button id="fcMissed">Revisar as que errei (${missed.length})</button>` : ""}
+        <button class="alt" id="fcAll">Recomeçar com todas</button>
+      </div>`;
+    const m = $("#fcMissed");
+    if (m) m.onclick = () => startDeck(missed);
+    $("#fcAll").onclick = () => startDeck(FLASHCARDS.map((_, i) => i));
+    return;
+  }
+  const [q, a] = FLASHCARDS[deck[pos]];
+  root.innerHTML = `
+    <div class="fc-top">
+      <small>Cartão ${pos + 1} de ${deck.length}</small>
+      <div class="score"><span class="r">✓ ${right}</span><span class="w">✗ ${wrong}</span></div>
+    </div>
+    <div class="flash" id="flash">
+      <div class="flash-inner">
+        <div class="face front"><div class="label">Pergunta</div><div class="q">${md(q)}</div><div class="hint">Toque para ver a resposta</div></div>
+        <div class="face back"><div class="label">Resposta</div><div class="a">${md(a)}</div><div class="hint">Toque para voltar</div></div>
+      </div>
+    </div>
+    <div class="fc-actions">
+      <button class="no" id="fcNo">Não sabia</button>
+      <button class="yes" id="fcYes">Sabia</button>
+    </div>
+    <div class="fc-secondary">
+      <button id="fcShuffle">Embaralhar de novo</button>
+    </div>`;
+  $("#flash").onclick = () => $("#flash").classList.toggle("flipped");
+  $("#fcYes").onclick = () => { right++; pos++; renderFlash(); };
+  $("#fcNo").onclick = () => { wrong++; missed.push(deck[pos]); pos++; renderFlash(); };
+  $("#fcShuffle").onclick = () => startDeck(FLASHCARDS.map((_, i) => i));
+}
+
+/* ---------- Dicas ---------- */
+function renderTips() {
+  $("#tips").innerHTML = TIPS.map(([t, d]) => `<div class="tip"><b>${esc(t)}</b><div>${md(d)}</div></div>`).join("");
+}
+
+/* ---------- Tema ---------- */
+function applyTheme() {
+  if (state.theme) document.documentElement.setAttribute("data-theme", state.theme);
+  else document.documentElement.removeAttribute("data-theme");
+}
+$("#themeBtn").onclick = () => {
+  const isDark = state.theme ? state.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  state.theme = isDark ? "light" : "dark";
+  save(); applyTheme();
+};
+
+/* ---------- Início ---------- */
+applyTheme();
+renderChips();
+renderCards();
+renderTips();
+updateProgress();
+startDeck(FLASHCARDS.map((_, i) => i));
+</script>
+</body>
+</html>
